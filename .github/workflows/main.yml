@@ -39,3 +39,14 @@ jobs:
           
       - name: List objects in S3 bucket
         run: aws s3 ls s3://abbybucketcloudformation-dont-delete 
+        
+      - name: Download JSON file from S3
+        run: aws s3 cp s3://abbybucketcloudformation-dont-delete/blueprints.json .
+
+      - name: Update JSON objects
+        run: |
+          # Use jq to update each object in the array
+          jq '.[] |= . + { newProperty: "newValue" }' blueprints.json > modified_blueprints.json
+
+      - name: Upload modified JSON file to S3
+        run: aws s3 cp modified_blueprints.json s3://abbybucketcloudformation-dont-delete/
