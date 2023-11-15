@@ -41,12 +41,14 @@ jobs:
         run: aws s3 ls s3://abbybucketcloudformation-dont-delete 
         
       - name: Download JSON file from S3
-        run: aws s3 cp s3://abbybucketcloudformation-dont-delete/blueprints.json .
+        run: aws s3 cp s3://abbybucketcloudformation-dont-delete/modified_blueprints.json .
 
       - name: Update JSON objects
         run: |
           # Use jq to update each object in the array
-          jq '.[] |= . + { newProperty: "newValue" }' blueprints.json > modified_blueprints.json
+          # jq '.[] |= . + { newProperty: "newValue" }' modified_blueprints.json > modified_blueprints_new.json
+          jq 'map(if .name == "ADO Pipeline" then .newProperty = "Updated This Value" else . end)' modified_blueprints.json > modified_blueprints_new.json
+
 
       - name: Upload modified JSON file to S3
-        run: aws s3 cp modified_blueprints.json s3://abbybucketcloudformation-dont-delete/
+        run: aws s3 cp modified_blueprints_new.json s3://abbybucketcloudformation-dont-delete/modified_blueprints.json
