@@ -44,9 +44,23 @@ jobs:
       - name: Download and Update and Upload JSON objects
         run: |
           echo "Folders ${{ steps.list-folders.outputs.folders }}"
-          IFS=$'\t' read -ra array <<< "${{ steps.list-folders.outputs.folders }}"
-          for element in "${array[@]}"; do
-            echo "Processing element: $element"
+          IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
+          for folder in "${folders[@]}"; do
+            folder="${folder%/}"  # Remove trailing slash
+            echo "Processing folder: $folder"
+
+            # Download JSON file from the folder
+            echo "Downloading  File : ${{ matrix.type }}.json"
+            aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
+
+            echo "Quering and Updating File where name is ADO Pipeline" 
+            jq 'map(if .name == "ADO Pipeline" then .newProperty = "Updated This Value" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+
+            echo "Uploading File modified_${{ matrix.type }}_new.json to folder ${folder}"   
+            aws s3 cp modified_${{ matrix.type }}_new.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
+            
           done
+
+          
 
             
