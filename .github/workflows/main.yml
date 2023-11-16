@@ -12,6 +12,16 @@ jobs:
   changed_files:
     runs-on: ubuntu-latest  
     name: Test changed-files
+    strategy:
+      matrix:
+        type:
+          - blueprints
+          - ui-extension-packages
+          - cb-applets
+          - orchestration-actions
+          - recurring-jobs
+          - server-actions
+          - resource-actions
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,18 +47,45 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
           
-      - name: List objects in S3 bucket
-        run: aws s3 ls s3://abbybucketcloudformation-dont-delete 
+      # - name: List objects in S3 bucket
+      #   run: aws s3 ls s3://abbybucketcloudformation-dont-delete 
         
-      - name: Download JSON file from S3
-        run: aws s3 cp s3://abbybucketcloudformation-dont-delete/modified_blueprints.json .
+      # - name: Download JSON file from S3
+      #   run: aws s3 cp s3://abbybucketcloudformation-dont-delete/modified_blueprints.json .
+      
+      - name: List folders in S3 bucket
+        id: list-folders
+        run: |
+          folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
+          echo "::set-output name=folders::${folders}"
 
-      - name: Update JSON objects
+      
+
+      - name: Download and Update and Upload JSON objects
         run: |
           # Use jq to update each object in the array
           # jq '.[] |= . + { newProperty: "newValue" }' modified_blueprints.json > modified_blueprints_new.json
-          jq 'map(if .name == "ADO Pipeline" then .newProperty = "Updated This Value" else . end)' modified_blueprints.json > modified_blueprints_new.json
+          IFS=$'\n' read -rd '' -a folders <<< "${{ steps.list-folders.outputs.folders }}"
 
+          
+          for folder in "${folders[@]}"; do
+            echo "Processing folder Name: $folder" 
+            folder="${folder%/}"  # Remove trailing slash
 
-      - name: Upload modified JSON file to S3
-        run: aws s3 cp modified_blueprints_new.json s3://abbybucketcloudformation-dont-delete/modified_blueprints.json
+            set_variable "folder_name" "$folder"
+            echo "Processing folder: ${folder_name}" 
+
+            # Download JSON file from the folder
+            
+            echo "Downloading  File : {{ matrix.type }}.json"
+            aws s3 cp "s3://abbybucketcloudformation-dont-delete/${folder_name}/${{ matrix.type }}.json" .
+            
+
+            echo "Quering and Updating File where name is ADO Pipeline" 
+            jq 'map(if .name == "ADO Pipeline" then .newProperty = "Updated This Value" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+
+            echo "Uploading File modified_${{ matrix.type }}_new.json"   
+            aws s3 cp modified_${{ matrix.type }}_new.json s3://abbybucketcloudformation-dont-delete/${folder_name}/${{ matrix.type }}.json
+
+      # - name: Upload modified JSON file to S3
+      #   run: aws s3 cp modified_blueprints_new.json s3://abbybucketcloudformation-dont-delete/modified_blueprints.json
