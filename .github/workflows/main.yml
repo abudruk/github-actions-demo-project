@@ -53,10 +53,10 @@ jobs:
             echo "Downloading  File : ${{ matrix.type }}.json"
 
             # Check if File Exists 
-            echo "Check if file exists at this path  $folder/${{ matrix.type }}.json"
-            result = $(aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" || echo "File does not exist")
-            echo "::set-output name=result::${result}"
-            if "${result}" == "success"; then
+            # Check if the file exists
+            if aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" 2>&1 | grep -q "NoSuchKey"; then
+              echo "File not found in S3. Skipping download."
+            else
               # Download the file 
               echo " Download the file $folder/${{ matrix.type }}.json" 
               aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
