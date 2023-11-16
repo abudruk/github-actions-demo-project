@@ -43,7 +43,7 @@ jobs:
 
       - name: Download and Update and Upload JSON objects
         run: |
-          IFS=$'\t\n' read -rd '' -a folders <<< "${{ steps.list-folders.outputs.folders }}"
+          IFS=$' ' read -rd '' -a folders <<< "${{ steps.list-folders.outputs.folders }}"
           
           for f in "${folders[@]}"; do
             echo "Processing folder: $f" 
