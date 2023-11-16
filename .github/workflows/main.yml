@@ -69,6 +69,7 @@ jobs:
 
           
           for folder in "${folders[@]}"; do
+            echo "Processing folder Name: $folder" 
             folder="${folder%/}"  # Remove trailing slash
 
             set_variable "folder_name" "$folder"
