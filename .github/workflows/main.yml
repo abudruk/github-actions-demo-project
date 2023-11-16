@@ -44,4 +44,6 @@ jobs:
       - name: Download and Update and Upload JSON objects
         run: |
           echo "Folders ${{ steps.list-folders.outputs.folders }}"
+          IFS=$'\t' read -ra array <<< "${{ steps.list-folders.outputs.folders }}"
+          echo "Array Display : $array"
             
