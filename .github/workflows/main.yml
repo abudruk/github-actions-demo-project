@@ -26,18 +26,7 @@ jobs:
         with:
           fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v40
-        with:
-          files: |
-             **.md
-        
-      - name: List all changed files
-        run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
+      
           
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
@@ -45,12 +34,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
-          
-      # - name: List objects in S3 bucket
-      #   run: aws s3 ls s3://abbybucketcloudformation-dont-delete 
-        
-      # - name: Download JSON file from S3
-      #   run: aws s3 cp s3://abbybucketcloudformation-dont-delete/modified_blueprints.json .
       
       - name: List folders in S3 bucket
         id: list-folders
@@ -58,30 +41,11 @@ jobs:
           folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
           echo "::set-output name=folders::${folders}"
 
-      
-
       - name: Download and Update and Upload JSON objects
         run: |
-          # Use jq to update each object in the array
-          # jq '.[] |= . + { newProperty: "newValue" }' modified_blueprints.json > modified_blueprints_new.json
+          set -x
           IFS=$'\n' read -rd '' -a folders <<< "${{ steps.list-folders.outputs.folders }}"
-
           
-          for folder in "${folders[@]}"; do
-            folder="${folder%/}"  # Remove trailing slash
+          for f in "${folders[@]}"; do
+            echo "Processing folder: $f" 
             
-            echo "Processing folder: $folder" 
-
-            # # Download JSON file from the folder
-            # echo "Downloading  File : ${{ matrix.type }}.json"
-            # aws s3 cp "s3://abbybucketcloudformation-dont-delete/${folder}/${{ matrix.type }}.json" .
-            
-
-            # echo "Quering and Updating File where name is ADO Pipeline" 
-            # jq 'map(if .name == "ADO Pipeline" then .newProperty = "Updated This Value" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
-
-            # echo "Uploading File modified_${{ matrix.type }}_new.json to folder ${folder}"   
-            # aws s3 cp modified_${{ matrix.type }}_new.json "s3://abbybucketcloudformation-dont-delete/${folder}/${{ matrix.type }}.json"
-
-      # - name: Upload modified JSON file to S3
-      #   run: aws s3 cp modified_blueprints_new.json s3://abbybucketcloudformation-dont-delete/modified_blueprints.json
