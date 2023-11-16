@@ -52,10 +52,12 @@ jobs:
             # Download JSON file from the folder
             echo "Downloading  File : ${{ matrix.type }}.json"
 
-            if aws s3 ls "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" 2>&1 | grep -q "NoSuchKey"; then
-              echo "File not found in S3. Skipping download."
-            else
-              # Download the file if it exists
+            # Check if File Exists 
+            echo "Check if file exists at this path  $folder/${{ matrix.type }}.json"
+            result = $(aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" || echo "File does not exist")
+            if result == 'success'; then
+              # Download the file 
+              echo " Download the file $folder/${{ matrix.type }}.json" 
               aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
               echo "File downloaded successfully."
 
@@ -65,10 +67,6 @@ jobs:
               echo "Uploading File modified_${{ matrix.type }}_new.json to folder ${folder}"   
               aws s3 cp modified_${{ matrix.type }}_new.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
             fi
-            
-
-            
-            
           done
 
           
