@@ -54,7 +54,7 @@ jobs:
 
             # Check if File Exists 
             echo "Check if File Exists at $folder/${{ matrix.type }}.json"
-            if aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" > 2>&1 | grep -q "NoSuchKey"; then
+            if aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" 2>&1 | grep -q "NoSuchKey"; then
               echo "File not found in S3. Skipping download."
             else
               # Download the file 
