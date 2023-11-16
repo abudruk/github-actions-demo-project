@@ -47,4 +47,5 @@ jobs:
           
           for f in "${folders[@]}"; do
             echo "Processing folder: $f" 
+          done
             
