@@ -75,7 +75,7 @@ jobs:
             # Download JSON file from the folder
             
             echo "Downloading  File : {{ matrix.type }}.json"
-            aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${matrix.type}.json" .
+            aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
             
 
             echo "Quering and Updating File where name is ADO Pipeline" 
