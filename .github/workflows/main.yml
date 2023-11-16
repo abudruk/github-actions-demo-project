@@ -45,5 +45,8 @@ jobs:
         run: |
           echo "Folders ${{ steps.list-folders.outputs.folders }}"
           IFS=$'\t' read -ra array <<< "${{ steps.list-folders.outputs.folders }}"
-          echo "Array Display : $array"
+          for element in "${array[@]}"; do
+            echo "Processing element: $element"
+          done
+
             
