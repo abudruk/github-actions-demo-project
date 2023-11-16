@@ -70,7 +70,7 @@ jobs:
           
           for folder in "${folders[@]}"; do
             folder="${folder%/}"  # Remove trailing slash
-            echo "Processing folder: $folder"
+            echo "Processing folder: $folder" 
 
             # Download JSON file from the folder
             
