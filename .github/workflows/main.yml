@@ -55,7 +55,8 @@ jobs:
             # Check if File Exists 
             echo "Check if file exists at this path  $folder/${{ matrix.type }}.json"
             result = $(aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" || echo "File does not exist")
-            if "$result" == "success"; then
+            echo "::set-output name=result::${result}"
+            if "${result}" == "success"; then
               # Download the file 
               echo " Download the file $folder/${{ matrix.type }}.json" 
               aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
