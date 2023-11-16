@@ -51,13 +51,23 @@ jobs:
 
             # Download JSON file from the folder
             echo "Downloading  File : ${{ matrix.type }}.json"
-            aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
 
-            echo "Quering and Updating File where name is ADO Pipeline" 
-            jq 'map(if .name == "ADO Pipeline" then .newProperty = "Updated This Value" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+            if aws s3 ls "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" 2>&1 | grep -q "NoSuchKey"; then
+              echo "File not found in S3. Skipping download."
+            else
+              # Download the file if it exists
+              aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
+              echo "File downloaded successfully."
 
-            echo "Uploading File modified_${{ matrix.type }}_new.json to folder ${folder}"   
-            aws s3 cp modified_${{ matrix.type }}_new.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
+              echo "Quering and Updating File where name is ADO Pipeline" 
+              jq 'map(if .name == "ADO Pipeline" then .newProperty = "Updated This Value" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+
+              echo "Uploading File modified_${{ matrix.type }}_new.json to folder ${folder}"   
+              aws s3 cp modified_${{ matrix.type }}_new.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
+            fi
+            
+
+            
             
           done
 
