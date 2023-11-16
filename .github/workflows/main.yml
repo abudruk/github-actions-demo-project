@@ -75,13 +75,14 @@ jobs:
             # Download JSON file from the folder
             
             echo "Downloading  File : {{ matrix.type }}.json"
-            aws s3 cp "s3://your-bucket-name/$folder/${{ matrix.type }}.json" .
+            aws s3 cp "s3://your-bucket-name/${folder%/}/${matrix.type}.json" .
+            
 
             echo "Quering and Updating File where name is ADO Pipeline" 
             jq 'map(if .name == "ADO Pipeline" then .newProperty = "Updated This Value" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
             echo "Uploading File modified_${{ matrix.type }}_new.json"   
-            aws s3 cp modified_${{ matrix.type }}_new.json s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json
+            aws s3 cp modified_${{ matrix.type }}_new.json s3://abbybucketcloudformation-dont-delete/${folder%/}/${ matrix.type }.json
 
       # - name: Upload modified JSON file to S3
       #   run: aws s3 cp modified_blueprints_new.json s3://abbybucketcloudformation-dont-delete/modified_blueprints.json
