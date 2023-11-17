@@ -29,9 +29,9 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v40
-        # with:
-        #   files: |
-        #      **.zip
+        with:
+          files: |
+             **.zip
 
       - name: List all changed files
         run: |
@@ -40,37 +40,37 @@ jobs:
           done
 
           
-      # - name: Set up AWS CLI
-      #   uses: aws-actions/configure-aws-credentials@v2
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ap-south-1
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
 
-      # - name: Create ${{ matrix.type }} Artifacts
-      #   working-directory: CMP/${{ matrix.type }}
-      #   run: |
-      #     shopt -s globstar
-      #     mkdir -p "${{github.workspace}}/tmp"
-      #     for file in **/*.zip; do
-      #       echo "Moving $file"
-      #       BASENAME=$(basename "$file")
-      #       mv "$file" "${{ github.workspace }}/tmp/$BASENAME"
-      #     done
+      - name: Create ${{ matrix.type }} Artifacts
+        working-directory: CMP/${{ matrix.type }}
+        run: |
+          shopt -s globstar
+          mkdir -p "${{github.workspace}}/tmp"
+          for file in "${{ steps.changed-files.outputs.all_changed_files }}"; do
+            echo "Moving $file"
+            BASENAME=$(basename "$file")
+            mv "$file" "${{ github.workspace }}/tmp/$BASENAME"
+          done
 
-      # - name: Create a single tar of all the files in the current directory
-      #   working-directory: tmp
-      #   env:
-      #     MATRIX_TYPE: ${{ matrix.type }}
-      #   run: |
-      #     echo "Creating a tar of all the files in the current directory"
-      #     tar -cvzf "$MATRIX_TYPE".tar.gz *
+      - name: Create a single tar of all the files in the current directory
+        working-directory: tmp
+        env:
+          MATRIX_TYPE: ${{ matrix.type }}
+        run: |
+          echo "Creating a tar of all the files in the current directory"
+          tar -cvzf "$MATRIX_TYPE".tar.gz *
 
-      # - uses: actions/upload-artifact@v3
-      #   with:
-      #     name: ${{ matrix.type }}
-      #     path: |
-      #       **/${{ matrix.type }}.tar.gz
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.type }}
+          path: |
+            **/${{ matrix.type }}.tar.gz
 
 
 
