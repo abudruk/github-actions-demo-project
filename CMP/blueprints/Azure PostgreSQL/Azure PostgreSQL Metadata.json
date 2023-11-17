@@ -1,0 +1,98 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "Create An Azure PostgreSQL Database",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-135h2wpp",
+            "name": "Create An Azure PostgreSQL Database",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "Create, delete and synchronise Azure  PostgreSQL databases",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-2f4hpdex/",
+        "title": "Azure PostgreSQL Discovery"
+    },
+    "favorited": false,
+    "icon": "Azure-PostgreSQL-icon_jsIVvF4_AUehBrE_1wPheet_FzdxsfR.png",
+    "id": "BP-oqvbc04h",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "color": null,
+            "id": "TAG-s7tn0t3i",
+            "image": null,
+            "name": "Azure",
+            "parent": {
+                "color": null,
+                "id": "TAG-rgqwsw74",
+                "image": null,
+                "name": "Technology Type",
+                "sequence": 0
+            },
+            "sequence": 0
+        },
+        {
+            "color": null,
+            "id": "TAG-oangrcy8",
+            "image": null,
+            "name": "PostgreSQL",
+            "parent": {
+                "color": null,
+                "id": "TAG-fpdjl8eu",
+                "image": null,
+                "name": "Databases",
+                "parent": {
+                    "color": null,
+                    "id": "TAG-d7rehwzt",
+                    "image": null,
+                    "name": "Public Cloud Services",
+                    "sequence": 0
+                },
+                "sequence": 0
+            },
+            "sequence": 0
+        }
+    ],
+    "last_updated": "2023-07-10",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure PostgreSQL",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "fas fa-database",
+        "id": "RT-h0npsxst",
+        "label": "Database",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "database",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Azure PostgreSQL Teardown Script",
+            "continue_on_failure": false,
+            "deploy_seq": -1,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-cw0bs2bz",
+            "name": "Azure PostgreSQL Teardown Script",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

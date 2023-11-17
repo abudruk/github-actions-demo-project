@@ -1,0 +1,14 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Email Remote File",
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "fa  fa-envelope-o",
+    "icon": "E-Mail-Icon.png",
+    "id": "SVA-mgqpe34q",
+    "label": "Email Remote File",
+    "last_updated": "2022-02-01",
+    "requires_approval": false,
+    "sequence": null,
+    "submit_button_label": "Send"
+}

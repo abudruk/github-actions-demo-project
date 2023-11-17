@@ -1,0 +1,23 @@
+{
+    "description": null,
+    "enabled": true,
+    "icon": "cloudendure_L8MAc1X_oOEvkwn.jpg",
+    "id": "XUI-iub9pdfd",
+    "label": "CloudEndure",
+    "last_updated": "2022-01-13",
+    "name": "cloudendure",
+    "package_contents": [
+        "forms.py",
+        "cloudendure_scripts.py",
+        "urls.py",
+        "install_agent.py",
+        "views.py",
+        "cloudendure_admin.py",
+        "templates/server_tab.html",
+        "templates/admin_page.html",
+        "templates/tab-jobs.html",
+        "templates/tab-dashboard.html",
+        "templates/tab-servers.html",
+        "templates/tab-projects.html"
+    ]
+}

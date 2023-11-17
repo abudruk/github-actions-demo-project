@@ -1,0 +1,15 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Delete Database",
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "",
+    "id": "RSA-vya8ijgm",
+    "label": "Delete Database",
+    "last_updated": "2022-10-13",
+    "list_view_visible": true,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "requires_approval": false,
+    "submit_button_label": ""
+}

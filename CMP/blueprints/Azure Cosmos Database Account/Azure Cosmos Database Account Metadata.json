@@ -1,0 +1,77 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "Create Azure Cosmos Database Account",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-02o8c2hp",
+            "name": "Create Azure Cosmos Database Account",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "Create, delete and synchronise Azure Cosmos Database Accounts",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-cstoudde/",
+        "title": "Discover Azure Cosmos Database Account"
+    },
+    "favorited": false,
+    "icon": "cosmosdb_muVjDlF_zTe6gTH_SHnSmw6_tsqJ44X_68LOgRr_7m767st_3Oyee2m_X1qwC9g.png",
+    "id": "BP-jj39136f",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "color": null,
+            "id": "TAG-s7tn0t3i",
+            "image": null,
+            "name": "Azure",
+            "parent": {
+                "color": null,
+                "id": "TAG-1es0jds6",
+                "image": null,
+                "name": "Technology Type",
+                "sequence": 0
+            },
+            "sequence": 0
+        }
+    ],
+    "last_updated": "2023-05-08",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure Cosmos Database Account",
+    "resource_name_template": "",
+    "resource_type": {
+        "icon": "fas fa-database",
+        "id": "RT-h0npsxst",
+        "label": "Database",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "database",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Delete Azure Cosmos Database Account",
+            "continue_on_failure": false,
+            "deploy_seq": -1,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-g28b278d",
+            "name": "Delete Azure Cosmos Database Account",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

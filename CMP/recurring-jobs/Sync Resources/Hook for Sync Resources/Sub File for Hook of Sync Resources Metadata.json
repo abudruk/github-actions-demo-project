@@ -1,0 +1,12 @@
+{
+    "description": "For any Blueprint that has a Discovery Plug-in specified, use that logic to discover and sync Resources of the type described by that Blueprint.",
+    "id": "OHK-jael8jf5",
+    "last_updated": "2022-01-21",
+    "max_retries": 0,
+    "name": "Sync Resources",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Sync Resources Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

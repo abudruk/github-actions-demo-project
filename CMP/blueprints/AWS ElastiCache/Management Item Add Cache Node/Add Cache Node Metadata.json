@@ -1,0 +1,45 @@
+{
+    "action_input_default_values": [
+        {
+            "label": "Nodes To Add",
+            "name": "nodes_to_add_a192",
+            "value": "1"
+        }
+    ],
+    "action_inputs": [
+        {
+            "allow-multiple": false,
+            "available-all-servers": false,
+            "description": "",
+            "field-dependency-controlling-set": [],
+            "field-dependency-dependent-set": [],
+            "global-options": [],
+            "hide-if-default-value": false,
+            "label": "Nodes To Add",
+            "maximum": "20.00",
+            "minimum": "1.00",
+            "name": "nodes_to_add",
+            "placeholder": null,
+            "relevant-osfamilies": [],
+            "required": true,
+            "show-as-attribute": false,
+            "show-on-servers": false,
+            "type": "INT",
+            "value-pattern-string": null
+        }
+    ],
+    "base_action_name": "Add Node",
+    "dangerous": false,
+    "dialog_message": "Add Cache nodes to the cache cluster. One node can be added to a Redis cache cluster at one time. 1 to 20 cache nodes can be added to a Memcached cache cluster at a time.",
+    "enabled": true,
+    "extra_classes": "fas fa-server",
+    "id": "RSA-ra567o3z",
+    "is_synchronous": false,
+    "label": "Add Cache Node",
+    "last_updated": "2023-10-19",
+    "list_view_visible": true,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "requires_approval": false,
+    "submit_button_label": ""
+}

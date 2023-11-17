@@ -1,0 +1,96 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "Create GCP Bucket",
+            "continue_on_failure": false,
+            "deploy_seq": 0,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-3i3vei7b",
+            "name": "Create GCP Bucket",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "Blueprint for creating and managing Google Cloud buckets.  To use this Blueprint in CloudBolt version 8.3 or earlier you must first install the google cloud API python bindings by running 'pip install google-cloud-storage'",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-35rx0cni/",
+        "title": "GCP Storage Sync"
+    },
+    "favorited": false,
+    "icon": "google-cloud-storage_g0zFqxw.png",
+    "id": "BP-vcr3m6q4",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "model_name": "serviceblueprint",
+            "name": "GCP",
+            "parent": {
+                "model-name": "serviceblueprint",
+                "name": "Technology Type"
+            }
+        }
+    ],
+    "last_updated": "2022-09-28",
+    "management_actions": [
+        {
+            "enabled": false,
+            "label": "Download Blob"
+        },
+        {
+            "enabled": false,
+            "label": "Copy Blob"
+        },
+        {
+            "enabled": false,
+            "label": "Delete Blob"
+        },
+        {
+            "enabled": false,
+            "label": "Move Blob"
+        },
+        {
+            "enabled": false,
+            "label": "Rename Blob"
+        },
+        {
+            "enabled": false,
+            "label": "Upload Blob"
+        }
+    ],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "GCP Storage",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "fas fa-box",
+        "id": "RT-acp5jvcg",
+        "label": "Storage",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "storage",
+        "plural_label": "Storage"
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Delete GCP Storage bucket",
+            "continue_on_failure": false,
+            "deploy_seq": -1,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-o9mxsgjn",
+            "name": "Delete GCP Storage Bucket",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "action_input_default_values": [],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Email Notifications for Openstack VM Details",
+    "create_date": "2022-09-14 09:56:23.340959",
+    "description": "",
+    "enabled": false,
+    "id": "RJB-klq3mzqw",
+    "last_run": null,
+    "last_updated": "2022-09-14",
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Email Notifications for Openstack VM Details",
+    "schedule": "",
+    "type": "orchestration_hook"
+}

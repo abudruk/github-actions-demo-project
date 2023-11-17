@@ -1,0 +1,20 @@
+{
+    "action_input_default_values": [
+        {
+            "label": "Base Path",
+            "name": "base_path_a234",
+            "value": "/home/ansible"
+        }
+    ],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Import or Update Ansible Playbooks",
+    "create_date": "2021-11-16 10:21:28.225794",
+    "description": "Import or Update Ansible Playbooks",
+    "enabled": false,
+    "id": "RJB-u3n82g1g",
+    "last_run": null,
+    "last_updated": null,
+    "name": "Import or Update Ansible Playbooks",
+    "schedule": "0 * * * *",
+    "type": "orchestration_hook"
+}

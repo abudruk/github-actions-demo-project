@@ -1,0 +1,14 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Delete snapshot created by CloudBolt",
+    "dialog_message": "If there is a snapshot initiated by CloudBolt for this server, it will be deleted. Snapshots created directly in VMware will not be affected.",
+    "enabled": true,
+    "extra_classes": "fas fa-trash-alt",
+    "icon": "cloudbolt_BWEZuU1.jpg",
+    "id": "SVA-7uk6a6lw",
+    "label": "Delete snapshot created by CloudBolt",
+    "last_updated": "2022-02-01",
+    "requires_approval": false,
+    "sequence": null,
+    "submit_button_label": "Delete Snapshot"
+}

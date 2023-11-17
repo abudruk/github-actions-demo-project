@@ -1,0 +1,14 @@
+{
+    "description": "Discovers all vnets for Azure RHs",
+    "id": "OHK-dftfktve",
+    "last_updated": "2023-05-11",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure VNET Discovery",
+    "resource_technologies": [],
+    "script_filename": "Azure VNET Discovery Script.py",
+    "shared": true,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

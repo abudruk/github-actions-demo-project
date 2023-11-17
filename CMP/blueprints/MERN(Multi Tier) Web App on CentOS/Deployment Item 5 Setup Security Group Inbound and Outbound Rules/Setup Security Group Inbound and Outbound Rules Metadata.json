@@ -1,0 +1,18 @@
+{
+    "description": "",
+    "id": "OHK-5mvg0smk",
+    "last_updated": "2022-11-28",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Setup Security Group Inbound and Outbound Rules",
+    "resource_technologies": [
+        "Amazon Web Services",
+        "AWS GovCloud (US)",
+        "AWS China - \u4e9a\u9a6c\u900a"
+    ],
+    "script_filename": "Setup Security Group Inbound and Outbound Rules Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

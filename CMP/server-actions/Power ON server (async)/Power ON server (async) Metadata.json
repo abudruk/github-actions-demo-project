@@ -1,0 +1,14 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Power ON server (async)",
+    "dialog_message": "",
+    "enabled": false,
+    "extra_classes": "",
+    "icon": "power_on_kZO1lbj.png",
+    "id": "SVA-a5vopfm6",
+    "label": "Power ON server (async)",
+    "last_updated": "2022-02-01",
+    "requires_approval": false,
+    "sequence": null,
+    "submit_button_label": ""
+}

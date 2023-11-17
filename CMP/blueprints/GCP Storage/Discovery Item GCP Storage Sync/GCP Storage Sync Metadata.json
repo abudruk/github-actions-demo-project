@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-35rx0cni",
+    "last_updated": "2022-09-28",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "GCP Storage Sync",
+    "resource_technologies": [],
+    "script_filename": "GCP Storage Sync Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

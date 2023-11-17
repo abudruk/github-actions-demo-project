@@ -1,0 +1,98 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "Build an Azure SQL Database",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-5fx7cs6b",
+            "name": "Build an Azure SQL Database",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-g82afy5d/",
+        "title": "Azure SQL Discovery"
+    },
+    "favorited": false,
+    "icon": "azure-sql-database_ULTdg8G_KmIcUbx.svg",
+    "id": "BP-9qekqvdf",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "color": null,
+            "id": "TAG-s7tn0t3i",
+            "image": null,
+            "name": "Azure",
+            "parent": {
+                "color": null,
+                "id": "TAG-1es0jds6",
+                "image": null,
+                "name": "Technology Type",
+                "sequence": 0
+            },
+            "sequence": 0
+        },
+        {
+            "color": null,
+            "id": "TAG-xpytx5rl",
+            "image": null,
+            "name": "MySQL",
+            "parent": {
+                "color": null,
+                "id": "TAG-fpdjl8eu",
+                "image": null,
+                "name": "Databases",
+                "parent": {
+                    "color": null,
+                    "id": "TAG-d7rehwzt",
+                    "image": null,
+                    "name": "Public Cloud Services",
+                    "sequence": 0
+                },
+                "sequence": 0
+            },
+            "sequence": 0
+        }
+    ],
+    "last_updated": "2023-05-05",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure SQL",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "",
+        "id": "RT-fe3i9hqn",
+        "label": "Database",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "Database",
+        "plural_label": "Databases"
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Teardown for Azure SQL",
+            "continue_on_failure": false,
+            "deploy_seq": 2,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-46xwf2p3",
+            "name": "Teardown for Azure SQL",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

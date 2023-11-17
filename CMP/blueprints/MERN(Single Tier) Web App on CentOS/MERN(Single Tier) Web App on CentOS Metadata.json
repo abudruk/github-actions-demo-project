@@ -1,0 +1,477 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "all_environments_enabled": false,
+            "allowed_os_families": [
+                "CentOS",
+                "Red Hat"
+            ],
+            "applications": null,
+            "deploy_seq": 1,
+            "description": "",
+            "enabled_environments": [
+                {
+                    "environment": {
+                        "href": "/api/v3/cmp/environments/ENV-wgw2v0st/",
+                        "title": "(AWS Roles Anywhere TEST/DEMO) Asia Pacific (Mumbai) vpc-07820cf80d4760227"
+                    },
+                    "predefined_parameters": [
+                        {
+                            "allow_multiple": true,
+                            "available_all_servers": false,
+                            "description": "Name of a security group defined in this resource handler",
+                            "field_dependency_controlling_set": [],
+                            "field_dependency_dependent_set": [],
+                            "global_options": [],
+                            "label": "Security groups",
+                            "name": "sec_groups",
+                            "parameter_type": "CustomField",
+                            "placeholder": null,
+                            "relevant_osfamilies": [],
+                            "required": false,
+                            "show_as_attribute": false,
+                            "show_on_servers": false,
+                            "type": "STR",
+                            "value": null,
+                            "value_pattern_string": null
+                        },
+                        {
+                            "allow_multiple": false,
+                            "available_all_servers": false,
+                            "description": "Input/output operations per second. AWS requires you to specify an amount of IOPS when creating an 'io1' volume.",
+                            "field_dependency_controlling_set": [
+                                {
+                                    "controlling-field": {
+                                        "name": "ebs_volume_type"
+                                    },
+                                    "custom-field-options": [
+                                        "io1"
+                                    ],
+                                    "dependency-type": "SHOWHIDE",
+                                    "dependent-field": {
+                                        "name": "iops"
+                                    },
+                                    "maximum": null,
+                                    "minimum": null,
+                                    "regex": ""
+                                }
+                            ],
+                            "field_dependency_dependent_set": [],
+                            "global_options": [],
+                            "label": "IOPS",
+                            "name": "iops",
+                            "parameter_type": "CustomField",
+                            "placeholder": null,
+                            "relevant_osfamilies": [],
+                            "required": false,
+                            "show_as_attribute": false,
+                            "show_on_servers": false,
+                            "type": "INT",
+                            "value": null,
+                            "value_pattern_string": null
+                        },
+                        {
+                            "allow_multiple": false,
+                            "available_all_servers": false,
+                            "description": "Optionally launch new AWS instances into a specific availability zone within a region to protect an application from the failure of a single Amazon data center.  Note that a VPC subnet may be tied to a particular zone, in which case that takes precedence.",
+                            "field_dependency_controlling_set": [],
+                            "field_dependency_dependent_set": [],
+                            "global_options": [],
+                            "label": "Availability Zone",
+                            "name": "aws_availability_zone",
+                            "parameter_type": "CustomField",
+                            "placeholder": null,
+                            "relevant_osfamilies": [],
+                            "required": false,
+                            "show_as_attribute": false,
+                            "show_on_servers": false,
+                            "type": "STR",
+                            "value": null,
+                            "value_pattern_string": null
+                        },
+                        {
+                            "allow_multiple": false,
+                            "available_all_servers": false,
+                            "description": "Specifies the type of disk. This determines the performance and cost of the disk. See https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html for more info on disk types.",
+                            "field_dependency_controlling_set": [],
+                            "field_dependency_dependent_set": [
+                                {
+                                    "controlling-field": {
+                                        "name": "ebs_volume_type"
+                                    },
+                                    "custom-field-options": [
+                                        "io1"
+                                    ],
+                                    "dependency-type": "SHOWHIDE",
+                                    "dependent-field": {
+                                        "name": "iops"
+                                    },
+                                    "maximum": null,
+                                    "minimum": null,
+                                    "regex": ""
+                                }
+                            ],
+                            "global_options": [],
+                            "label": "EBS Volume Type",
+                            "name": "ebs_volume_type",
+                            "parameter_type": "CustomField",
+                            "placeholder": null,
+                            "relevant_osfamilies": [],
+                            "required": true,
+                            "show_as_attribute": false,
+                            "show_on_servers": true,
+                            "type": "STR",
+                            "value": "gp2",
+                            "value_pattern_string": null
+                        },
+                        {
+                            "allow_multiple": false,
+                            "available_all_servers": false,
+                            "description": "Assign an elastic IP to this instance at startup time. If there are none to choose from, more must be allocated in AWS by an admin.",
+                            "field_dependency_controlling_set": [],
+                            "field_dependency_dependent_set": [],
+                            "global_options": [],
+                            "label": "Elastic IP",
+                            "name": "aws_elastic_ip",
+                            "parameter_type": "CustomField",
+                            "placeholder": null,
+                            "relevant_osfamilies": [],
+                            "required": false,
+                            "show_as_attribute": false,
+                            "show_on_servers": false,
+                            "type": "STR",
+                            "value": null,
+                            "value_pattern_string": null
+                        },
+                        {
+                            "allow_multiple": false,
+                            "available_all_servers": false,
+                            "description": "Networks options are those available to the resource handler if they are also available to the group or environment",
+                            "field_dependency_controlling_set": [],
+                            "field_dependency_dependent_set": [],
+                            "global_options": [],
+                            "label": "NIC 1",
+                            "name": "sc_nic_0",
+                            "parameter_type": "CustomField",
+                            "placeholder": null,
+                            "relevant_osfamilies": [],
+                            "required": true,
+                            "show_as_attribute": false,
+                            "show_on_servers": false,
+                            "type": "NET",
+                            "value": "subnet-0c4e7afc2dc49ad56",
+                            "value_pattern_string": null
+                        },
+                        {
+                            "allow_multiple": false,
+                            "available_all_servers": false,
+                            "description": "Launch this instance onto the selected Dedicated Host. Note that either this or Dedicated Host Group should be selected, and if you enter a value for both this will take precedence. These options will also not include any Host that has been added to a Host Resource Group, as AWS does not allow launching instances on those directly, instead requiring use of the Group.",
+                            "field_dependency_controlling_set": [],
+                            "field_dependency_dependent_set": [],
+                            "global_options": [],
+                            "label": "Dedicated Host",
+                            "name": "aws_host",
+                            "parameter_type": "CustomField",
+                            "placeholder": null,
+                            "relevant_osfamilies": [],
+                            "required": false,
+                            "show_as_attribute": false,
+                            "show_on_servers": false,
+                            "type": "STR",
+                            "value": null,
+                            "value_pattern_string": null
+                        },
+                        {
+                            "allow_multiple": false,
+                            "available_all_servers": false,
+                            "description": "Launch this instance into the selected Host Resource Group. Note that either this or Dedicated Host should be selected, and if you enter a value for both the specific Dedicated Host will take precedence.",
+                            "field_dependency_controlling_set": [],
+                            "field_dependency_dependent_set": [],
+                            "global_options": [],
+                            "label": "Dedicated Host Group",
+                            "name": "aws_host_group",
+                            "parameter_type": "CustomField",
+                            "placeholder": null,
+                            "relevant_osfamilies": [],
+                            "required": false,
+                            "show_as_attribute": false,
+                            "show_on_servers": false,
+                            "type": "STR",
+                            "value": null,
+                            "value_pattern_string": null
+                        }
+                    ]
+                }
+            ],
+            "environment_selection_orchestration": null,
+            "execute_in_parallel": false,
+            "hostname_template": "",
+            "id": "BDI-x9425tgx",
+            "name": "MERN Stack VM",
+            "os_build": {
+                "href": "/api/v3/cmp/osBuilds/OSB-wzbywhwd/",
+                "title": "CentOS 7.9.2009 x86_64"
+            },
+            "restrict_applications": false,
+            "show_on_order_form": false,
+            "tier_type": "server"
+        },
+        {
+            "action_name": "Setup EC2 Security Group Inbound and Outbound Rules",
+            "continue_on_failure": false,
+            "deploy_seq": 2,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-6siiv4yt",
+            "name": "Setup EC2 Security Group Inbound and Outbound Rules",
+            "run_on_scale_up": true,
+            "show_on_order_form": false,
+            "tier_type": "plugin"
+        },
+        {
+            "action_name": "Deploy MERN Stack Web App",
+            "continue_on_failure": false,
+            "deploy_seq": 3,
+            "description": "This script able to install the express, react and node technologies into VM",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-l6prp637",
+            "name": "Deploy MERN Stack Web App",
+            "run_on_scale_up": true,
+            "server_tiers": [
+                "MERN Stack VM"
+            ],
+            "show_on_order_form": false,
+            "tier_type": "script"
+        }
+    ],
+    "description": "This blueprint setup a production ready web server from scratch on the Amazon EC2 (Elastic Compute Cloud) service, then deploy a custom MERN Stack application to it that supports user registration and authentication.\r\n\r\nA MERN Stack application is made up of a front app built with React and React frontend is connected to a backend API built with Node.js + Expressjs + MongoDB, hence the name MERN (MongoDB , Expressjs , React, Nodejs)",
+    "favorited": false,
+    "icon": "image_qZq6zoK_I2ecaY4_qXSkD0F.png",
+    "id": "BP-dhpuhbba",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [],
+    "last_updated": "2022-11-28",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "MERN(Single Tier) Web App on CentOS",
+    "parameters": [
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "constraints": "Unconstrained",
+            "description": "How frequently backups should be taken",
+            "destination": "Both",
+            "field_dependency_controlling_set": [
+                {
+                    "controlling-field": {
+                        "name": "enable_backups"
+                    },
+                    "custom-field-options": [
+                        "True"
+                    ],
+                    "dependency-type": "SHOWHIDE",
+                    "dependent-field": {
+                        "name": "backup_policy"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "field_dependency_dependent_set": [],
+            "global_options": [
+                "Daily full, hourly incremental",
+                "Weekly full, daily incremental"
+            ],
+            "label": "Backup Policy",
+            "name": "backup_policy",
+            "options": [],
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": false,
+            "show_as_attribute": false,
+            "show_on_servers": true,
+            "type": "STR",
+            "value_pattern_string": ""
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "constraints": "Unconstrained",
+            "description": "Number of days to keep the backups",
+            "destination": "Both",
+            "field_dependency_controlling_set": [
+                {
+                    "controlling-field": {
+                        "name": "enable_backups"
+                    },
+                    "custom-field-options": [
+                        "True"
+                    ],
+                    "dependency-type": "SHOWHIDE",
+                    "dependent-field": {
+                        "name": "bkrt"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "field_dependency_dependent_set": [],
+            "global_options": [],
+            "label": "Backup Retention",
+            "name": "bkrt",
+            "options": [],
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": true,
+            "show_as_attribute": false,
+            "show_on_servers": true,
+            "type": "INT",
+            "value_pattern_string": ""
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "constraints": "Unconstrained",
+            "description": "Automatic Veeam backups will be taken of this VM ($2/month)",
+            "destination": "Both",
+            "field_dependency_controlling_set": [],
+            "field_dependency_dependent_set": [
+                {
+                    "controlling-field": {
+                        "name": "enable_backups"
+                    },
+                    "custom-field-options": [
+                        "True"
+                    ],
+                    "dependency-type": "SHOWHIDE",
+                    "dependent-field": {
+                        "name": "bkrt"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                },
+                {
+                    "controlling-field": {
+                        "name": "enable_backups"
+                    },
+                    "custom-field-options": [
+                        "True"
+                    ],
+                    "dependency-type": "SHOWHIDE",
+                    "dependent-field": {
+                        "name": "backup_policy"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "global_options": [],
+            "label": "Enable Backups",
+            "name": "enable_backups",
+            "options": [],
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": false,
+            "show_as_attribute": false,
+            "show_on_servers": true,
+            "type": "BOOL",
+            "value_pattern_string": null
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "constraints": "Unconstrained",
+            "description": "",
+            "destination": "Both",
+            "field_dependency_controlling_set": [
+                {
+                    "controlling-field": {
+                        "name": "monitoring_tool"
+                    },
+                    "custom-field-options": [],
+                    "dependency-type": "REGENOPTIONS",
+                    "dependent-field": {
+                        "name": "monitoring_group"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "field_dependency_dependent_set": [],
+            "global_options": [],
+            "label": "Monitoring Group",
+            "name": "monitoring_group",
+            "options": [],
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": false,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "STR",
+            "value_pattern_string": ""
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "constraints": "Unconstrained",
+            "description": "wqewerq",
+            "destination": "Both",
+            "field_dependency_controlling_set": [],
+            "field_dependency_dependent_set": [
+                {
+                    "controlling-field": {
+                        "name": "monitoring_tool"
+                    },
+                    "custom-field-options": [],
+                    "dependency-type": "REGENOPTIONS",
+                    "dependent-field": {
+                        "name": "monitoring_group"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "global_options": [
+                "DataDog",
+                "Sensu",
+                "SolarWinds",
+                "Zabbix"
+            ],
+            "label": "Monitoring Tool",
+            "name": "monitoring_tool",
+            "options": [],
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": false,
+            "show_as_attribute": false,
+            "show_on_servers": true,
+            "type": "STR",
+            "value_pattern_string": null
+        }
+    ],
+    "resource_name_template": "mern-stack-web-app-on-centos",
+    "resource_type": {
+        "icon": "",
+        "id": "RT-ky65jpf8",
+        "label": "Service",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "service_57bd9e0a5b32427aba8b9e2c6d939123",
+        "plural_label": null
+    },
+    "sequence": 35,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": []
+}

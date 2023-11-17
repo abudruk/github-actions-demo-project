@@ -1,0 +1,51 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "blueprint_image": null,
+    "deployment_items": [
+        {
+            "action_name": "aurora_multi_az_db",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-uaz261ki",
+            "name": "Aurora Multi AZ database",
+            "parameter_defaults": [
+                {
+                    "label": "Aurora Capacity",
+                    "name": "max_capacity_a435",
+                    "value": "2"
+                }
+            ],
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "This blueprint creates Aurora Serverless v2 Multi-AZ DB Cluster in provided zones within a region.",
+    "favorited": false,
+    "id": "BP-4mtpb5l3",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [],
+    "last_updated": "2023-03-03",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Aurora Multi-AZ DB",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "fas fa-database",
+        "id": "RT-62cszen1",
+        "label": "Database",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "database",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": []
+}

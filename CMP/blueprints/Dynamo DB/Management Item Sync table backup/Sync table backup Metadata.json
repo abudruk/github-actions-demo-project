@@ -1,0 +1,17 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Sync table backup",
+    "dangerous": false,
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "glyphicon glyphicon-download",
+    "id": "RSA-fa5ikreh",
+    "is_synchronous": false,
+    "label": "Sync table backup",
+    "last_updated": "2023-10-25",
+    "list_view_visible": true,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "requires_approval": false,
+    "submit_button_label": ""
+}

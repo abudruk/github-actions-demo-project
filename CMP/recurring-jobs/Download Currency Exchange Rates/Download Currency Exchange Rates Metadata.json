@@ -1,0 +1,14 @@
+{
+    "action_input_default_values": [],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Download Currency Exchange Rates",
+    "create_date": "2021-03-02 13:29:24.805214",
+    "description": "Download the latest exchange rates for supported currencies.",
+    "enabled": false,
+    "id": "RJB-wkpd0stm",
+    "last_run": "2021-10-14 02:00:00.248049",
+    "last_updated": null,
+    "name": "Download Currency Exchange Rates",
+    "schedule": "0 2 * * *",
+    "type": "orchestration_hook"
+}

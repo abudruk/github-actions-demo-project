@@ -1,0 +1,12 @@
+{
+    "description": "",
+    "id": "OHK-lkqnjw0w",
+    "last_updated": "2022-01-21",
+    "max_retries": 0,
+    "name": "Lock Workspace",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Lock Workspace Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

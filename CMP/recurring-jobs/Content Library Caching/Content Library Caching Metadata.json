@@ -1,0 +1,15 @@
+{
+    "action_input_default_values": [],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Content Library Caching",
+    "create_date": "2021-12-31 08:18:50.647144",
+    "description": "Create local cached files for per-collection, CloudBolt hosted content",
+    "enabled": true,
+    "icon": "cloudbolt_2EP3Eyg.jpg",
+    "id": "RJB-z0v48q52",
+    "last_run": null,
+    "last_updated": "2022-01-20",
+    "name": "Content Library Caching",
+    "schedule": "5 0 * * *",
+    "type": "orchestration_hook"
+}

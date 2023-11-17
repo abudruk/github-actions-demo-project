@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-cp7316wk",
+    "last_updated": "2023-08-09",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Delete Project",
+    "resource_technologies": [],
+    "script_filename": "Delete Project Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

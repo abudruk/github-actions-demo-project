@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-zunwb8di",
+    "last_updated": "2023-10-20",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Teardown Route 53 DNS Record",
+    "resource_technologies": [],
+    "script_filename": "Teardown Route 53 DNS Record Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

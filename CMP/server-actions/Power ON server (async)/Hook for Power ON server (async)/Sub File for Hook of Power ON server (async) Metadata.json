@@ -1,0 +1,12 @@
+{
+    "description": "Powers a single server on. Used by the *multijob* version of the \r\n\"Auto-power control servers\" recurring job.",
+    "id": "OHK-41nn3dbi",
+    "last_updated": "2022-02-01",
+    "max_retries": 0,
+    "name": "Power ON server (async)",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Power ON server (async) Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

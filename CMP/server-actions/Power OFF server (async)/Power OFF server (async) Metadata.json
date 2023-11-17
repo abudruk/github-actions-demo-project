@@ -1,0 +1,14 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Power OFF server (async)",
+    "dialog_message": "",
+    "enabled": false,
+    "extra_classes": "",
+    "icon": "Power_Button-512.png",
+    "id": "SVA-ljnabsce",
+    "label": "Power OFF server (async)",
+    "last_updated": "2022-02-01",
+    "requires_approval": false,
+    "sequence": null,
+    "submit_button_label": ""
+}

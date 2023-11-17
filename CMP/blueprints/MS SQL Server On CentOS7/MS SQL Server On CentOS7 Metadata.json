@@ -1,0 +1,110 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "all_environments_enabled": true,
+            "allowed_os_families": [
+                "CentOS"
+            ],
+            "applications": null,
+            "deploy_seq": 1,
+            "description": "Installs MSSQL on VMware. Currently only CentOS7 is being supported.\r\nA default password for the System Admin is set as CloudBolt!\r\nIf you need to change this, you can change it during the ordering process.",
+            "enabled_environments": [],
+            "environment_selection_orchestration": null,
+            "execute_in_parallel": false,
+            "hostname_template": "",
+            "id": "BDI-git7zmgm",
+            "name": "MSSQL on VMware",
+            "os_build": null,
+            "restrict_applications": false,
+            "show_on_order_form": false,
+            "tier_type": "server"
+        },
+        {
+            "action_name": "Install MSSQL",
+            "continue_on_failure": false,
+            "deploy_seq": 3,
+            "description": "Installs  SQL Server on the provisioned machine.",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-snrjyju9",
+            "name": "Install SQL Server",
+            "parameter_defaults": [
+                {
+                    "label": "Sa Password",
+                    "name": "sa_password_a359",
+                    "value": "CloudBolt!"
+                },
+                {
+                    "label": "Install Sql Server Agent",
+                    "name": "install_sql_server_agent_a359",
+                    "value": "Y"
+                },
+                {
+                    "label": "Mssql Product Id",
+                    "name": "mssql_product_id_a359",
+                    "value": "express"
+                }
+            ],
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "script"
+        }
+    ],
+    "description": "Installs MSSQL. Currently only CentOS7 is being supported.\r\nA default password for the System Admin is set as CloudBolt!\r\nIf you need to change this, you can change it during the ordering process.",
+    "favorited": false,
+    "icon": "mssql_ZT1ceRj_rekfCPx_pdTYR7L.png",
+    "id": "BP-dva7sj42",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "model_name": "serviceblueprint",
+            "name": "CentOS 7",
+            "parent": {
+                "model-name": "serviceblueprint",
+                "name": "CentOS"
+            }
+        },
+        {
+            "model_name": "serviceblueprint",
+            "name": "MySQL",
+            "parent": {
+                "model-name": "serviceblueprint",
+                "name": "Databases",
+                "parent": {
+                    "model-name": "serviceblueprint",
+                    "name": "Public Cloud Services"
+                }
+            }
+        }
+    ],
+    "last_updated": "2022-09-28",
+    "management_actions": [
+        {
+            "enabled": true,
+            "label": "Restart MSSql server"
+        },
+        {
+            "enabled": true,
+            "label": "Stop MSSql Server"
+        }
+    ],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "MS SQL Server On CentOS7",
+    "resource_name_template": "",
+    "resource_type": {
+        "icon": "fas fa-database",
+        "id": "RT-h0npsxst",
+        "label": "Database",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "database",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": []
+}

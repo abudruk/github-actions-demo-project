@@ -1,0 +1,79 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "Create AWS FSx",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": null,
+            "enabled": true,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-utpwtiy7",
+            "name": "Create AWS FSx",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "Amazon FSx provides fully managed third-party file systems. Amazon FSx provides you with the native compatibility of third-party file systems with feature sets for workloads such as Windows-based storage, high-performance computing (HPC), machine learning, and electronic design automation (EDA).",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-cag0x7nf/",
+        "title": "Discover Amazon FSx file systems"
+    },
+    "favorited": false,
+    "icon": "aws_fsx.png",
+    "id": "BP-1i71es9n",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "color": null,
+            "id": "TAG-6spb5ltg",
+            "image": null,
+            "name": "AWS",
+            "parent": {
+                "color": null,
+                "id": "TAG-rgqwsw74",
+                "image": null,
+                "name": "Technology Type",
+                "sequence": 0
+            },
+            "sequence": 0
+        }
+    ],
+    "last_updated": "2023-10-23",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Amazon FSx",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "fa fa-file",
+        "id": "RT-8ggigb3n",
+        "label": "File System",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "FileSystem",
+        "plural_label": "File Systems"
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Delete Amazon FSx file system",
+            "continue_on_failure": false,
+            "deploy_seq": 2,
+            "description": null,
+            "enabled": true,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-mmwi9s8e",
+            "name": "Delete Amazon FSx file system",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

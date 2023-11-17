@@ -1,0 +1,20 @@
+{
+    "description": "\n###### Setting Up:\n- Import the UI extension from the Content Library.\n- On the UI Extensions page, click *Sync Static Assets.*\n- Run these commands in the terminal:\n\t- sudo mkdir /var/run/cloudbolt/jupyterd\n\t- chown cloudbolt /var/run/cloudbolt/jupyterd\n\t- service jupyterd restart\n\t- service httpd restart\n\n###### Accessing Jupyter Notebook:\n- The Jupyter Notebook link is located on the *All Admin* page under the *Admin Extensions* section.\n###### Additional Information:\n- For additional details and troubleshooting tips, consult the User Guide: [https://cloudboltsoftware.github.io/cloudbolt-forge/sites/NewJupyterXUI/jupyter.html](https://cloudboltsoftware.github.io/cloudbolt-forge/sites/NewJupyterXUI/jupyter.html).<hr>\n",
+    "enabled": true,
+    "icon": "jupyter_notebook_az36RpW_CIpLVe5.png",
+    "id": "XUI-fxkobqt9",
+    "label": "Jupyter Notebook",
+    "last_updated": "2023-10-13",
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "jupyter_notebook",
+    "package_contents": [
+        "urls.py",
+        "views.py",
+        "__init__.py",
+        "README.md",
+        "templates/base.html",
+        "templates/django-notebook.html"
+    ],
+    "version": ""
+}

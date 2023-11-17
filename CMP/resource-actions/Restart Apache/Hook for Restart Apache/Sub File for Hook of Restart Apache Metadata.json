@@ -1,0 +1,19 @@
+{
+    "commandline_args": null,
+    "credentials": "YOUR_CREDENTIALS",
+    "description": "Restarts the apache process on the server",
+    "execution_timeout": 120,
+    "id": "OHK-hpo2y0mm",
+    "last_updated": "2022-01-21",
+    "max_retries": 0,
+    "name": "Restart Apache",
+    "remove_after_run": true,
+    "resource_technologies": [],
+    "run_with_sudo": true,
+    "script_filename": "Sub File for Hook of Restart Apache Script.py",
+    "shared": false,
+    "target_os_families": [
+        "Linux"
+    ],
+    "type": "Remote Script"
+}

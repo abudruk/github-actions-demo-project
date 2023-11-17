@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-8k0b7vv9",
+    "last_updated": "2023-03-03",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "delete_all_resources_of_ha",
+    "resource_technologies": [],
+    "script_filename": "delete_all_resources_of_ha Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

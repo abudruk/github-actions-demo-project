@@ -1,0 +1,107 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "all_environments_enabled": true,
+            "allowed_os_families": [
+                "CentOS",
+                "Red Hat"
+            ],
+            "applications": null,
+            "deploy_seq": 1,
+            "description": "",
+            "enabled_environments": [],
+            "environment_selection_orchestration": null,
+            "execute_in_parallel": false,
+            "hostname_template": "mysql-00X",
+            "id": "BDI-8xu6em66",
+            "name": "MySQL Server",
+            "os_build": null,
+            "restrict_applications": false,
+            "show_on_order_form": true,
+            "tier_type": "server"
+        },
+        {
+            "action_name": "Install MySQL",
+            "continue_on_failure": false,
+            "deploy_seq": 2,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-dnhvrf7u",
+            "name": "Install MySQL",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "script"
+        }
+    ],
+    "description": "Deploys MySQL on a CentOS/Red Hat VM. When deploying, it asks for the desired root mysql password and sets the password accordingly.",
+    "favorited": false,
+    "icon": "mysql_Q9BEaUH_XhioEjT_IFOK0Ud.png",
+    "id": "BP-dys93mlj",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "model_name": "serviceblueprint",
+            "name": "CentOS"
+        },
+        {
+            "model_name": "serviceblueprint",
+            "name": "MySQL",
+            "parent": {
+                "model-name": "serviceblueprint",
+                "name": "Databases",
+                "parent": {
+                    "model-name": "serviceblueprint",
+                    "name": "Public Cloud Services"
+                }
+            }
+        }
+    ],
+    "last_updated": "2022-09-28",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "MySQL on CentOS",
+    "parameters": [
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "constraints": {
+                "maximum": "32.00",
+                "minimum": "8.00",
+                "regex_constraint": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+            },
+            "description": "Accepts a string with at least one uppercase letter, one lowercase letter, one number, and one special character.",
+            "destination": "Build Items",
+            "field_dependency_controlling_set": [],
+            "field_dependency_dependent_set": [],
+            "global_options": [],
+            "label": "Database Root Password",
+            "name": "database_root_password",
+            "options": [],
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": true,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "PWD",
+            "value_pattern_string": ""
+        }
+    ],
+    "resource_name_template": "",
+    "resource_type": {
+        "icon": "",
+        "id": "RT-wl1o0b0w",
+        "label": "Service",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "service",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": []
+}

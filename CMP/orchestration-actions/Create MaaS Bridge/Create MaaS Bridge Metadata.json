@@ -1,0 +1,20 @@
+{
+    "action_input_default_values": [
+        {
+            "label": "Bridge Type",
+            "name": "bridge_type_a145",
+            "value": "standard"
+        }
+    ],
+    "base_action_name": "Create MaaS Bridge",
+    "continue_on_failure": false,
+    "description": "",
+    "enabled": true,
+    "hook_point": "During Resource Provisioning",
+    "icon": "maas-logo.png",
+    "id": "HPA-gwxstreh",
+    "last_updated": "2022-02-09",
+    "name": "Create MaaS Bridge",
+    "run_on_statuses": "",
+    "run_seq": 2
+}

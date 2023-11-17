@@ -1,0 +1,85 @@
+{
+    "any_group_can_deploy": false,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "all_environments_enabled": false,
+            "allowed_os_families": [
+                "Windows"
+            ],
+            "applications": null,
+            "deploy_seq": 2,
+            "description": "",
+            "enabled_environments": [],
+            "environment_selection_orchestration": null,
+            "execute_in_parallel": false,
+            "hostname_template": "",
+            "id": "BDI-h7k7f6c9",
+            "name": "Windows Server",
+            "os_build": null,
+            "restrict_applications": false,
+            "show_on_order_form": true,
+            "tier_type": "server"
+        },
+        {
+            "action_name": "Set Desktop Color",
+            "continue_on_failure": false,
+            "deploy_seq": 3,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-r6y2b65k",
+            "name": "Set Desktop Color",
+            "parameter_defaults": [
+                {
+                    "label": "Blue",
+                    "name": "Blue_a374",
+                    "value": "166"
+                },
+                {
+                    "label": "Green",
+                    "name": "Green_a374",
+                    "value": "109"
+                },
+                {
+                    "label": "Red",
+                    "name": "Red_a374",
+                    "value": "57"
+                }
+            ],
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "script"
+        }
+    ],
+    "description": "<p>A simple example that installs Windows and sets the desktop background to the specified color. </p>\r\n\r\n<p>Depending on environment parameters, the new server will be joined to the domain as appropriate (via CloudBolt's out-of-the-box orchestration actions).</p>\r\n\r\n<p><i>Add your own powershell scripts to the build steps of this blueprint to customize it to your liking.</i></p>",
+    "favorited": false,
+    "icon": "microsoft-windows-logo-vector-download_MdvaZnl_ArypPUh_ILy6aXp.png",
+    "id": "BP-25y2kdod",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "model_name": "serviceblueprint",
+            "name": "Windows"
+        }
+    ],
+    "last_updated": "2022-09-28",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Windows Server",
+    "resource_name_template": "",
+    "resource_type": {
+        "icon": "",
+        "id": "RT-wl1o0b0w",
+        "label": "Service",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "service",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": []
+}

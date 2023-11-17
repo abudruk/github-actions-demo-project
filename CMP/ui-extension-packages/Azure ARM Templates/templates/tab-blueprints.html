@@ -1,0 +1,76 @@
+
+
+<div class="container-fluid">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">Azure ARM Template Library</h2>
+        </div>
+        <div class="panel-body">
+            <div class="btn-toolbar">
+                <a class="btn open-dialog cb-btn-primary" href="{% url 'create_arm_blueprint' %}"><span class="icon-add"></span> Create new Azure ARM Template Blueprint</a>
+            </div>
+            {% if arm_blueprints %}
+                <p>List of Azure ARM Template Blueprints (has <code>Azure ARM Template</code> in <b>Labels</b> field).</p>
+                <table class="dataTable no-footer table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Blueprint Name</th>
+                            <th>Active Resources</th>
+                            <th>ConnectionInfo</th>
+                            <th>ConnectionInfo Type</th>
+                            <th>Git URL</th>
+                            <th>Allowed Environments</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for arm in arm_blueprints %}
+                        <tr>
+                            <td>
+                                {% if arm.ci_error %}
+                                    {{ arm.ci_error }}
+                                {% else %}
+                                    {% if arm.resource_type.icon %}
+                                        <span class="{{ arm.resource_type.icon }}"></span>
+                                    {% endif %}
+                                {% endif %}
+                                <a href="{% url 'blueprint_detail' arm.bp.id %}">{{arm.bp.name}}</a>
+                            </td>
+                            <td>
+                                <a href="{% url 'blueprint_detail' arm.bp.id %}/#tab-resources">{{ arm.resource_count }}</a>
+                            </td>
+                            <td>
+                                {% if arm.conn_info %}
+                                <a href="{% url 'connectioninfo_detail' arm.conn_info.id %}">{{arm.conn_info.name}}</a>
+                                {% else %}
+                                N/A
+                                {% endif %}
+                            </td>
+                            <td>{{arm.conn_info_type|title}}</td>
+                            <td><a href="{{arm.url}}" target="_blank" rel="noopener noreferrer">{{arm.filename}}</a></td>
+                            <td>{% if arm.allowed_envs == 'all_capable' %}All Capable{% else %}{% for env in arm.allowed_envs %}<a href="{% url 'env_detail' env.id %}">{{env.name}}</a><br>{% endfor %}{% endif %}</td>
+                            <td class="shrink">
+                                <div class="btn-group">
+                                    <a class="icon-sync btn btn-default btn-sm open-dialog"
+                                        href="{% url 'sync_arm_blueprint' arm.bp.id %}"
+                                        title="Synchronize Blueprint"></a>
+                                    <a class="icon-edit btn btn-default btn-sm open-dialog"
+                                        href="{% url 'edit_arm_blueprint' arm.bp.id %}"
+                                        title="Edit Blueprint"></a>
+                                    <a class="icon-delete btn btn-default btn-sm open-dialog"
+                                        href="{% url 'delete_arm_blueprint' arm.bp.id %}"
+                                        title="Delete Blueprint"></a>
+                                 </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-info w-75">
+                    <p><i class="fas fa-info-circle mr-2"></i> No Azure ARM Template backed Blueprints are currently deployed in the environment.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

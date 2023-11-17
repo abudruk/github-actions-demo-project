@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-2f4hpdex",
+    "last_updated": "2023-07-10",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure PostgreSQL Discovery",
+    "resource_technologies": [],
+    "script_filename": "Azure PostgreSQL Discovery Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

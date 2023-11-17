@@ -1,0 +1,35 @@
+{
+    "action_input_default_values": [
+        {
+            "label": "OS Build Name",
+            "name": "os_build_name_a729",
+            "value": "{{ server.os_family.os_build_set.first }}"
+        },
+        {
+            "label": "New Template Name",
+            "name": "template_name_a729",
+            "value": "template-from-vm-{{ server.hostname }}"
+        },
+        {
+            "label": "OS Build Name",
+            "name": "os_build_name_a197",
+            "value": "{{ server.os_family.os_build_set.first }}"
+        },
+        {
+            "label": "New Template Name",
+            "name": "template_name_a197",
+            "value": "template-from-vm-{{ server.hostname }}"
+        }
+    ],
+    "base_action_name": "Clone VM to Template",
+    "dialog_message": "Clone this VM to a template and import it as an OS Build choice for this environment.",
+    "enabled": true,
+    "extra_classes": "far fa-clone",
+    "icon": "vm_iieXwZh.png",
+    "id": "SVA-jlqczp3l",
+    "label": "Clone VM to Template",
+    "last_updated": "2022-01-18",
+    "requires_approval": false,
+    "sequence": null,
+    "submit_button_label": "Clone to Template"
+}

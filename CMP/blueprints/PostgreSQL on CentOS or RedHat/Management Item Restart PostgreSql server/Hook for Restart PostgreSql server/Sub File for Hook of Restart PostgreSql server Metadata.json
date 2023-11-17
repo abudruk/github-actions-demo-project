@@ -1,0 +1,21 @@
+{
+    "commandline_args": null,
+    "credentials": "YOUR_CREDENTIALS",
+    "description": "Restart PostgreSql server",
+    "execution_timeout": 120,
+    "id": "OHK-kst4y05m",
+    "last_updated": "2023-03-03",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Restart PostgreSql server",
+    "remove_after_run": true,
+    "resource_technologies": [],
+    "run_with_sudo": false,
+    "script_filename": "Sub File for Hook of Restart PostgreSql server Script.py",
+    "shared": false,
+    "target_os_families": [
+        "Linux -> CentOS"
+    ],
+    "type": "Remote Script"
+}

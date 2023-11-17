@@ -1,0 +1,21 @@
+{
+    "action_input_default_values": [
+        {
+            "label": "Threshold Days",
+            "name": "threshold_days_a173",
+            "value": "365"
+        }
+    ],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Delete Old Historical Server Records",
+    "create_date": "2022-01-21 05:38:16.462512",
+    "description": "Delete Old Historical Server Records",
+    "enabled": false,
+    "icon": "cloudbolt_2EP3Eyg.jpg",
+    "id": "RJB-2po9ye96",
+    "last_run": null,
+    "last_updated": "2022-01-21",
+    "name": "Delete Old Historical Server Records",
+    "schedule": "15 2 * * 6",
+    "type": "orchestration_hook"
+}

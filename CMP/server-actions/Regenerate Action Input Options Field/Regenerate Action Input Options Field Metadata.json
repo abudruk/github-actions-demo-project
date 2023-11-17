@@ -1,0 +1,14 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Regenerate Action Input Options Field",
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "",
+    "icon": "cloudbolt_6zOr5qj.jpg",
+    "id": "SVA-ptfoguji",
+    "label": "Regenerate Action Input Options Field",
+    "last_updated": "2022-02-01",
+    "requires_approval": false,
+    "sequence": null,
+    "submit_button_label": ""
+}

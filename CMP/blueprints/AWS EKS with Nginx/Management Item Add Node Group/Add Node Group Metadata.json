@@ -1,0 +1,202 @@
+{
+    "action_input_default_values": [
+        {
+            "label": "Desired Nodes",
+            "name": "desired_nodes_a242",
+            "value": "1"
+        },
+        {
+            "label": "Disk Size",
+            "name": "disk_size_a242",
+            "value": "20"
+        },
+        {
+            "label": "Max Nodes",
+            "name": "max_nodes_a242",
+            "value": "1"
+        },
+        {
+            "label": "Min Nodes",
+            "name": "min_nodes_a242",
+            "value": "1"
+        }
+    ],
+    "action_inputs": [
+        {
+            "allow-multiple": false,
+            "available-all-servers": false,
+            "description": "Select the EKS-optimized Amazon Machine Image for nodes.",
+            "field-dependency-controlling-set": [],
+            "field-dependency-dependent-set": [
+                {
+                    "controlling-field": {
+                        "name": "ami_type_a242"
+                    },
+                    "custom-field-options": [],
+                    "dependency-type": "REGENOPTIONS",
+                    "dependent-field": {
+                        "name": "instance_type_a242"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "global-options": [],
+            "hide-if-default-value": false,
+            "label": "Ami Type",
+            "name": "ami_type",
+            "placeholder": null,
+            "relevant-osfamilies": [],
+            "required": true,
+            "show-as-attribute": false,
+            "show-on-servers": false,
+            "type": "STR",
+            "value-pattern-string": null
+        },
+        {
+            "allow-multiple": false,
+            "available-all-servers": false,
+            "description": "Set the desired number of nodes that the group should launch with initially.",
+            "field-dependency-controlling-set": [],
+            "field-dependency-dependent-set": [],
+            "global-options": [],
+            "hide-if-default-value": false,
+            "label": "Desired Nodes",
+            "maximum": "100.00",
+            "minimum": "1.00",
+            "name": "desired_nodes",
+            "placeholder": null,
+            "relevant-osfamilies": [],
+            "required": true,
+            "show-as-attribute": false,
+            "show-on-servers": false,
+            "type": "INT",
+            "value-pattern-string": null
+        },
+        {
+            "allow-multiple": false,
+            "available-all-servers": false,
+            "description": "Disk Size depends on AMI and Instance Type. The root device disk size (in GiB) for your node group instances. The default disk size is 20 GiB.",
+            "field-dependency-controlling-set": [],
+            "field-dependency-dependent-set": [],
+            "global-options": [],
+            "hide-if-default-value": false,
+            "label": "Disk Size",
+            "maximum": "500.00",
+            "minimum": "20.00",
+            "name": "disk_size",
+            "placeholder": null,
+            "relevant-osfamilies": [],
+            "required": true,
+            "show-as-attribute": false,
+            "show-on-servers": false,
+            "type": "INT",
+            "value-pattern-string": null
+        },
+        {
+            "allow-multiple": false,
+            "available-all-servers": false,
+            "description": "Select instance types you prefer for this node group.",
+            "field-dependency-controlling-set": [
+                {
+                    "controlling-field": {
+                        "name": "ami_type_a242"
+                    },
+                    "custom-field-options": [],
+                    "dependency-type": "REGENOPTIONS",
+                    "dependent-field": {
+                        "name": "instance_type_a242"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "field-dependency-dependent-set": [],
+            "global-options": [],
+            "hide-if-default-value": false,
+            "label": "Instance Type",
+            "name": "instance_type",
+            "placeholder": null,
+            "relevant-osfamilies": [],
+            "required": true,
+            "show-as-attribute": false,
+            "show-on-servers": false,
+            "type": "STR",
+            "value-pattern-string": null
+        },
+        {
+            "allow-multiple": false,
+            "available-all-servers": false,
+            "description": "Set the maximum number of nodes that the group can scale out to.",
+            "field-dependency-controlling-set": [],
+            "field-dependency-dependent-set": [],
+            "global-options": [],
+            "hide-if-default-value": false,
+            "label": "Max Nodes",
+            "maximum": "100.00",
+            "minimum": "1.00",
+            "name": "max_nodes",
+            "placeholder": null,
+            "relevant-osfamilies": [],
+            "required": true,
+            "show-as-attribute": false,
+            "show-on-servers": false,
+            "type": "INT",
+            "value-pattern-string": null
+        },
+        {
+            "allow-multiple": false,
+            "available-all-servers": false,
+            "description": "Set the minimum number of nodes that the group can scale in to.",
+            "field-dependency-controlling-set": [],
+            "field-dependency-dependent-set": [],
+            "global-options": [],
+            "hide-if-default-value": false,
+            "label": "Min Nodes",
+            "maximum": "100.00",
+            "minimum": "1.00",
+            "name": "min_nodes",
+            "placeholder": null,
+            "relevant-osfamilies": [],
+            "required": true,
+            "show-as-attribute": false,
+            "show-on-servers": false,
+            "type": "INT",
+            "value-pattern-string": null
+        },
+        {
+            "allow-multiple": false,
+            "available-all-servers": false,
+            "description": "Assign a unique name for this node group.",
+            "field-dependency-controlling-set": [],
+            "field-dependency-dependent-set": [],
+            "global-options": [],
+            "hide-if-default-value": false,
+            "label": "Nodegroup Name",
+            "name": "nodegroup_name",
+            "placeholder": null,
+            "relevant-osfamilies": [],
+            "required": true,
+            "show-as-attribute": false,
+            "show-on-servers": false,
+            "type": "STR",
+            "value-pattern-string": null
+        }
+    ],
+    "base_action_name": "Add Node Group",
+    "dangerous": false,
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "glyphicon glyphicon-plus",
+    "id": "RSA-6101cj7a",
+    "is_synchronous": false,
+    "label": "Add Node Group",
+    "last_updated": "2023-10-30",
+    "list_view_visible": true,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "requires_approval": false,
+    "submit_button_label": ""
+}

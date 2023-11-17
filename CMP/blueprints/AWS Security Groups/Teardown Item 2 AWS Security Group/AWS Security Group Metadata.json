@@ -1,0 +1,18 @@
+{
+    "description": "",
+    "id": "OHK-yhn3hrat",
+    "last_updated": "2023-10-20",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "AWS Security Group",
+    "resource_technologies": [
+        "Amazon Web Services",
+        "AWS GovCloud (US)",
+        "AWS China - \u4e9a\u9a6c\u900a"
+    ],
+    "script_filename": "AWS Security Group Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

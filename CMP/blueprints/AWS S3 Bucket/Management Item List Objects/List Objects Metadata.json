@@ -1,0 +1,17 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "List Objects",
+    "dangerous": false,
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "fas fa-list",
+    "id": "RSA-p8sdo03a",
+    "is_synchronous": false,
+    "label": "List Objects",
+    "last_updated": "2023-10-23",
+    "list_view_visible": true,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "requires_approval": false,
+    "submit_button_label": ""
+}

@@ -1,0 +1,20 @@
+{
+    "action_input_default_values": [
+        {
+            "label": "Name Of New Ami",
+            "name": "name_of_new_ami_a206",
+            "value": "AMI-from-instance-{{ server.resource_handler_svr_id }}"
+        }
+    ],
+    "base_action_name": "Create Amazon Machine Image from Instance",
+    "dialog_message": "The server must be powered off.",
+    "enabled": true,
+    "extra_classes": "fab fa-amazon",
+    "icon": "ami1.png",
+    "id": "SVA-p52rfe44",
+    "label": "Create Amazon Machine Image from Instance",
+    "last_updated": "2022-02-01",
+    "requires_approval": false,
+    "sequence": null,
+    "submit_button_label": "Create AMI"
+}

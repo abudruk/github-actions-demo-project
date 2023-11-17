@@ -1,0 +1,21 @@
+{
+    "commandline_args": null,
+    "credentials": "YOUR_CREDENTIALS",
+    "description": "Restarts the MSSql serve.\r\nSince the restart command doesn't return any output, the status command is executed after the restart to show that the server is running.",
+    "execution_timeout": 120,
+    "id": "OHK-ehzkzr3s",
+    "last_updated": "2022-09-28",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Restart MSSql server",
+    "remove_after_run": true,
+    "resource_technologies": [],
+    "run_with_sudo": false,
+    "script_filename": "Sub File for Hook of Restart MSSql server Script.py",
+    "shared": false,
+    "target_os_families": [
+        "Linux -> CentOS"
+    ],
+    "type": "Remote Script"
+}

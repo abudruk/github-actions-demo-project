@@ -1,0 +1,27 @@
+{
+    "description": "\nProvides features to support a Tintri storage array.\n\nServers in environments that have a Tintri store will have a \"Tintri\" tab on\ntheir detail view. This tab exposes storage performance metrics as well as some\nactions users can take on the server, such as taking a snapshot.\n",
+    "enabled": true,
+    "icon": "tintri.jpeg",
+    "id": "XUI-fi8wlxfu",
+    "label": "Tintri",
+    "last_updated": "2023-01-04",
+    "maximum_version_required": "",
+    "minimum_version_required": "9999.9999.9999.9999",
+    "name": "tintri",
+    "package_contents": [
+        "tintri.py",
+        "forms.py",
+        "utils.py",
+        "urls.py",
+        "common.py",
+        "views1.py",
+        "views.py",
+        "__init__.py",
+        "tintri_api.py",
+        "templates/server_tab.html",
+        "templates/tab-hypervisors.html",
+        "templates/admin_page.html",
+        "templates/tab-overview.html"
+    ],
+    "version": ""
+}

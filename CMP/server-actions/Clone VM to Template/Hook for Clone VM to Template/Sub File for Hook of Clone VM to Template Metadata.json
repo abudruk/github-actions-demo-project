@@ -1,0 +1,69 @@
+{
+    "action_inputs": [
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "description": "",
+            "field_dependency_controlling_set": [],
+            "field_dependency_dependent_set": [],
+            "global_options": [],
+            "hide_if_default_value": false,
+<<<<<<< Updated upstream
+            "id": "CF-ghvn5hz5",
+=======
+            "id": "CF-y64tnj3a",
+>>>>>>> Stashed changes
+            "label": "OS Build Name",
+            "maximum": "1000.00",
+            "minimum": "3.00",
+            "name": "os_build_name",
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": true,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "STR",
+            "value_pattern_string": null
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "description": "",
+            "field_dependency_controlling_set": [],
+            "field_dependency_dependent_set": [],
+            "global_options": [],
+            "hide_if_default_value": false,
+<<<<<<< Updated upstream
+            "id": "CF-q11jjaea",
+=======
+            "id": "CF-brp5kpr4",
+>>>>>>> Stashed changes
+            "label": "New Template Name",
+            "name": "template_name",
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": false,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "STR",
+            "value_pattern_string": null
+        }
+    ],
+    "description": "Clones a vCenter VM to a template and then imports that into CloudBolt so it can be used as an OS Build choice.\r\n\r\nThe template is placed in the same data store and folder as the source VM. Its name is derived from the VM's OS Build name but can be customized at run time.",
+<<<<<<< Updated upstream
+    "id": "OHK-vsvol4f2",
+    "last_updated": "2022-01-18",
+=======
+    "id": "OHK-z6uzwy81",
+    "last_updated": "2022-02-01",
+>>>>>>> Stashed changes
+    "max_retries": 0,
+    "name": "Clone VM to Template",
+    "resource_technologies": [
+        "VMware vCenter"
+    ],
+    "script_filename": "Sub File for Hook of Clone VM to Template Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

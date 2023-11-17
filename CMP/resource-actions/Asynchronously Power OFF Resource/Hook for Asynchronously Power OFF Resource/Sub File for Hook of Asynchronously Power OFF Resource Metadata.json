@@ -1,0 +1,12 @@
+{
+    "description": "For use by the \"Auto-power control resources\" recurring job.",
+    "id": "OHK-krjacnfs",
+    "last_updated": "2022-01-21",
+    "max_retries": 0,
+    "name": "Asynchronously Power OFF Resource",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Asynchronously Power OFF Resource Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

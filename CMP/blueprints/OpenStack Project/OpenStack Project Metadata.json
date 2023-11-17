@@ -1,0 +1,73 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "Create Project",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-rs82yo7a",
+            "name": "Create Project",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "",
+    "favorited": false,
+    "icon": "RedhatOpenstackLogo_dFKX515.png",
+    "id": "BP-xyzwv42x",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "color": null,
+            "id": "TAG-jte5jp4a",
+            "image": null,
+            "name": "OpenStack",
+            "parent": {
+                "color": null,
+                "id": "TAG-rgqwsw74",
+                "image": null,
+                "name": "Technology Type",
+                "sequence": 0
+            },
+            "sequence": 0
+        }
+    ],
+    "last_updated": "2023-08-09",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "OpenStack Project",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "",
+        "id": "RT-wl7zplk0",
+        "label": "OpenStack Project",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "openstack_project_700d6440ccb94c33870e16f7c9658598",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Delete Project",
+            "continue_on_failure": false,
+            "deploy_seq": 2,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-quxe8hcg",
+            "name": "Delete Project",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

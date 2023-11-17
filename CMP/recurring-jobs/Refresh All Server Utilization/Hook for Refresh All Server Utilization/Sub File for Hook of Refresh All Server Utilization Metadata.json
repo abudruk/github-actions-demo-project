@@ -1,0 +1,12 @@
+{
+    "description": "Run any action whose name starts with \"Refresh Utilization \".\n            This action can be set up to run periodically via Admin > Recurring Jobs.",
+    "id": "OHK-ikx0ygpp",
+    "last_updated": "2022-01-21",
+    "max_retries": 0,
+    "name": "Refresh All Server Utilization",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Refresh All Server Utilization Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

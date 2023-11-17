@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-omh52xlx",
+    "last_updated": "2023-10-20",
+    "max_retries": 3,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Delete AWS RDS Instance",
+    "resource_technologies": [],
+    "script_filename": "Delete AWS RDS Instance Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

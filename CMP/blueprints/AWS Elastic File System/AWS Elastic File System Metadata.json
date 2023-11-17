@@ -1,0 +1,84 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "AWS Elastic File System Create",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": null,
+            "enabled": true,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-p5sru86c",
+            "name": "AWS Elastic File System Create",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "Blueprint for creating and managing AWS ECs Elastic File Systems (EFS).",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-ph4mpg5y/",
+        "title": "EFS Discovery"
+    },
+    "favorited": false,
+    "icon": "AwsElasticFileSystem_yqZNkDb.png",
+    "id": "BP-5s5zqcrh",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "color": null,
+            "id": "TAG-6spb5ltg",
+            "image": null,
+            "name": "AWS",
+            "parent": {
+                "color": null,
+                "id": "TAG-rgqwsw74",
+                "image": null,
+                "name": "Technology Type",
+                "sequence": 0
+            },
+            "sequence": 0
+        }
+    ],
+    "last_updated": "2023-10-19",
+    "management_actions": [
+        {
+            "enabled": true,
+            "label": "Create mount target"
+        }
+    ],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "AWS Elastic File System",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "fas fa-box",
+        "id": "RT-acp5jvcg",
+        "label": "Storage",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "storage",
+        "plural_label": "Storage"
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Delete AWS Elastic File System",
+            "continue_on_failure": false,
+            "deploy_seq": -1,
+            "description": null,
+            "enabled": true,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-7hesta5r",
+            "name": "Delete AWS Elastic File System",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

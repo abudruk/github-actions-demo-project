@@ -1,0 +1,15 @@
+{
+    "action_input_default_values": [],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Refresh Server Rates",
+    "create_date": "2021-12-31 08:18:50.211503",
+    "description": "Refresh rates by downloading the rate files for GCE and AWS.",
+    "enabled": true,
+    "icon": "refresh.png",
+    "id": "RJB-nmwvjdmj",
+    "last_run": null,
+    "last_updated": "2022-01-21",
+    "name": "Refresh Server Rates",
+    "schedule": "45 3 * * 0",
+    "type": "orchestration_hook"
+}

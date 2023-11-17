@@ -1,0 +1,111 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "AKS Cluster Build",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-zqkasrvz",
+            "name": "AKS Cluster Build",
+            "parameter_defaults": [
+                {
+                    "label": "Enable Private Cluster",
+                    "name": "enable_private_cluster_a169",
+                    "value": "False"
+                },
+                {
+                    "label": "Enable Rbac",
+                    "name": "enable_rbac_a169",
+                    "value": "True"
+                },
+                {
+                    "label": "Kubernetes Version",
+                    "name": "kubernetes_version_a169",
+                    "value": "1.20.7"
+                },
+                {
+                    "label": "Node Count",
+                    "name": "node_count_a169",
+                    "value": "1"
+                },
+                {
+                    "label": "OS Disk Size",
+                    "name": "os_disk_size_a169",
+                    "value": "0"
+                }
+            ],
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "Create an Azure Kubernetes Service (AKS) Cluster with manual scaling enabled. Includes actions for Build, Discovery, Management, and Teardown.",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-uof2rcaa/",
+        "title": "AKS Cluster Discovery"
+    },
+    "favorited": false,
+    "icon": "azure_aks_EpZzJj4_osOZYge_pTL5YV4_SlRg327.png",
+    "id": "BP-20q58q9z",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "color": null,
+            "id": "TAG-rvep5iv0",
+            "image": null,
+            "name": "Azure",
+            "parent": {
+                "color": null,
+                "id": "TAG-37hfoi7s",
+                "image": null,
+                "name": "Technology Type",
+                "sequence": 0
+            },
+            "sequence": 0
+        },
+        {
+            "color": null,
+            "id": "TAG-ib4jvddz",
+            "image": null,
+            "name": "Kubernetes",
+            "sequence": 0
+        }
+    ],
+    "last_updated": "2023-05-11",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure Kubernetes Service",
+    "resource_name_template": "sedemo-aks-00X",
+    "resource_type": {
+        "icon": "fas fa-dharmachakra",
+        "id": "RT-760nizbe",
+        "label": "Kubernetes Cluster",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "kubernetes_cluster",
+        "plural_label": "Kubernetes Clusters"
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "AKS Cluster Teardown",
+            "continue_on_failure": false,
+            "deploy_seq": -1,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-ndykjlo3",
+            "name": "AKS Cluster Teardown",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

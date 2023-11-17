@@ -1,0 +1,14 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Asynchronously Power OFF Resource",
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "fas fa-bolt",
+    "icon": "Asynchronously Power OFF Resource .png",
+    "id": "RSA-3avo5wzy",
+    "label": "Asynchronously Power OFF Resource",
+    "last_updated": "2022-01-21",
+    "list_view_visible": true,
+    "requires_approval": false,
+    "submit_button_label": ""
+}

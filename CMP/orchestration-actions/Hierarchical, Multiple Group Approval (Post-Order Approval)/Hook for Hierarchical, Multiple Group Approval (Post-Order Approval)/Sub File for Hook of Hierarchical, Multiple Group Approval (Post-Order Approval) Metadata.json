@@ -1,0 +1,14 @@
+{
+    "description": "Overrides CloudBolt's standard Order Approval workflow.\r\n\r\nThis Orchestration Action requires that users from two separate Groups approve an Order in a specified order before it becomes Active.",
+    "id": "OHK-yc7jap6t",
+    "last_updated": "2022-11-19",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Hierarchical, Multiple Group Approval (Post-Order Approval)",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Hierarchical, Multiple Group Approval (Post-Order Approval) Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

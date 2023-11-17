@@ -1,0 +1,20 @@
+{
+    "action_input_default_values": [
+        {
+            "label": "Tintri Clone Name",
+            "name": "tintri_clone_name_a204",
+            "value": "{{ server.hostname }}-copy-01"
+        }
+    ],
+    "base_action_name": "Clone VM using Tintri",
+    "dialog_message": "Clone this VM using the Tintri store instead of the hypervisor for blazingly fast performance.\r\n\r\nLearn more on the <a href=\"https://www.tintri.com/resources/videos/using-tintri-snapshot-and-replicate-individual-vms\" target=\"_blank\">Tintri website</a>.",
+    "enabled": false,
+    "extra_classes": "far fa-clone",
+    "icon": "tintri_img_as3AUYh.jpeg",
+    "id": "SVA-0s7hyc35",
+    "label": "Clone VM using Tintri",
+    "last_updated": "2022-02-01",
+    "requires_approval": false,
+    "sequence": null,
+    "submit_button_label": "Clone VM"
+}

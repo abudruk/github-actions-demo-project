@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-7jfgk1zq",
+    "last_updated": "2023-10-20",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "AWS MariaDB Database Delete Service",
+    "resource_technologies": [],
+    "script_filename": "AWS MariaDB Database Delete Service Script.py",
+    "shared": true,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

@@ -1,0 +1,14 @@
+{
+    "description": "Delete an SQL server",
+    "id": "OHK-qn77p1k9",
+    "last_updated": "2023-05-11",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure SQL Server Teardown",
+    "resource_technologies": [],
+    "script_filename": "Azure SQL Server Teardown Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

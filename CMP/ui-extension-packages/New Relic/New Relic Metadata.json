@@ -1,0 +1,22 @@
+{
+    "description": null,
+    "enabled": true,
+    "icon": "new_relic.png",
+    "id": "XUI-28a5kgrq",
+    "label": "New Relic",
+    "last_updated": "2022-01-13",
+    "name": "new_relic",
+    "package_contents": [
+        "forms.py",
+        "uninstall_agent.py",
+        "urls.py",
+        "install_agent.py",
+        "new_relic_helper.py",
+        "views.py",
+        "__init__.py",
+        "new_relic_scripts.py",
+        "templates/admin_page.html",
+        "templates/new_relic_server_tab.html",
+        "templates/tab-dashboard.html"
+    ]
+}

@@ -1,0 +1,151 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "Create EKS Cluster",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": "",
+            "enabled": true,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-uhrwfg14",
+            "name": "Create EKS Cluster",
+            "parameter_defaults": [
+                {
+                    "label": "Desired Nodes",
+                    "name": "desired_nodes_a237",
+                    "value": "2"
+                },
+                {
+                    "label": "Disk Size",
+                    "name": "disk_size_a237",
+                    "value": "20"
+                },
+                {
+                    "label": "Kubernetes Version",
+                    "name": "k8s_version_a237",
+                    "value": "1.22"
+                },
+                {
+                    "label": "Max Nodes",
+                    "name": "max_nodes_a237",
+                    "value": "2"
+                },
+                {
+                    "label": "Min Nodes",
+                    "name": "min_nodes_a237",
+                    "value": "2"
+                }
+            ],
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        },
+        {
+            "action_name": "Nginx Deployment",
+            "continue_on_failure": false,
+            "deploy_seq": 2,
+            "description": null,
+            "enabled": true,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-vm7ljpre",
+            "name": "Nginx Deployment",
+            "run_on_scale_up": true,
+            "show_on_order_form": false,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "Amazon Elastic Kubernetes Service\r\nProvided resource action feature to add Node Group with autoscaling,  Sync Node Group, delete Node Group, Update Kubernetes version, and Deploying containerized Nginx Web Application/Service.\r\n\r\nNginx, stylized as NGI\u0418X, is a web server that can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache. The software was created by Igor Sysoev and publicly released in 2004. Nginx is free and open-source software, released under the terms of the 2-clause BSD license.\r\n\r\nWhile Deploying the blueprint need to add the parameters carefully, Select the Instance Type Large, xLarge if nodes need to be created more than 2. \r\n\r\nUseful details, Always select Desired nodes less than max nodes and Min nodes always less than the Desired Nodes. Always add the disk size relevant to the selection of instance Types. Ideally more than 20 GB. \r\n\r\ne.g Desired Nodes: 3, Min Nodes: 2, Max Nodes: 5",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-7i4k36rx/",
+        "title": "Discover EKS Cluster"
+    },
+    "favorited": false,
+    "icon": "aws_eks_nginx_E1FZyO0.png",
+    "id": "BP-52lmu5pf",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "color": null,
+            "id": "TAG-6spb5ltg",
+            "image": null,
+            "name": "AWS",
+            "parent": {
+                "color": null,
+                "id": "TAG-rgqwsw74",
+                "image": null,
+                "name": "Technology Type",
+                "sequence": 0
+            },
+            "sequence": 0
+        },
+        {
+            "color": null,
+            "id": "TAG-ftmeofj6",
+            "image": null,
+            "name": "Kubernetes",
+            "sequence": 0
+        },
+        {
+            "color": null,
+            "id": "TAG-74r2s50z",
+            "image": null,
+            "name": "Nginx",
+            "sequence": 0
+        }
+    ],
+    "last_updated": "2023-10-23",
+    "management_actions": [
+        {
+            "enabled": true,
+            "label": "List Node Group"
+        },
+        {
+            "enabled": true,
+            "label": "Add Node Group"
+        },
+        {
+            "enabled": true,
+            "label": "Update Kubernetes Version"
+        },
+        {
+            "enabled": true,
+            "label": "Delete Node Group"
+        }
+    ],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "AWS EKS With Nginx",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "",
+        "id": "RT-t3u2amy4",
+        "label": "Cluster",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "cluster",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Delete EKS Cluster",
+            "continue_on_failure": false,
+            "deploy_seq": -1,
+            "description": "Delete AWS EKS Cluster with Associated Nodegroup and Role",
+            "enabled": true,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-4s2hg9fm",
+            "name": "Delete EKS Cluster",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

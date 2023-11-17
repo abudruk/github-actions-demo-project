@@ -1,0 +1,48 @@
+{
+    "description": "S3 Bucket Browser Applet extending the CloudBolt CUI",
+    "enabled": true,
+    "entry_point": "static/main.es.js",
+    "icon": "Icons_Storage_S3.png",
+    "id": "APL-dostf9ik",
+    "is_applet": true,
+    "label": "S3 Bucket Browser Applet",
+    "last_updated": "2023-09-20",
+    "maximum_version_required": "",
+    "minimum_version_required": "2023.5.1",
+    "name": "applet-s3-bucket-browser",
+    "package_contents": [
+        "Icons_Storage_S3.png",
+        "static/main.es.js",
+        "static/style.css"
+    ],
+    "required_ui_extensions": [
+        {
+            "maximum_version": "",
+            "minimum_version": "2023.3.65",
+            "name": "cui"
+        },
+        {
+            "maximum_version": "",
+            "minimum_version": "1.0",
+            "name": "s3_file_manager"
+        }
+    ],
+    "targets": {
+        "cui": {
+            "fullPage": [
+                {
+                    "slug": "s3-browser"
+                }
+            ],
+            "resourceDetailsTabs": [
+                {
+                    "label": "S3 Bucket Browser",
+                    "resourceTypes": [
+                        "s3_bucket"
+                    ]
+                }
+            ]
+        }
+    },
+    "version": "0.1.0"
+}

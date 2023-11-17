@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-l6in4rc0",
+    "last_updated": "2022-10-07",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Import VMware Custom Attributes",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Import VMware Custom Attributes Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}
