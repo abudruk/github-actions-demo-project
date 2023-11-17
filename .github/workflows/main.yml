@@ -8,67 +8,136 @@ jobs:
   # ------------------------------------------------------------------------------------------------------------------------------------------------
   # Event `pull_request`: Compare the last commit of the main branch or last remote commit of the PR branch -> to the current commit of a PR branch.
   # ------------------------------------------------------------------------------------------------------------------------------------------------
-  changed_files:
-    runs-on: ubuntu-latest  
-    name: Test changed-files
+  archive-collections:
+    name: Archive Collections
     strategy:
       matrix:
         type:
           - blueprints
-          - ui-extension-packages
-          - cb-applets
-          - orchestration-actions
-          - recurring-jobs
-          - server-actions
-          - resource-actions
+          # - ui-extension-packages
+          # - cb-applets
+          # - orchestration-actions
+          # - recurring-jobs
+          # - server-actions
+          # - resource-actions
+
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
         with:
-          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+          files: |
+             **.zip
+
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+
+          
+      # - name: Set up AWS CLI
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ap-south-1
+
+      # - name: Create ${{ matrix.type }} Artifacts
+      #   working-directory: CMP/${{ matrix.type }}
+      #   run: |
+      #     shopt -s globstar
+      #     mkdir -p "${{github.workspace}}/tmp"
+      #     for file in **/*.zip; do
+      #       echo "Moving $file"
+      #       BASENAME=$(basename "$file")
+      #       mv "$file" "${{ github.workspace }}/tmp/$BASENAME"
+      #     done
+
+      # - name: Create a single tar of all the files in the current directory
+      #   working-directory: tmp
+      #   env:
+      #     MATRIX_TYPE: ${{ matrix.type }}
+      #   run: |
+      #     echo "Creating a tar of all the files in the current directory"
+      #     tar -cvzf "$MATRIX_TYPE".tar.gz *
+
+      # - uses: actions/upload-artifact@v3
+      #   with:
+      #     name: ${{ matrix.type }}
+      #     path: |
+      #       **/${{ matrix.type }}.tar.gz
+
+
+
+
+
+     
+  # changed_files:
+  #   runs-on: ubuntu-latest  
+  #   name: Test changed-files
+  #   strategy:
+  #     matrix:
+  #       type:
+  #         - blueprints
+  #         - ui-extension-packages
+  #         - cb-applets
+  #         - orchestration-actions
+  #         - recurring-jobs
+  #         - server-actions
+  #         - resource-actions
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
 
       
           
-      - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+  #     - name: Set up AWS CLI
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ap-south-1
       
-      - name: List folders in S3 bucket
-        id: list-folders
-        run: |
-          folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
-          echo "::set-output name=folders::${folders}"
+  #     - name: List folders in S3 bucket
+  #       id: list-folders
+  #       run: |
+  #         folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
+  #         echo "::set-output name=folders::${folders}"
 
-      - name: Download and Update and Upload JSON objects
-        run: |
-          echo "Folders ${{ steps.list-folders.outputs.folders }}"
-          IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
-          for folder in "${folders[@]}"; do
-            folder="${folder%/}"  # Remove trailing slash
-            echo "Processing folder: $folder"
+  #     - name: Download and Update and Upload JSON objects
+  #       run: |
+  #         echo "Folders ${{ steps.list-folders.outputs.folders }}"
+  #         IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
+  #         for folder in "${folders[@]}"; do
+  #           folder="${folder%/}"  # Remove trailing slash
+  #           echo "Processing folder: $folder"
 
-            # Download JSON file from the folder
-            echo "Downloading  File : ${{ matrix.type }}.json"
+  #           # Download JSON file from the folder
+  #           echo "Downloading  File : ${{ matrix.type }}.json"
 
-            # Check if File Exists 
-            echo "Check if File Exists at $folder/${{ matrix.type }}.json"
-            if aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" 2>&1 | grep -q "Not Found"; then
-              echo "File not found in S3. Skipping download."
-            else
-              # Download the file 
-              echo " Download the file $folder/${{ matrix.type }}.json" 
-              aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
-              echo "File downloaded successfully."
+  #           # Check if File Exists 
+  #           echo "Check if File Exists at $folder/${{ matrix.type }}.json"
+  #           if aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" 2>&1 | grep -q "Not Found"; then
+  #             echo "File not found in S3. Skipping download."
+  #           else
+  #             # Download the file 
+  #             echo " Download the file $folder/${{ matrix.type }}.json" 
+  #             aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
+  #             echo "File downloaded successfully."
 
-              echo "Quering and Updating File where name is ADO Pipeline" 
-              jq 'map(if .name == "ADO Pipeline" then .newProperty = "Updated This Value" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+  #             echo "Quering and Updating File where name is ADO Pipeline" 
+  #             jq 'map(if .name == "ADO Pipeline" then .newProperty = "Updated This Value" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
-              echo "Uploading File modified_${{ matrix.type }}_new.json to folder ${folder}"   
-              aws s3 cp modified_${{ matrix.type }}_new.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
-            fi
-          done
+  #             echo "Uploading File modified_${{ matrix.type }}_new.json to folder ${folder}"   
+  #             aws s3 cp modified_${{ matrix.type }}_new.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
+  #           fi
+  #         done
 
           
 
