@@ -1,0 +1,16 @@
+{
+    "description": "",
+    "id": "OHK-ky28f9ep",
+    "last_updated": "2023-10-26",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Discover AWS Redshift Clusters",
+    "resource_technologies": [
+        "Amazon Web Services"
+    ],
+    "script_filename": "Discover AWS Redshift Clusters Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

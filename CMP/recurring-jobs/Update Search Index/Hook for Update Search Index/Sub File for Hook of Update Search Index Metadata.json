@@ -1,0 +1,12 @@
+{
+    "description": "Refreshes the search index that enables the global search feature.",
+    "id": "OHK-ngjuqfuv",
+    "last_updated": "2022-01-21",
+    "max_retries": 0,
+    "name": "Update Search Index",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Update Search Index Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

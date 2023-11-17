@@ -1,0 +1,18 @@
+{
+    "description": "",
+    "id": "OHK-0atnduhw",
+    "last_updated": "2022-11-28",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Setup Inbound Rule for MongoDB",
+    "resource_technologies": [
+        "Amazon Web Services",
+        "AWS GovCloud (US)",
+        "AWS China - \u4e9a\u9a6c\u900a"
+    ],
+    "script_filename": "Setup Inbound Rule for MongoDB Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

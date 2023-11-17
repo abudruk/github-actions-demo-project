@@ -1,0 +1,16 @@
+{
+    "description": null,
+    "enabled": true,
+    "icon": "sample_use_of_dialog.jpg",
+    "id": "XUI-a1ed4ra8",
+    "label": "Sample Use Of Dialog",
+    "last_updated": "2022-01-13",
+    "name": "sample_use_of_dialog",
+    "package_contents": [
+        "forms.py",
+        "urls.py",
+        "views.py",
+        "__init__.py",
+        "templates/sample_tab.html"
+    ]
+}

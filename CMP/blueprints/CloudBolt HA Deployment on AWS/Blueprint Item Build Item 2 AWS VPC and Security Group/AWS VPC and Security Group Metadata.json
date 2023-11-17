@@ -1,0 +1,44 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "blueprint_image": null,
+    "deployment_items": [
+        {
+            "action_name": "aws_vpc_and_security_group",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-vw83gw1b",
+            "name": "AWS VPC and Security Group",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "This blueprint will either select existing VPC or if not creates the one and then-after creates subnet per zone selected in each region by user in SetRegionandZones of parent blueprint.",
+    "favorited": false,
+    "id": "BP-76g63lmy",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [],
+    "last_updated": "2023-03-03",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "AWS VPC and Security Group",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "",
+        "id": "RT-ky65jpf8",
+        "label": "Service",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "service",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": []
+}

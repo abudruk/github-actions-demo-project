@@ -1,0 +1,17 @@
+{
+    "description": "",
+    "id": "OHK-pb4wlkef",
+    "last_updated": "2023-05-15",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure Storage FIle Teardown",
+    "resource_technologies": [
+        "Azure",
+        "Azure Stack"
+    ],
+    "script_filename": "Azure Storage FIle Teardown Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

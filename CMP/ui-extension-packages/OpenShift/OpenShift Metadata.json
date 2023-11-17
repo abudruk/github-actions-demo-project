@@ -1,0 +1,20 @@
+{
+    "description": null,
+    "enabled": true,
+    "icon": "OpenShift.png",
+    "id": "XUI-uv5az9ea",
+    "label": "OpenShift",
+    "last_updated": "2023-02-15",
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "openshift",
+    "package_contents": [
+        "urls.py",
+        "views.py",
+        "openshiftmanager.py",
+        "forms.py",
+        "templates/admin_page.html",
+        "templates/tab-dashboard.html"
+    ],
+    "version": ""
+}

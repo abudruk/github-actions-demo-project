@@ -1,0 +1,234 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "select_deployment_locations",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": "This plugin will set zones within the selected region for the deployment of AWS resources for High Availability Architecture.",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-8ho4qm51",
+            "name": "Select Deployment Locations",
+            "parameter_defaults": [
+                {
+                    "label": "AWS HA Existing VPC",
+                    "name": "aws_ha_existing_vpc_a351",
+                    "value": "Not Selected Any"
+                }
+            ],
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        },
+        {
+            "continue_on_failure": false,
+            "deploy_seq": 2,
+            "description": "This blueprint will either select existing VPC or if not creates the one and then-after creates subnet per zone selected in each region by user in SetRegionandZones of parent blueprint.",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-bp8l7dm9",
+            "name": "AWS VPC and Security Group",
+            "restrict_execution_scope": true,
+            "show_on_order_form": true,
+            "tier_type": "blueprint"
+        },
+        {
+            "action_name": "aws_route53_hosted_zone",
+            "continue_on_failure": false,
+            "deploy_seq": 3,
+            "description": "Amazon Route 53 provides highly available and scalable Domain Name System (DNS), domain name registration, and health-checking web services.",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-vcni7zxx",
+            "name": "AWS Route53 Hosted Zone",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        },
+        {
+            "continue_on_failure": false,
+            "deploy_seq": 4,
+            "description": "This blueprint is intended to create and deploy AWS application load balancer in a region selected by user.",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-xo0mqzgp",
+            "name": "AWS Load Balancer",
+            "restrict_execution_scope": true,
+            "show_on_order_form": true,
+            "tier_type": "blueprint"
+        },
+        {
+            "continue_on_failure": false,
+            "deploy_seq": 5,
+            "description": "This blueprint will only create file system and mount  targets in respective zones selected by user in parent CloudBolt HA Deployment on AWS Blueprint. This needs to be mounted in whichever instances will be generated or created.",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-6di6fnxn",
+            "name": "AWS Shared File System",
+            "restrict_execution_scope": true,
+            "show_on_order_form": true,
+            "tier_type": "blueprint"
+        },
+        {
+            "continue_on_failure": false,
+            "deploy_seq": 6,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-zweclv24",
+            "name": "AWS Auto Scaling Groups",
+            "restrict_execution_scope": true,
+            "show_on_order_form": true,
+            "tier_type": "blueprint"
+        },
+        {
+            "continue_on_failure": false,
+            "deploy_seq": 7,
+            "description": "This blueprint creates Aurora Serverless v2 Multi-AZ DB Cluster in provided zones within a region.",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-1j7qerw0",
+            "name": "Aurora Multi-AZ DB",
+            "restrict_execution_scope": true,
+            "show_on_order_form": true,
+            "tier_type": "blueprint"
+        },
+        {
+            "action_name": "sync_servers_and_add_sshkey",
+            "continue_on_failure": false,
+            "deploy_seq": 8,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-x0qecy4d",
+            "name": "Sync Servers and Add SSH Key",
+            "run_on_scale_up": true,
+            "show_on_order_form": false,
+            "tier_type": "plugin"
+        },
+        {
+            "action_name": "pre_configuration_setup",
+            "continue_on_failure": false,
+            "deploy_seq": 9,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-wr2ux467",
+            "name": "Preconfiguration Setup",
+            "run_on_scale_up": true,
+            "show_on_order_form": false,
+            "tier_type": "plugin"
+        },
+        {
+            "action_name": "mount_shared_file_system",
+            "continue_on_failure": false,
+            "deploy_seq": 10,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-5pgx1ta5",
+            "name": "Mount Shared File System",
+            "run_on_scale_up": true,
+            "show_on_order_form": false,
+            "tier_type": "plugin"
+        },
+        {
+            "action_name": "configure_shared_database",
+            "continue_on_failure": false,
+            "deploy_seq": 11,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-1yyh48af",
+            "name": "Configure Shared Database",
+            "run_on_scale_up": true,
+            "show_on_order_form": false,
+            "tier_type": "plugin"
+        },
+        {
+            "action_name": "configure_product_license_and_user",
+            "continue_on_failure": false,
+            "deploy_seq": 12,
+            "description": "This plugin will apply Cloudbolt product license and will generate user credentials for Cloudbolt application login.",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-49si0cd2",
+            "name": "Configure Product License and User",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        },
+        {
+            "action_name": "update_auto_scaling_group_template",
+            "continue_on_failure": false,
+            "deploy_seq": 13,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-a6f3rjfb",
+            "name": "Update Auto Scaling Group Template",
+            "run_on_scale_up": true,
+            "show_on_order_form": false,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "This blueprint is created for deploying and configuring all AWS resources needed for HA type deployment. \r\nThis blueprint will create VPC in selected region and subnets in selected zones. The security group will be created with all required inbound rules. The Application load balancer will point to the instances available in auto-scaling group created. The route53 record will be created in selected domain. \r\nThe entire architecture is accessible via single endpoint URL (A record in route53) or with DNS of load balancer.",
+    "favorited": false,
+    "icon": "cb_logo.jpg",
+    "id": "BP-mrrvnspz",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "model_name": "serviceblueprint",
+            "name": "AWS",
+            "parent": {
+                "model-name": "serviceblueprint",
+                "name": "Technology Type"
+            }
+        }
+    ],
+    "last_updated": "2023-03-03",
+    "management_actions": [
+        {
+            "enabled": true,
+            "label": "Modify Threshold Value"
+        },
+        {
+            "enabled": true,
+            "label": "Modify Scaling Configuration"
+        }
+    ],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "CloudBolt HA Deployment on AWS",
+    "resource_name_template": "CloudBolt AWS HA",
+    "resource_type": {
+        "icon": "",
+        "id": "RT-ky65jpf8",
+        "label": "Service",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "service",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "delete_all_resources_of_ha",
+            "continue_on_failure": false,
+            "deploy_seq": -1,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-si25fytr",
+            "name": "Delete All Resources of HA Architecture",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

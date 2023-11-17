@@ -1,0 +1,15 @@
+{
+    "action_input_default_values": [],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Download Azure Resource Manager Invoice",
+    "create_date": "2021-12-31 08:18:50.468206",
+    "description": "Download the latest monthly invoice for all Azure ARM Resource Handlers.",
+    "enabled": true,
+    "icon": "invoice.jpg",
+    "id": "RJB-ml0b2hii",
+    "last_run": null,
+    "last_updated": "2022-01-20",
+    "name": "Download Azure Resource Manager Invoice",
+    "schedule": "0 2 1 * *",
+    "type": "orchestration_hook"
+}

@@ -1,0 +1,17 @@
+{
+    "description": null,
+    "enabled": true,
+    "icon_url": "",
+    "id": "XUI-x9cnt3th",
+    "label": "Server Cost Details",
+    "last_updated": "2023-01-11",
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "server_cost_details",
+    "package_contents": [
+        "__init__.py",
+        "views.py",
+        "templates/cost_details.html"
+    ],
+    "version": ""
+}

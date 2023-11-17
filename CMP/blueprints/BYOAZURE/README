@@ -1,0 +1,10 @@
+This blueprint allows for the creation of an Azure resource handler with controlled attributes.
+
+How to use:
+Once uploaded or imported, navigate to the catalog of your CloudBolt UI, navigate to the edit button of the BYOAZURE blueprint (It will look like a gear). Then select the BYOR build action, and in the code provided change the IP address to your own IP address where it says "api_client = InternalAPIClient(admin_user, "http", "10.40.1.184", "8001")". Once this is done, save the code with the button in the bottom left, navigate to the Catalog and order the BYOAZURE blueprint. Input your action inputs and submit.
+
+Requirements:
+Before ordering the blueprint and inputing action inputs, you need to create the parameters and preconfigurations you plan to use as inputs as well as the group and assign the proper users to said group. Then you will need to navigate to Admin, then to Catalog Management and add an "Azure Services" category. Assign this label to all of the blueprints that you want your user to be able to see after running the BYOAZURE.
+
+Installation:
+Download the byoazure.zip file and navigate to the Catalog section of the CloudBolt UI. In the top right select "Upload Blueprint" and choose the byoazure.zip file.

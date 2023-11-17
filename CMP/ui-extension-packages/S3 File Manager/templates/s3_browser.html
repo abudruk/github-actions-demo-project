@@ -1,0 +1,946 @@
+{% if state %}
+<div id='loading-box-2' class="text-center">
+  <div class=spinner></div>
+</div>
+<nav class="nav nav-header-tabs">
+  <div class="nav-left">
+    <ul class="breadcrumb breadcrumb-line">
+      <li><a class="btn btn-link dd-link" data-flat="{{ state.flat }}" href="#">{{ resource.name }}</a></li>
+      {% for entry in state.path_dirs %}
+      {% if forloop.last %}
+      <li>{{ entry.name }}</li>
+      {% else %}
+      <li><a class="btn btn-link dd-link" href="#" data-path="{{ entry.path }}" data-name="{{ entry.name }}">{{ entry.name }}</a></li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="nav-right">
+    <button type="button" class="btn btn-link fl-link download-btn" title="Download" disabled style="border: 1px solid silver; border-radius: 0.25em; padding: 0.5em;">
+      <i class="fa fa-download fa-fw"></i>
+    </button>
+    <button type="button" class="btn btn-link fl-delete delete-btn" title="Delete" disabled style="border: 1px solid silver; border-radius: 0.25em; padding: 0.5em;">
+      <i class="fa fa-trash fa-fw"></i>
+    </button>
+    <button type="button" id="upload_btn" class="btn btn-link" title="Upload New File" style="border: 1px solid silver; border-radius: 0.25em; padding: 0.5em;">
+      <i class="fa fa-upload fa-fw"></i>
+    </button>
+    <button type="button" id="create_btn" class="btn btn-link" title="Add New Folder" style="border: 1px solid silver; border-radius: 0.25em; padding: 0.5em;">
+      <i class="fa fa-folder-plus fa-fw"></i>
+    </button>
+    {% if state.flat %}
+    <button type="button" class="view_btn btn btn-link dd-link" data-path="" data-flat="False" style="border: 1px solid silver; border-radius: 0.25em; padding: 0.5em;">
+      <i class="fa fa-folder-open fa-fw"></i>
+    </button>
+    {% else %}
+    <button type="button" class="view_btn btn btn-link dd-link" data-path="" data-flat="True" title="Toggle List/Folder View" style="border: 1px solid silver; border-radius: 0.25em; padding: 0.5em;">
+      <i class="fa fa-bars fa-fw"></i>
+    </button>
+    {% endif %}
+  </div>
+</nav>
+<div id="s3-files-table">
+  <table id="folder-contents" data-table>
+    <thead>
+      <th><input class="form-check-input select-box select-all" type="checkbox" value="" data-value="all" name="select-box" data-path="{{ entry.url }}" data-name="{{ entry.name }}" data-file_path="{{ entry.url }}" data-object_type="{{ entry.item_type }}">
+      </th>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Last Modified</th>
+      <th>Size</th>
+      <th>Storage Class</th>
+      {% if state.flat %}
+      <th>Path</th>
+      {% endif %}
+      <th>Actions</th>
+      <th></th>
+    </thead>
+    <tbody>
+      {% for entry in state.dir_list %}
+      {% if entry.is_file == True %}
+      <tr>
+        <td><input class="form-check-input select-box select-file" type="checkbox" value="" data-value="file" name="select-box" data-path="{{ entry.url }}" data-name="{{ entry.name }}" data-file_path="{{ entry.url }}" data-object_type="{{ entry.item_type }}">
+        </td>
+        <td class="file_name_col" data-order="{{ entry.name }}">
+          <i class="btn-link fa fa-file"></i>&nbsp;{{ entry.name }}&nbsp;
+        </td>
+        <td>{{ entry.item_type }}</td>
+        <td data-order="{{ entry.actual_last_modified }}">{{ entry.last_modified }}</td>
+        <td data-order="{{ entry.actual_size }}">{{ entry.size }}</td>
+        <td>{{ entry.storage_class|title }}</td>
+        {% if state.flat %}
+        <td>
+          {{ entry.path|default:"<i>Root folder</i>" }}
+        </td>
+        {% endif %}
+        <td class="file-action-icon">
+          <button type="button" class="btn btn-link fl-edit" data-path="{{state.full_path}}" data-file_path="{{ entry.url }}" data-name="{{ entry.name }}" title="Rename">
+            <i class="fas fa-edit"></i>
+          </button>
+        </td>
+        <td>
+          <button type="button" class="btn btn-link fl-info" data-path="{{state.full_path}}" data-file_path="{{ entry.url }}" data-name="{{ entry.name }}" data-type="{{ entry.item_type }}" data-last_modified="{{ entry.last_modified }}" data-size="{{ entry.size }}" data-storage_class="{{ entry.storage_class }}" data-owner_name="{{ entry.owner_name }}" data-e_tag="{{ entry.e_tag }}" data-object_url="{{ entry.object_url }}" data-s3_uri="{{ entry.s3_uri }}" data-arn="{{ entry.arn }}" title="Details">
+            <i class="fas fa-info-circle"></i>
+          </button>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td><input class="form-check-input select-box select-folder" type="checkbox" value="" data-value="folder" name="select-box" data-path="{{ entry.url }}" data-name="{{ entry.name }}" data-file_path="{{ entry.url }}" data-object_type="{{ entry.item_type }}">
+        </td>
+        <td class="file_name_col" data-order="{{ entry.name }}">
+          <i class="btn-link fa fa-folder"></i>
+          <button type="button" class="btn btn-link dd-link" data-path="{{ entry.url }}" data-name="{{ entry.name }}">
+            {{ entry.name }}
+          </button>
+        </td>
+        <td>{{ entry.item_type }}</td>
+        <td data-order="0">-</td>
+        <td data-order="0">-</td>
+        <td>-</td>
+        <td></td>
+        <td></td>
+      </tr>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% comment %} Upload Modal {% endcomment %}
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div id="" class="modal-body">
+          <button type="button" id="file_btn" class="btn btn-primary" title="Upload New File"><i class="fa fa-file-plus"></i> Upload a File</button>
+          <button type="button" id="folder_btn" class="btn btn-primary" title="Upload New Folder"><i class="fa fa-folder-plus"></i> Upload a Folder</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% comment %} File Upload Modal {% endcomment %}
+<div class="modal fade" id="uploadObjectModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <form id="uploadFileForm" action="#" method="post" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Upload File to {{ state.full_path|default:"<i>Root folder</i>"}}
+          </h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="" class="modal-body">
+          <input type="file" name="object_file" id="object_file">
+          <p class="error-message" id="object_file_message">This field is required</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button id="submit-object" type="button" class="btn btn-primary">Upload to S3</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% comment %} Folder Upload Modal {% endcomment %}
+<div class="modal fade" id="uploadFolderModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <form id="uploadFolderForm" action="#" method="post" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Upload Folder to {{ state.full_path|default:"<i>Root folder</i>"}}
+          </h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="" class="modal-body">
+          <input type="file" name="object_folder" id="object_folder" webkitdirectory mozdirectory />
+          <p class="error-message" id="object_folder_message">This field is required</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button id="submit-folder" type="button" class="btn btn-primary">Upload to S3</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% comment %} Delete Object Modal {% endcomment %}
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="modal-dialog-title" class="modal-title">
+          Delete Confirmation
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" title="Close this dialog"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete?</p>
+        <p>Note: If you have selected the folder, all objects in that folder will also be deleted.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="cb-btn cb-btn-link" data-dismiss="modal">
+          Cancel
+        </button>
+        <button id="confirm-delete" data-path="" data-file_path="" class="cb-btn cb-btn-primary js-submit-form" data-loading-text="Submitting…">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="folderModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <form id="createFolderForm" action="#" method="post" enctype="multipart/form-data"></form>
+      <div class="modal-header">
+        <h4 id="modal-dialog-title" class="modal-title">
+          Create Folder {% if state.full_path %} to {{ state.full_path }} {% endif %}
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" title="Close this dialog"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <label class="nf-rn-modal-title">Folder Name</label>
+          </div>
+          <div class="col-sm-10">
+            <input class="form-control" type="text" name="folder_name" id="folder_name" value="" placeholder="Enter folder name" required>
+            <p class="error-message" id="folder_error_message">This field is required</p>
+          </div>
+        </div>
+        <div class="col-sm-12 details-div">
+          <p class="col-sm-10">Folder names can't contain "/". <span class="more-details"><a href="https://docs.aws.amazon.com/console/s3/object-keys" target="_blank">See rules for naming <i class="fa fa-info-circle" aria-hidden="true"></i></a></span> </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="cb-btn cb-btn-link" data-dismiss="modal">
+          Cancel
+        </button>
+        <input type="submit" id="create-folder-btn" data-path="" data-file_path="" class="cb-btn cb-btn-primary js-submit-form" data-loading-text="Submitting…" value="Create">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="renameObjectModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <form id="createFolderForm" action="#" method="post" enctype="multipart/form-data"></form>
+      <div class="modal-header">
+        <h4 id="modal-dialog-title" class="modal-title">
+          Rename Object
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" title="Close this dialog"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+            <label class="nf-rn-modal-title">Object Name</label>
+          </div>
+          <div class="col-sm-10">
+            <input type="hidden" name="old_object_name" id="old_object_name" value="">
+            <input class="form-control" type="text" name="new_object_name" id="new_object_name" value="" placeholder="Enter name here" required>
+            <p class="error-message" id="object_error_message">This field is required</p>
+          </div>
+        </div>
+        <div class="col-sm-12 details-div">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="cb-btn cb-btn-link" data-dismiss="modal">
+          Cancel
+        </button>
+        <input type="submit" id="rename-object-btn" data-old_object_name="" data-path="" class="cb-btn cb-btn-primary js-submit-form" data-loading-text="Submitting…" value="Rename">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="objectOverviewModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <form id="createFolderForm" action="#" method="post" enctype="multipart/form-data"></form>
+      <div class="modal-header">
+        <h4 id="modal-dialog-title" class="modal-title">
+          <ul class="nav nav-tabs">
+            <li class="active tab-btn" id="overview-btn" data-type="overview"><a data-toggle="tab" href="#overview">Overview</a></li>
+            <li class="tab-btn" id="versions-btn" data-type="versions"><a data-toggle="tab" href="#versions">Versions</a></li>
+          </ul>
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" title="Close this dialog"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div id='modal-loading-box' class="text-center">
+          <div class=spinner></div>
+        </div>
+        <div class="tab-content">
+          <div id="overview-div" class="col-sm-12">
+            <div class="col-sm-6">
+              <div class="overview-div">
+                <p>Owner</p>
+                <label id="owner_name"></label>
+              </div>
+              <div class="overview-div">
+                <p>AWS Region</p>
+                <label id="object_region"></label>
+              </div>
+              <div class="overview-div">
+                <p>Last Modified</p>
+                <label id="last_modified"></label>
+              </div>
+              <div class="overview-div">
+                <p>Size</p>
+                <label id="size"></label>
+              </div>
+              <div class="overview-div">
+                <p>Type</p>
+                <label id="type"></label>
+              </div>
+              <div class="overview-div">
+                <p>Key</p>
+                <label id="key"></label>
+              </div>
+              <div id="kfp-parent">
+                <label id="key_file_path"></label>
+              </div>
+            </div>
+            <div class="col-sm-6 overview-modal-right-pane">
+              <div class="overview-div">
+                <p>S3 URI</p>
+                <label id="s3_uri"></label>
+              </div>
+              <div class="overview-div">
+                <p>Amazon Resource Name (ARN)</p>
+                <label id="arn"></label>
+              </div>
+              <div class="overview-div">
+                <p>Entity Tag (ETag)</p>
+                <label id="e_tag"></label>
+              </div>
+              <div class="overview-div">
+                <p>Object URL</p>
+                <a id="object_url" target="_blank" href="#"></a>
+              </div>
+            </div>
+          </div>
+          <div id="versions-div" class="col-sm-12">
+            <div class=" col-sm-12 version-alert-div">
+              <div class="col-sm-1">
+                <p class="version-alert-icon"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></p>
+              </div>
+              <div class="col-sm-8">
+                <p class="version-alert-name">Bucket "{{ resource.name }}" doesn't have Bucket Versioning enabled</p>
+                <p class="version-alert-message">We recommend that you enable Bucket Versioning to help protect against unintentionally overwriting or deleting objects.
+                  <span class="more-details"><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html" target="_blank">Learn more <i class="fa fa-info-circle" aria-hidden="true"></i></a></span>
+                </p>
+              </div>
+              <div class="col-sm-3">
+                <button class="cb-btn cb-btn-primary enable-btn">
+                  Enable Bucket Versioning
+                </button>
+              </div>
+            </div>
+            <table id="version-table" data-table>
+              <thead>
+                <th><i class="fa fa-cog"></i></th>
+                <th>Filename</th>
+                <th>Version ID</th>
+                <th>Type</th>
+                <th>Last Modified</th>
+                <th>Size</th>
+                <th>Storage Class</th>
+                <th>Download</th>
+              </thead>
+              <tbody id="versions-list">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="cb-btn cb-btn-primary" data-dismiss="modal">
+          OK
+        </button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  // Populate the data for the window
+  function drillDown(data) {
+
+    $.ajax({
+      url: '/ajax/s3-browser/{{ resource.id }}/',
+      type: "POST",
+      data: data,
+      success: function(data) {
+        $("#repoContent").fadeOut("slow",
+          function() {
+            $("#loading-box-2").hide();
+            $("#repoContent").html(data);
+            $("#repoContent").fadeIn("slow");
+          });
+      },
+      error: function(err) {
+        $("#repoContent").fadeOut("slow",
+          function() {
+            $("#loading-box-2").hide();
+            $("#repoContent").html(data);
+            $("#repoContent").fadeIn("slow");
+          }
+        );
+      }
+    });
+  }
+
+  async function downloadFile(data) {
+
+    $.ajax({
+      url: '/ajax/s3-download-file/{{ resource.id }}/',
+      type: "POST",
+      data: data,
+      success: function(data) {
+        window.open(data.url, "_blank");
+      },
+      error: function(err) {
+        $("#repoContent").fadeOut("slow",
+          function() {
+            $("#repoContent").html(data);
+            $("#repoContent").fadeIn("slow");
+          }
+        );
+      },
+    });
+  }
+
+  function deleteFile(data) {
+
+    $.ajax({
+      url: '/ajax/s3-delete-file/{{ resource.id }}/',
+      type: "POST",
+      data: data,
+      success: function(data) {
+        $("#repoContent").fadeOut("slow",
+          function() {
+            $("#loading-box-2").hide();
+            $("#repoContent").html(data);
+            $("#repoContent").fadeIn("slow");
+          });
+      },
+      error: function(err) {
+        $("#repoContent").fadeOut("slow",
+          function() {
+            $("#loading-box-2").hide();
+            $("#repoContent").html(data);
+            $("#repoContent").fadeIn("slow");
+          }
+        );
+      }
+    });
+  }
+
+  // File Upload:  Handle the upload of a single file
+  async function uploadFile(data) {
+
+    $.ajax({
+      url: '/ajax/s3-upload/{{ resource.id }}/',
+      type: "POST",
+      data: data,
+      async: false,
+      timeout: 1000,
+      success: function(data) {
+        $('#uploadFileForm').attr('action', data.action_url);
+        $("#formContent").html(data.rendered_form);
+        $("#theButton").addClass("uploadFile");
+
+      },
+      error: function(err) {
+        $("#repoContent").fadeOut("slow",
+          function() {
+            $("#repoContent").html(data);
+            $("#repoContent").fadeIn("slow");
+          }
+        );
+      }
+    });
+  }
+
+  async function createFolder(data) {
+
+    $.ajax({
+      url: '/ajax/s3-create-folder/{{ resource.id }}/',
+      type: "POST",
+      data: data,
+      async: false,
+      timeout: 1000,
+      success: function(data) {
+        if (data['status'] == true) {
+          $("#folderModal").modal('hide');
+          drillDown({
+            'path': '{{ state.full_path }}',
+            'flat': '{{  state.flat }}'
+          });
+        }
+      },
+      error: function(err) {
+        $("#loading-box-2").hide();
+      }
+    });
+  }
+
+  async function renameObject(data) {
+    $.ajax({
+      url: '/ajax/s3-rename-object/{{ resource.id }}/',
+      type: "POST",
+      data: data,
+      async: false,
+      timeout: 1000,
+      success: function(data) {
+        if (data['status'] == true) {
+          $("#renameObjectModal").modal('hide');
+          drillDown({
+            'path': '{{ state.full_path }}',
+            'flat': '{{  state.flat }}'
+          });
+        }
+      },
+      error: function(err) {
+        $("#loading-box-2").hide();
+      }
+    });
+  }
+
+  $(document).ready(function() {
+
+    // Version Promote: Promote a version to current
+    function promotionHandler() {
+      function promoteVersion() {
+        $("#versions-list tr").click(function() {
+          $(this).addClass('selected').siblings().removeClass('selected');
+          var data = {
+            'key': $("#versions-list tr.selected [name='key']").text(),
+            'version_id': $("#versions-list tr.selected [name='version']").text(),
+            "location": "{{ location }}"
+          };
+          $.ajax({
+            url: '/ajax/s3-promote-version/{{ resource.id }}/',
+            type: "POST",
+            data: data,
+            success: function() {
+              getVersions(data);
+
+            },
+            error: function(err) {
+              getVersions(data);
+              c2.block.unblock();
+
+            }
+          });
+        });
+      };
+
+      $('#promote').click(function() {
+        c2.block.block();
+        promoteVersion();
+      });
+    };
+    // Handle the download link 
+    $('.dd-link').on('click', function() {
+      $("#loading-box-2").show();
+      drillDown({
+        'path': this.dataset.path,
+        'name': this.dataset.name,
+        'flat': this.dataset.flat
+      });
+    });
+    $('.fl-link').on('click', function() {
+      $('input[type=checkbox][name=select-box]:checked').each(function() {
+        if ($(this).data('file_path') !== "" && $(this).data('value') !== "folder") {
+          downloadFile({
+            'path': $(this).data('file_path'), 'location': "{{ location }}" 
+          });
+        }
+      });
+    });
+    $('.fl-delete').on('click', function() {
+      $("#deleteModal").modal('show');
+      $("#confirm-delete").attr({
+        "data-path": this.dataset.path
+      });
+      $("#confirm-delete").attr({
+        "data-file_path": this.dataset.file_path
+      });
+    });
+    $('.fl-edit').on('click', function() {
+      $("#renameObjectModal").modal('show');
+      var name = $(this).data('name');
+      $("#new_object_name").val(name);
+      $("#old_object_name").val(name);
+    });
+    $(".fl-info").on('click', function() {
+      $("#overview-div").css({
+        "display": "block"
+      });
+      $("#versions-div").css({
+        "display": "none"
+      });
+      $("#overview-btn").addClass("active");
+      $("#versions-btn").removeClass("active");
+      var owner_name = $(this).data("owner_name");
+      var object_region = "{{ location }}";
+      var last_modified = $(this).data("last_modified");
+      var size = $(this).data("size");
+      var type = $(this).data("type");
+      var key = $(this).data("name");
+      var key_file_path = $(this).data("file_path");
+      var e_tag = $(this).data("e_tag");
+      var storage_class = $(this).data("storage_class");
+      var name = $(this).data("name");
+      var object_url = $(this).data("object_url");
+      var s3_uri = $(this).data("s3_uri");
+      var arn = $(this).data("arn");
+      $("#objectOverviewModal").modal("show");
+      $("#owner_name").text(owner_name);
+      $("#object_region").text(object_region);
+      $("#last_modified").text(last_modified);
+      $("#size").text(size + " KB");
+      $("#type").text(type);
+      $("#e_tag").text(e_tag);
+      $("#owner_name").text(owner_name);
+      $("#key").text(name);
+      $("#key_file_path").text(key_file_path);
+      $("#object_url").text(object_url);
+      $("#object_url").attr({
+        "href": object_url
+      })
+      $("#s3_uri").text(s3_uri);
+      $("#arn").text(arn);
+    });
+
+    $('#create_btn').on('click', function() {
+      $("#folderModal").modal('show');
+    });
+
+    $("#create-folder-btn").on('click', function() {
+      var folder_name = $("#folder_name").val();
+      if (folder_name != "") {
+        $("#create-folder-btn").prop("disabled", true);
+        $("#folder_error_message").hide();
+        $("#loading-box-2").show();
+        var data = {
+          'folder_name': $("#folder_name").val(),
+          'path': '{{  state.full_path }}',
+          'bucket_name': '{{ resource.name }}',
+        }
+        createFolder(data)
+      } else {
+        $("#folder_error_message").show();
+      }
+    });
+
+    $("#rename-object-btn").on('click', function() {
+      var object_name = $("#new_object_name").val();
+      if (object_name != "") {
+        $("#object_error_message").hide();
+        $("#loading-box-2").show();
+        var data = {
+          'new_object_name': $("#new_object_name").val(),
+          'old_object_name': $("#old_object_name").val(),
+          'path': '{{  state.full_path }}',
+          'bucket_name': '{{ resource.name }}',
+
+        }
+        renameObject(data)
+      } else {
+        $("#object_error_message").show();
+      }
+    });
+    // Delete confirmation logic
+    $("#confirm-delete").on('click', function() {
+      var all_files_path = []
+      $('input[type=checkbox][name=select-box]:checked').each(function() {
+        if ($(this).data('file_path') !== "") {
+          json_data = {}
+          json_data['file_path'] = $(this).data('file_path');
+          json_data['object_type'] = $(this).data('object_type');
+          all_files_path.push(json_data);
+        }
+      });
+      deleteFile({
+        "all_files_path": JSON.stringify(all_files_path)
+      });
+      $("#loading-box-2").show();
+      $("#deleteModal").modal('hide');
+    });
+
+    $('#folder-contents').dataTable({
+      "columnDefs": [{
+          "orderable": false,
+          "targets": [0, 6]
+        },
+        {
+          "orderable": true,
+          "targets": [1, 2, 3, 4, 5]
+        }
+      ]
+    });
+    $('#version-table').dataTable({
+      "ordering": false
+    });
+    // File dialogue: Render the loading screen and open the box appears
+    $(document).on('click', '#upload_btn', function() {
+        $("#loading-box-2").show();
+        $('#uploadModal').modal('show');
+        });
+
+    // File dialogue: Render the loading screen and open the box appears
+    $(document).on('click', '#file_btn', function() {
+      $("#loading-box-2").show();
+      $('#uploadModal').modal('hide');
+      $('#uploadObjectModal').modal('show');
+    });
+
+    // Folder dialogue: Render the loading screen and open the folder dialogue box appears
+    $(document).on('click', '#folder_btn', function() {
+      $("#loading-box-2").show();
+      $('#uploadModal').modal('hide');
+      $('#uploadFolderModal').modal('show');
+    });
+
+    // File Upload dialogue: Hide the loading screen once the box appears
+    $(".modal").on('shown.bs.modal', function() {
+      $("#loading-box-2").hide();
+    });
+
+
+    // Versions List Data: Generate the versions data to be displayed in the versions panel
+    function getVersions(data) {
+      $.ajax({
+        url: '/ajax/s3-get-versions/{{ resource.id }}/',
+        type: "POST",
+        data: data,
+        success: function(data) {
+          $("#version-table").dataTable().fnDestroy();
+          $(".version-alert-div").show();
+          $("#version-table_wrapper").show();
+          if (data['status'] == true && data['message'] == "Successfully fetched") {
+            $(".version-alert-div").hide();
+            $("#versions-list").empty();
+            if (data['data'].length > 0) {
+              for (i = 0; i < data['data'].length; i++) {
+                if (data['data'][i].is_latest == true) {
+                  data['data'][i].icon = "<span class='btn-link'><i class='fa fa-crown'></i> </span>"
+                } else {
+                  data['data'][i].icon = "<span id='promote' class='btn-link'><i class='fa fa-level-up-alt'></i></span>"
+                }
+                $("#versions-list").append("<tr>\
+                    <td>" + data['data'][i].icon + "</td>\
+                    <td name='key'>" + data['data'][i].Key + "</td>\
+                    <td name='version'>" + data['data'][i].version_id + "</td>\
+                    <td>" + data['data'][i].type + "</td>\
+                    <td>" + data['data'][i].last_modified + "</td>\
+                    <td>" + data['data'][i].size + " KB</td>\
+                    <td>" + data['data'][i].storage_class + "</td>\
+                    <td> <button class='btn btn-link download-btn'\
+                        onclick=location.href=" + '"' + data['data'][i].download_url + '"' + ">\
+                        <i class='fa fa-download'></i></button></td> ")
+                // Register the promtion click Handler
+                promotionHandler();
+                c2.block.unblock();
+              }
+            } else {
+              $("#versions-list").append("<tr><td>No record found</td></tr>")
+            }
+          } else if (data['status'] == true && data['message'] == "Versioning disabled") {
+            $(".version-alert-div").show();
+          }
+          $('#version-table').dataTable({
+            "ordering": false,
+            "searching": true
+          });
+          $("#modal-loading-box").hide();
+        },
+        error: function(err) {
+          $("#modal-loading-box").hide();
+        }
+      });
+
+    };
+
+    // Version Tab Display: handler for rendering versions information when the versions tab is clicked
+    $(".tab-btn").on("click", function() {
+      $(".tab-btn").removeClass("active");
+      $(this).addClass("active");
+      var data_type = $(this).data('type');
+      if (data_type == "overview") {
+        $("#modal-loading-box").hide();
+        $("#overview-div").css({
+          "display": "block"
+        });
+        $("#versions-div").css({
+          "display": "none"
+        });
+      } else if (data_type == "versions") {
+        $("#modal-loading-box").show();
+        $(".version-alert-div").hide();
+        $("#version-table_wrapper").hide();
+        $("#overview-div").css({
+          "display": "none"
+        });
+        $("#versions-div").css({
+          "display": "block"
+        });
+        var data = {
+          "e_tag": $("#e_tag").text(),
+          "key": $("#key_file_path").text(),
+          "location": "{{ location }}"
+        }
+        getVersions(data);
+      }
+    });
+    // Versioning Enable : enable versioning on a bucket 
+    $(".enable-btn").on("click", function() {
+      $("#modal-loading-box").show();
+      $("#versions-div").css({
+        "display": "none"
+      });
+      $(".version-alert-div").hide();
+      var data = {
+        'bucket_name': '{{ resource.name }}'
+      }
+      $.ajax({
+        url: '/ajax/s3-enable-versioning/{{ resource.id }}/',
+        type: "POST",
+        data: data,
+        success: function(data) {
+          $("#modal-loading-box").hide();
+          $("#versions-btn").click()
+        },
+        error: function(err) {
+          $("#modal-loading-box").hide();
+        }
+      });
+    });
+
+    //  File Submission: Handle the file submission for uploading a file 
+    $("#submit-object").on('click', function(e) {
+      var file = $("#object_file")[0];
+      if (file.files.length == 0) {
+        $("#object_file_message").show();
+      } else {
+        $("#object_file_message").hide();
+        $("#submit-object").prop("disabled", true);
+        var data = new FormData();
+        jQuery.each(jQuery('#object_file')[0].files, function(i, file) {
+          data.append('object_file', file);
+        });
+        data.append('file_name', $("#object_file")[0].files[0].name);
+        data.append('bucket_name', '{{ resource.name }}');
+        data.append('path', '{{ state.full_path }}');
+        jQuery.ajax({
+          url: '/ajax/s3-upload-new-object/{{ resource.id }}/',
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          method: 'POST',
+          type: 'POST',
+          success: function(data) {
+            if (data['status'] == true) {
+              $('#uploadObjectModal').modal('hide');
+              $("#loading-box-2").show();
+              drillDown({
+                'path': '{{ state.full_path }}',
+                'flat': '{{  state.flat }}'
+              });
+            }
+          },
+          error: function(err) {
+            console.log(err);
+          }
+        });
+      }
+    });
+
+
+    // Folder submission: Handle the folder submission for uploading a folder
+    $("#submit-folder").on('click', function(e) {
+      var file = $("#object_folder")[0];
+      if (file.files.length == 0) {
+        $("#object_folder_message").show();
+      } else {
+        $("#object_folder_message").hide();
+        $("#submit-folder").prop("disabled", true);
+        var data = new FormData();
+        // add each item to the data
+        jQuery.each(jQuery('#object_folder')[0].files, function(i, file) {
+          data.append("file[" + i + "].path", file.webkitRelativePath)
+          data.append("file[" + i + "]", file)
+        });
+        data.append('folder_name', $("#object_folder")[0].files[0].name);
+        data.append('bucket_name', '{{ resource.name }}');
+        data.append('folder_path', '{{ state.full_path }}');
+        jQuery.ajax({
+          url: '/ajax/s3-upload-new-folder/{{ resource.id }}/',
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          method: 'POST',
+          type: 'POST',
+          success: function(data) {
+            if (data['status'] == true) {
+              $('#uploadFolderModal').modal('hide');
+              $("#loading-box-2").show();
+              drillDown({
+                'path': '{{ state.full_path }}',
+                'flat': '{{ state.flat }}'
+              });
+            }
+          },
+          error: function(err) {
+            console.log(err);
+          }
+        });
+      }
+    });
+    $('input[type=checkbox][name=select-box]').change(function() {
+      var value = $(this).data('value');
+      var disable_download = true;
+      if (value == "all") {
+        if ($(this).is(':checked')) {
+          $('input[type=checkbox][name=select-box]').prop("checked", true);
+        } else {
+          $('input[type=checkbox][name=select-box]').prop("checked", false);
+        }
+      }
+      var numberOfChecked = $('input[type=checkbox][name=select-box]:checked').length;
+      var totalCheckboxes = $('input[type=checkbox][name=select-box]').length;
+      var value_array = [];
+      $("input[type=checkbox][name=select-box]:checked").map(function() {
+        return value_array.push($(this).data('value'));
+      }).get();
+      if (numberOfChecked !== totalCheckboxes) {
+        $('.select-all').prop("checked", false);
+      }
+      if (numberOfChecked > 0) {
+        $('.fl-delete').prop("disabled", false);
+        disable_download = false;
+      } else {
+        $('.fl-delete').prop("disabled", true);
+        disable_download = true;
+      }
+      if (value_array.includes('folder')) {
+        disable_download = true;
+      }
+      $('.fl-link').prop("disabled", disable_download);
+    });
+  });
+</script>
+{% else %}
+Sorry, no local repository found.
+{% endif %}

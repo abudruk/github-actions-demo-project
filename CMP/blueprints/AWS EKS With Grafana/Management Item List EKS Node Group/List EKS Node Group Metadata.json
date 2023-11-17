@@ -1,0 +1,17 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "List EKS Node Group",
+    "dangerous": false,
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "glyphicon glyphicon-th-list",
+    "id": "RSA-zqfmt8p5",
+    "is_synchronous": false,
+    "label": "List EKS Node Group",
+    "last_updated": "2023-10-23",
+    "list_view_visible": true,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "requires_approval": false,
+    "submit_button_label": ""
+}

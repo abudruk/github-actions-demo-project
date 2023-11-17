@@ -1,0 +1,40 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "Order Dominos Pizza",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-iykophty",
+            "name": "Order Dominos Pizza",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "PaaS - Pizzas as a Service.\r\n\r\nUsing your username's name & email address, deliver pizza(s) to any address you specify on the order form. \r\n\r\nSee the top of the included plug-in for instructions on how to install the prerequisite libraries.",
+    "favorited": false,
+    "icon": "Domino-logo-880x660_uZu7PcC_eEI8Ls7_zZyooqV_tW0c3dc.png",
+    "id": "BP-6rzkm14k",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "model_name": "serviceblueprint",
+            "name": "Pizza"
+        }
+    ],
+    "last_updated": "2022-09-28",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Pizzas",
+    "resource_name_template": "",
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": []
+}

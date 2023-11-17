@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-g82afy5d",
+    "last_updated": "2023-05-05",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure SQL Discovery",
+    "resource_technologies": [],
+    "script_filename": "Azure SQL Discovery Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

@@ -1,0 +1,14 @@
+{
+    "description": "Deletes a DynamoDB table",
+    "id": "OHK-g52psnh3",
+    "last_updated": "2023-10-25",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Teardown for Dynamo DB table",
+    "resource_technologies": [],
+    "script_filename": "Teardown for Dynamo DB table Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

@@ -1,0 +1,59 @@
+{% extends "dashboard/card.html" %}
+{% load static %}
+{% block card_id %}S3 Bucket Manager{% endblock %}
+{% block heading %}S3 Bucket Manager{% endblock %}
+{% block card_body %}
+<div>
+  <div class="row">
+    <div class="col-sm-1">
+      <label for="buckets" class="lead">Bucket:</label>
+    </div>
+    <div class="col-sm-11">
+      <select name="buckets" id="buckets">
+        {% for bucket in buckets %}
+        <option value="{{bucket.id}}">{{ bucket.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+</div>
+<div class="panel panel-default" id="content-box">
+  {% with buckets.0 as resource %}
+  {% include "s3_file_manager/templates/tab.html"  %}
+  {% endwith %}
+</div>
+<script>
+  // Handle the type-ahead for the dropdown
+  $("#buckets").selectize()
+
+  // Reload the S3 management screen when a new item is selected
+  $("#buckets").change(function() {
+    c2.block.block();
+    $("form#buckets").submit();
+    $.ajax({
+      url: '/ajax/s3-browser/' + $(this).val(),
+      success: function(data) {
+        $("#repoContent").html(data);
+        c2.block.unblock();
+      },
+      error: function(err) {
+        $("#loading-box").fadeOut("slow",
+          function() {
+            $("#repoContent").html(err);
+            c2.block.unblock();
+          });
+      }
+    });
+
+  });
+</script>
+<style>
+  #modal-backdrop {
+    z-index: -1;
+  }
+
+  .modal-backdrop {
+    z-index: -1;
+  }
+</style>
+{% endblock card_body %}

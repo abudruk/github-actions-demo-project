@@ -1,0 +1,20 @@
+{
+    "action_input_default_values": [
+        {
+            "label": "Tintri Snapshot Name",
+            "name": "tintri_snapshot_name_a214",
+            "value": "{{ server.hostname }}-snapshot-01"
+        }
+    ],
+    "base_action_name": "Take a Tintri Snapshot",
+    "dialog_message": "Take a crash-consistent snapshot of this VM's storage. Tintri snapshots take much less time and lead to much better performance over the long term than hypervisor-native snapshots.\r\n\r\nLearn more on the <a href=\"https://www.tintri.com/resources/videos/using-tintri-snapshot-and-replicate-individual-vms\" target=\"_blank\">Tintri website</a>.",
+    "enabled": false,
+    "extra_classes": "fas fa-camera",
+    "icon": "tintri.jpg",
+    "id": "SVA-5d3s7mcl",
+    "label": "Take a Tintri Snapshot",
+    "last_updated": "2022-02-01",
+    "requires_approval": false,
+    "sequence": null,
+    "submit_button_label": "Take Snapshot"
+}

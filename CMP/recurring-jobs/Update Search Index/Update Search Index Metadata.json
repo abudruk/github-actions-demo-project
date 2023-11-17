@@ -1,0 +1,15 @@
+{
+    "action_input_default_values": [],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Update Search Index",
+    "create_date": "2021-12-31 08:18:50.379192",
+    "description": "Refreshes the search index that enables the global search feature. Running this on a\n            regular basis ensures that objects new to CloudBolt will show up in search results.\n\n            The search index resides in /var/opt/cloudbolt/search_index/ and should only take a few\n            minutes to update.",
+    "enabled": true,
+    "icon": "search.png",
+    "id": "RJB-ztb6ahsr",
+    "last_run": "2022-01-21 05:51:00.901774",
+    "last_updated": "2022-01-21",
+    "name": "Update Search Index",
+    "schedule": "3,15,27,39,51 * * * *",
+    "type": "orchestration_hook"
+}

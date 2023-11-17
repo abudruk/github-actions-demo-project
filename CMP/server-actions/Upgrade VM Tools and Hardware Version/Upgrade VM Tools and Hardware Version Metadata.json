@@ -1,0 +1,14 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Upgrade VM Tools and Hardware Version",
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "fas fa-level-up-alt",
+    "icon": "VMTools_WP_Featured_Image-1.png",
+    "id": "SVA-iqb8bato",
+    "label": "Upgrade VM Tools and Hardware Version",
+    "last_updated": "2022-02-01",
+    "requires_approval": false,
+    "sequence": null,
+    "submit_button_label": ""
+}

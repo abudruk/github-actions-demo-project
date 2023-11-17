@@ -1,0 +1,14 @@
+{
+    "description": "List AWS MariaDB database snapshots.",
+    "id": "OHK-ep3x409k",
+    "last_updated": "2023-10-20",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "List Snapshots",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of List Snapshots Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

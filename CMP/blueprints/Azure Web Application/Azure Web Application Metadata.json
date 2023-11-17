@@ -1,0 +1,82 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": true,
+    "deployment_items": [
+        {
+            "action_name": "Create Azure Web App",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-scsc2skn",
+            "name": "Create Azure Web App",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "Deploys Azure Web App -- Azure Web Apps enables you to build and host web applications in the programming language of your choice without managing infrastructure. It offers auto-scaling and high availability, supports both Windows and Linux, and enables automated deployments from GitHub, Visual Studio Team Services, or any Git repo. Learn how to use Azure Web Apps with our quickstarts, tutorials, and samples. https://azure.microsoft.com/en-us/services/app-service/web/\r\n\r\n\r\nPre-requisite of a 'Resource Group' within Azure.",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-ido0jzym/",
+        "title": "Discover Azure Web App"
+    },
+    "favorited": false,
+    "icon": "web-app_uuaFrXK_L5wlCTR_cWEZcs3_bqKdwkV_8hT5OdQ.png",
+    "id": "BP-4aofw3e9",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "color": null,
+            "id": "TAG-s7tn0t3i",
+            "image": null,
+            "name": "Azure",
+            "parent": {
+                "color": null,
+                "id": "TAG-crscs0f3",
+                "image": null,
+                "name": "Technology Type",
+                "sequence": 0
+            },
+            "sequence": 0
+        }
+    ],
+    "last_updated": "2023-04-26",
+    "management_actions": [
+        {
+            "enabled": true,
+            "label": "Restart Azure Web App"
+        }
+    ],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure Web Application",
+    "resource_name_template": "Azure-Web-App-00X",
+    "resource_type": {
+        "icon": "fas fa-rocket",
+        "id": "RT-63h1wat8",
+        "label": "Web App",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "web_apps",
+        "plural_label": "Web Apps"
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Delete Azure Web App",
+            "continue_on_failure": false,
+            "deploy_seq": 2,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-i1u4odlf",
+            "name": "Delete Azure Web App",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

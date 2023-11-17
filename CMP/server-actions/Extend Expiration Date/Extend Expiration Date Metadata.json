@@ -1,0 +1,14 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Extend Expiration Date",
+    "dialog_message": "Extend the Server's expiration date by 30 days. Notifies all Approvers in the Server's Group by email.",
+    "enabled": true,
+    "extra_classes": "far fa-hourglass",
+    "icon": "noun_expired_2995208.png",
+    "id": "SVA-5mn2u4w6",
+    "label": "Extend Expiration Date",
+    "last_updated": "2022-02-01",
+    "requires_approval": false,
+    "sequence": null,
+    "submit_button_label": "Extend"
+}

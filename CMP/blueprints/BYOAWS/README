@@ -1,0 +1,10 @@
+This blueprint allows for the creation of an AWS resource handler with controlled attributes.
+
+How to use:
+Once uploaded or imported, navigate to the catalog of your CloudBolt UI, navigate to the edit button of the BYOAWS blueprint (It will look like a gear). Then select the "Build AWS Account" build action, and in the code provided change the IP address to your own IP address where it says "api_client = InternalAPIClient(admin_user, "http", "192.168.1.171", "8001")". Once this is done, save the code with the button in the bottom left, navigate to the Catalog and order the BYOAWS blueprint. Input your action inputs and submit.
+
+Requirements:
+Before ordering the blueprint and inputing action inputs, you need to create the parameters and preconfigurations you plan to use as inputs as well as the group and assign the proper users to said group. Then you will need to navigate to Admin, then to Catalog Management and add an "AWS Services" category. Assign this label to all of the blueprints that you want your user to be able to see after running the BYOAWS.
+
+Installation:
+Download the byoaws.zip file and navigate to the Catalog section of the CloudBolt UI. In the top right select "Upload Blueprint" and choose the byoaws.zip file.

@@ -1,0 +1,15 @@
+{
+    "action_input_default_values": [],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Clean RH Networks & Templates",
+    "create_date": "2021-12-31 08:18:50.356565",
+    "description": "Clean up any networks or templates in CB that are no longer valid\n            by syncing with what is on the Resource Handler.",
+    "enabled": false,
+    "icon": "short-broom.png",
+    "id": "RJB-pz5nyenv",
+    "last_run": null,
+    "last_updated": "2022-01-20",
+    "name": "Clean RH Networks & Templates",
+    "schedule": "0 4 * * *",
+    "type": "orchestration_hook"
+}

@@ -1,0 +1,109 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "all_environments_enabled": true,
+            "allowed_os_families": [
+                "CentOS",
+                "Red Hat"
+            ],
+            "applications": null,
+            "deploy_seq": 1,
+            "description": "",
+            "enabled_environments": [],
+            "environment_selection_orchestration": null,
+            "execute_in_parallel": false,
+            "hostname_template": "",
+            "id": "BDI-nvezvidm",
+            "name": "Postgres SQL Server",
+            "os_build": null,
+            "restrict_applications": false,
+            "show_on_order_form": false,
+            "tier_type": "server"
+        },
+        {
+            "action_name": "Install PostgreSQL On CentOS",
+            "continue_on_failure": false,
+            "deploy_seq": 3,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-xfz913d4",
+            "name": "Install Postgres",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "script"
+        }
+    ],
+    "description": "Installs Postgres on provisioned machines on VMware.\r\nCurrently, this will only work in CentOS6 and CentOS7.",
+    "favorited": false,
+    "icon": "postgres_vW4OFU1_nf1RGYM_wA5fiyQ_M6eKtev.png",
+    "id": "BP-qkuk1tm5",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "color": null,
+            "id": "TAG-jd2p0idv",
+            "image": null,
+            "name": "CentOS",
+            "sequence": 0
+        },
+        {
+            "color": null,
+            "id": "TAG-slf059e8",
+            "image": null,
+            "name": "PostgreSQL",
+            "parent": {
+                "color": null,
+                "id": "TAG-hqqjocip",
+                "image": null,
+                "name": "Databases",
+                "parent": {
+                    "color": null,
+                    "id": "TAG-4kxxg7j3",
+                    "image": null,
+                    "name": "Public Cloud Services",
+                    "sequence": 0
+                },
+                "sequence": 0
+            },
+            "sequence": 0
+        },
+        {
+            "color": null,
+            "id": "TAG-5x1ownnp",
+            "image": null,
+            "name": "RedHat",
+            "sequence": 0
+        }
+    ],
+    "last_updated": "2023-03-03",
+    "management_actions": [
+        {
+            "enabled": true,
+            "label": "Restart PostgreSql server"
+        },
+        {
+            "enabled": true,
+            "label": "Stop PostgreSQL Server"
+        }
+    ],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "PostgreSQL on CentOS or RedHat",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "fas fa-database",
+        "id": "RT-h0npsxst",
+        "label": "Database",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "database",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": []
+}

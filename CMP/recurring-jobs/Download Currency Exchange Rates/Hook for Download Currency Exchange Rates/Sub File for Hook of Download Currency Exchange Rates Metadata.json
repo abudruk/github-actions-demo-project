@@ -1,0 +1,11 @@
+{
+    "description": "Download the latest exchange rates for supported currencies.",
+    "id": "OHK-wosckjdw",
+    "max_retries": 0,
+    "name": "Download Currency Exchange Rates",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Download Currency Exchange Rates Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

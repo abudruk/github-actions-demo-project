@@ -1,0 +1,73 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "S3 Bucket Create Service",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": null,
+            "enabled": true,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-3hxvwlrd",
+            "name": "Create S3 Bucket",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "Creates an AWS S3 bucket. Deleting the resultant service deletes the bucket.",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-yuk1mpv7/",
+        "title": "Discover S3 Buckets"
+    },
+    "favorited": false,
+    "icon": "aws_s3_logo.png",
+    "id": "BP-mytqkxou",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [],
+    "last_updated": "2023-10-23",
+    "management_actions": [
+        {
+            "enabled": true,
+            "label": "List Objects"
+        },
+        {
+            "enabled": true,
+            "label": "Delete Object"
+        }
+    ],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "AWS S3 Bucket",
+    "resource_name_template": "S3 Bucket",
+    "resource_type": {
+        "icon": "",
+        "id": "RT-mhdvbemy",
+        "label": "S3 Bucket",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "s3_bucket",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "S3 Bucket Delete Service",
+            "continue_on_failure": false,
+            "deploy_seq": -1,
+            "description": null,
+            "enabled": true,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-weue4ihy",
+            "name": "Delete S3 Bucket From Service",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

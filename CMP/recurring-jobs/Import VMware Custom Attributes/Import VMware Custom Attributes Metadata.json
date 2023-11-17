@@ -1,0 +1,16 @@
+{
+    "action_input_default_values": [],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Import VMware Custom Attributes",
+    "create_date": "2022-10-07 10:38:06.644257",
+    "description": "Read VMware custom attributes from all VMware VMs managed by CB and set them on Custom Fields (AKA Parameters) on Servers in CB.\r\n\r\nNote that this creates a custom field for every uniquely named custom attribute on all servers in VMware. This may\r\nlead to many Custom Fields being created in CloudBolt, so use with care.\r\n\r\nThe names of the custom fields are all prefixed with \"vmware_cust_attr_\" to make them easy to find.",
+    "enabled": false,
+    "id": "RJB-e5lhkkrc",
+    "last_run": null,
+    "last_updated": "2022-10-07",
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Import VMware Custom Attributes",
+    "schedule": "45 0 * * *",
+    "type": "orchestration_hook"
+}

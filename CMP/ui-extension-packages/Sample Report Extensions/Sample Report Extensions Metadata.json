@@ -1,0 +1,17 @@
+{
+    "description": null,
+    "enabled": true,
+    "icon": "sample_report_extensions.jpg",
+    "id": "XUI-mvsj4az6",
+    "label": "Sample Report Extensions",
+    "last_updated": "2022-01-13",
+    "name": "sample_report_extensions",
+    "package_contents": [
+        "forms.py",
+        "views.py",
+        "__init__.py",
+        "reports/bar.html",
+        "reports/table.html",
+        "reports/pie.html"
+    ]
+}

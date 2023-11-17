@@ -1,0 +1,25 @@
+{
+    "description": null,
+    "enabled": true,
+    "icon": "solar-winds.jpg",
+    "id": "XUI-e8d5d172",
+    "label": "SolarWinds",
+    "last_updated": "2022-12-27",
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "solar_winds",
+    "package_contents": [
+        "__init__.py",
+        "solar_winds_helper.py",
+        "urls.py",
+        "forms.py",
+        "solar_winds_scripts.py",
+        "install_agent.py",
+        "views.py",
+        "templates/admin_page.html",
+        "templates/server_tab.html",
+        "templates/tab-servers.html",
+        "templates/tab-dashboard.html"
+    ],
+    "version": ""
+}

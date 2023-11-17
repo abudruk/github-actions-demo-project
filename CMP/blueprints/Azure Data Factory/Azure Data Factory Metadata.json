@@ -1,0 +1,98 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "Create Data Factory Workspace",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-9s575pvg",
+            "name": "Create Data Factory Workspace",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "Blueprint for Creating the Data Factory workspace on Azure portal.",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-u7pwvka8/",
+        "title": "Discover Data Factory Workspace"
+    },
+    "favorited": false,
+    "icon": "azure_data_factory_bp_vRPZPJ9_vAhMjeC_YVHwoPM_tUxMmqp.png",
+    "id": "BP-d077k2gb",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "color": null,
+            "id": "TAG-s7tn0t3i",
+            "image": null,
+            "name": "Azure",
+            "parent": {
+                "color": null,
+                "id": "TAG-1es0jds6",
+                "image": null,
+                "name": "Technology Type",
+                "sequence": 0
+            },
+            "sequence": 0
+        }
+    ],
+    "last_updated": "2023-05-08",
+    "management_actions": [
+        {
+            "enabled": true,
+            "label": "Rerun Pipelines"
+        },
+        {
+            "enabled": true,
+            "label": "Run Pipelines"
+        },
+        {
+            "enabled": true,
+            "label": "List Pipelines"
+        },
+        {
+            "enabled": true,
+            "label": "Cancel Pipelines"
+        },
+        {
+            "enabled": true,
+            "label": "Delete Pipelines"
+        }
+    ],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure Data Factory",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "",
+        "id": "RT-tlznfh97",
+        "label": "Service",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "service",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Delete Data Factory Workspace",
+            "continue_on_failure": false,
+            "deploy_seq": -1,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-sws635he",
+            "name": "Delete Data Factory Workspace",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

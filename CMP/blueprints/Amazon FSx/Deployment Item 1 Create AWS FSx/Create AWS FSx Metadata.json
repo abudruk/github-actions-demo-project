@@ -1,0 +1,354 @@
+{
+    "action_inputs": [
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "description": "The ID for an existing Microsoft Active Directory instance that the file system should join when it's created.\r\n\r\nThis is only required it Windows file type is specified.",
+            "field_dependency_controlling_set": [
+                {
+                    "controlling-field": {
+                        "name": "subnet_ids_a265"
+                    },
+                    "custom-field-options": [],
+                    "dependency-type": "REGENOPTIONS",
+                    "dependent-field": {
+                        "name": "active_directory_id_a265"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "field_dependency_dependent_set": [],
+            "global_options": [],
+            "hide_if_default_value": false,
+            "label": "Active Directory ID",
+            "name": "active_directory_id",
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": false,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "STR",
+            "value_pattern_string": null
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "description": "The number of days to retain automatic backups. The default is to retain backups for 7 days. Setting this value to 0 disables the creation of automatic backups. The maximum retention period for backups is 35 days.",
+            "field_dependency_controlling_set": [
+                {
+                    "controlling-field": {
+                        "name": "file_system_type_a265"
+                    },
+                    "custom-field-options": [
+                        "ONTAP",
+                        "OPENZFS",
+                        "WINDOWS"
+                    ],
+                    "dependency-type": "SHOWHIDE",
+                    "dependent-field": {
+                        "name": "AutomaticBackupRetentionDays_a265"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "field_dependency_dependent_set": [],
+            "global_options": [],
+            "hide_if_default_value": false,
+            "label": "Automatic Backup Retention Days",
+            "maximum": "35.00",
+            "name": "AutomaticBackupRetentionDays",
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": false,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "INT",
+            "value_pattern_string": null
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "description": "The preferred time to take daily automatic backups, in the UTC time zone.",
+            "field_dependency_controlling_set": [
+                {
+                    "controlling-field": {
+                        "name": "file_system_type_a265"
+                    },
+                    "custom-field-options": [
+                        "ONTAP",
+                        "OPENZFS",
+                        "WINDOWS"
+                    ],
+                    "dependency-type": "SHOWHIDE",
+                    "dependent-field": {
+                        "name": "DailyAutomaticBackupStartTime_a265"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "field_dependency_dependent_set": [],
+            "global_options": [],
+            "hide_if_default_value": false,
+            "label": "Daily Automatic Backup Start Time",
+            "name": "DailyAutomaticBackupStartTime",
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": false,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "STR",
+            "value_pattern_string": null
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "description": "",
+            "field_dependency_controlling_set": [],
+            "field_dependency_dependent_set": [
+                {
+                    "controlling-field": {
+                        "name": "env_id_a265"
+                    },
+                    "custom-field-options": [],
+                    "dependency-type": "REGENOPTIONS",
+                    "dependent-field": {
+                        "name": "subnet_ids_a265"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "global_options": [],
+            "hide_if_default_value": false,
+            "label": "Environment",
+            "name": "env_id",
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": true,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "STR",
+            "value_pattern_string": null
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "description": "The type of file system.",
+            "field_dependency_controlling_set": [],
+            "field_dependency_dependent_set": [
+                {
+                    "controlling-field": {
+                        "name": "file_system_type_a265"
+                    },
+                    "custom-field-options": [
+                        "ONTAP",
+                        "OPENZFS",
+                        "WINDOWS"
+                    ],
+                    "dependency-type": "SHOWHIDE",
+                    "dependent-field": {
+                        "name": "AutomaticBackupRetentionDays_a265"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                },
+                {
+                    "controlling-field": {
+                        "name": "file_system_type_a265"
+                    },
+                    "custom-field-options": [
+                        "ONTAP",
+                        "OPENZFS",
+                        "WINDOWS"
+                    ],
+                    "dependency-type": "SHOWHIDE",
+                    "dependent-field": {
+                        "name": "DailyAutomaticBackupStartTime_a265"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                },
+                {
+                    "controlling-field": {
+                        "name": "file_system_type_a265"
+                    },
+                    "custom-field-options": [
+                        "ONTAP",
+                        "OPENZFS",
+                        "WINDOWS"
+                    ],
+                    "dependency-type": "SHOWHIDE",
+                    "dependent-field": {
+                        "name": "ThroughputCapacity_a265"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "global_options": [],
+            "hide_if_default_value": false,
+            "label": "File System Type",
+            "name": "file_system_type",
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": true,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "STR",
+            "value_pattern_string": null
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "description": null,
+            "field_dependency_controlling_set": [],
+            "field_dependency_dependent_set": [],
+            "global_options": [],
+            "hide_if_default_value": false,
+            "label": "Fsx File Name",
+            "name": "fsx_file_name",
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": true,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "STR",
+            "value_pattern_string": null
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "description": "The storage capacity of the file system.\r\n\r\nFor Windows file systems, the storage capacity has a minimum of 32 GiB, and a maximum of 65,536 GiB.\r\n\r\nFor Lustre file systems, the storage capacity has a minimum of 1,200 GiB. Storage capacity is provisioned in increments of 2,400 GiB.",
+            "field_dependency_controlling_set": [],
+            "field_dependency_dependent_set": [],
+            "global_options": [],
+            "hide_if_default_value": false,
+            "label": "Storage Capacity",
+            "minimum": "32.00",
+            "name": "storage_capacity",
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": true,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "INT",
+            "value_pattern_string": null
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "description": "A list of IDs for the subnets that the file system will be accessible from. File systems support only one subnet. The file server is also launched in that subnet's Availability Zone.",
+            "field_dependency_controlling_set": [
+                {
+                    "controlling-field": {
+                        "name": "env_id_a265"
+                    },
+                    "custom-field-options": [],
+                    "dependency-type": "REGENOPTIONS",
+                    "dependent-field": {
+                        "name": "subnet_ids_a265"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "field_dependency_dependent_set": [
+                {
+                    "controlling-field": {
+                        "name": "subnet_ids_a265"
+                    },
+                    "custom-field-options": [],
+                    "dependency-type": "REGENOPTIONS",
+                    "dependent-field": {
+                        "name": "active_directory_id_a265"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "global_options": [],
+            "hide_if_default_value": false,
+            "label": "Subnet IDs",
+            "name": "subnet_ids",
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": true,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "STR",
+            "value_pattern_string": null
+        },
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "description": "The throughput of an Amazon FSx file system, measured in megabytes per second.",
+            "field_dependency_controlling_set": [
+                {
+                    "controlling-field": {
+                        "name": "file_system_type_a265"
+                    },
+                    "custom-field-options": [
+                        "ONTAP",
+                        "OPENZFS",
+                        "WINDOWS"
+                    ],
+                    "dependency-type": "SHOWHIDE",
+                    "dependent-field": {
+                        "name": "ThroughputCapacity_a265"
+                    },
+                    "maximum": null,
+                    "minimum": null,
+                    "regex": ""
+                }
+            ],
+            "field_dependency_dependent_set": [],
+            "global_options": [],
+            "hide_if_default_value": false,
+            "label": "ThroughPut Capacity",
+            "name": "ThroughputCapacity",
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": true,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "INT",
+            "value_pattern_string": null
+        }
+    ],
+    "action_inputs_sequence": [
+        "env_id",
+        "file_system_type",
+        "storage_capacity",
+        "DailyAutomaticBackupStartTime",
+        "AutomaticBackupRetentionDays",
+        "subnet_ids",
+        "active_directory_id",
+        "ThroughputCapacity"
+    ],
+    "description": "",
+    "id": "OHK-mo3p5rj9",
+    "last_updated": "2023-10-23",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Create AWS FSx",
+    "resource_technologies": [
+        "Amazon Web Services"
+    ],
+    "script_filename": "Create AWS FSx Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

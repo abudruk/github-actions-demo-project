@@ -1,0 +1,13 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Lock Workspace",
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "fas fa-lock",
+    "id": "RSA-lm3ypkib",
+    "label": "Lock Workspace",
+    "last_updated": "2022-01-21",
+    "list_view_visible": true,
+    "requires_approval": false,
+    "submit_button_label": ""
+}

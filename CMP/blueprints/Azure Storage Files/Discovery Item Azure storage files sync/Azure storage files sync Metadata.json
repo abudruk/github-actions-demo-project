@@ -1,0 +1,17 @@
+{
+    "description": "",
+    "id": "OHK-3v5tslm0",
+    "last_updated": "2023-05-15",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure storage files sync",
+    "resource_technologies": [
+        "Azure",
+        "Azure Stack"
+    ],
+    "script_filename": "Azure storage files sync Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

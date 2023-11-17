@@ -1,0 +1,20 @@
+{
+    "description": "\nThis UI Extension gives users some basic functionality to interact with their S3 buckets.\n\n",
+    "enabled": true,
+    "icon": "s3_file_manager_nwypIoy_a5x6aCB.png",
+    "id": "XUI-p1xaxtos",
+    "label": "S3 File Manager",
+    "last_updated": "2023-09-06",
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "s3_file_manager",
+    "package_contents": [
+        "operations.py",
+        "views.py",
+        "urls.py",
+        "templates/s3_browser.html",
+        "templates/widget.html",
+        "templates/tab.html"
+    ],
+    "version": "1.0"
+}

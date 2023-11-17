@@ -1,0 +1,17 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Restart Azure Web App",
+    "dangerous": false,
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "fas fa-bolt",
+    "id": "RSA-gr6nkmq9",
+    "is_synchronous": false,
+    "label": "Restart Azure Web App",
+    "last_updated": "2023-04-26",
+    "list_view_visible": true,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "requires_approval": false,
+    "submit_button_label": ""
+}

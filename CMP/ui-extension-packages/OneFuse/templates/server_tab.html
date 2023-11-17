@@ -1,0 +1,40 @@
+<div class="container-fluid">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">OneFuse Integration list for Server: {{server.hostname}}</h2>
+        </div>
+        <div class="panel-body">
+            {% if onefuse_objects %}
+                <table class="dataTable no-footer table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Policy Type</th>
+                            <th>Policy Name</th>
+                            <th>Suffix</th>
+                            <th>Endpoint</th>
+                            <th>MO Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for object in onefuse_objects %}
+                        <tr>
+                            <td>{{object.policy_type}}</td>
+                            <td>{{object.policy_name}}</td>
+                            <td>{{object.suffix}}</td>
+                            <td>{{object.endpoint}}</td>
+                            <td>{{object.mo_data|safe}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-info w-75">
+                    <p>No active OneFuse Integrations exist for Server: {{server.hostname}}</p>
+                </div>
+            {% endif %}
+        </div>
+        <div class="panel-heading">
+            <h2 class="panel-title">OneFuse Tracking ID: {{server.OneFuse_Tracking_Id}}</h2>
+        </div>
+    </div>
+</div>

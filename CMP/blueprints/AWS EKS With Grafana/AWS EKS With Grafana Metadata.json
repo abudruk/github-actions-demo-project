@@ -1,0 +1,110 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "Create AWS EKS Cluster",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": null,
+            "enabled": true,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-ioy2l7ds",
+            "name": "Create AWS EKS Cluster",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        },
+        {
+            "action_name": "Deploy Grafana Web Service",
+            "continue_on_failure": false,
+            "deploy_seq": 2,
+            "description": "",
+            "enabled": true,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-1bjzfemq",
+            "name": "Deploy Grafana Web Service",
+            "run_on_scale_up": true,
+            "show_on_order_form": false,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "Amazon Elastic Kubernetes Service\r\nProvided resource action feature to add Node Group with autoscaling,  Sync Node Group, delete Node Group, Update Kubernetes version, and Deploying containerized Grafana Web Application/Service.\r\n\r\nWhile Deploying the blueprint need to add the parameters carefully, Select the Instance Type  Large, xLarge if nodes need to be created more than 2. \r\n\r\nUseful details, Always select Desired nodes less than max nodes and Min nodes always less than the Desired Nodes.\r\n\r\nAlways add the disk size relevant to the selection of instance Types. Ideally more than 20 GB.\r\n \r\ne.g Desired Nodes: 3, Min Nodes: 2, Max Nodes: 5",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-nj7kuc0b/",
+        "title": "Discover AWS EKS Cluster"
+    },
+    "favorited": false,
+    "icon": "grafana_logo.png",
+    "id": "BP-ypooeey4",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "color": null,
+            "id": "TAG-6spb5ltg",
+            "image": null,
+            "name": "AWS",
+            "parent": {
+                "color": null,
+                "id": "TAG-rgqwsw74",
+                "image": null,
+                "name": "Technology Type",
+                "sequence": 0
+            },
+            "sequence": 0
+        }
+    ],
+    "last_updated": "2023-10-23",
+    "management_actions": [
+        {
+            "enabled": true,
+            "label": "Add EKS Node Group"
+        },
+        {
+            "enabled": true,
+            "label": "Update EKS Cluster Kubernetes Version"
+        },
+        {
+            "enabled": true,
+            "label": "Delete EKS Node Group"
+        },
+        {
+            "enabled": true,
+            "label": "List EKS Node Group"
+        }
+    ],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "AWS EKS With Grafana",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "",
+        "id": "RT-t3u2amy4",
+        "label": "Cluster",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "cluster",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Delete AWS EKS Cluster",
+            "continue_on_failure": false,
+            "deploy_seq": -1,
+            "description": "Delete AWS EKS Cluster with Associated Nodegroup and Web Service",
+            "enabled": true,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-awrnf1ry",
+            "name": "Delete AWS EKS Cluster",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

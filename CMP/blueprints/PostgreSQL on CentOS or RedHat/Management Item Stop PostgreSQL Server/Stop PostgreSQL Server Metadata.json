@@ -1,0 +1,17 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Stop PostgreSQL Server",
+    "dangerous": false,
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "fas fa-stop",
+    "id": "RSA-vx9shueg",
+    "is_synchronous": false,
+    "label": "Stop PostgreSQL Server",
+    "last_updated": "2023-03-03",
+    "list_view_visible": true,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "requires_approval": false,
+    "submit_button_label": ""
+}

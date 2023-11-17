@@ -1,0 +1,67 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "Create Cisco UCS Service Profile",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-ikz6n3fm",
+            "name": "Create Cisco UCS Service Profile",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "This blueprint will create a UCS service profile either from an existing UCS service profile template or without using any template. In order to use the blueprint the following prerequisites must be met. <br><br>\r\n\r\nThe ucsmsdk and ucscsdk python libraries need to be installed manually on the CloudBolt appliance using pip. (i.e pip install ucsmsdk && pip install ucscsdk)<br><br>\r\n\r\nIn CloudBolt, in Admin \u2192 Connection Info, you need to create a Connection Info called \u201cCisco UCS\u201d which contains IP address, username, and password to Cisco UCS.",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-1ghpdt9v/",
+        "title": "Discover Cisco UCS service profiles"
+    },
+    "favorited": false,
+    "icon": "Cisco_UCS_25K9VJu_KFm3jQB_0MON9yC_xu1kcfW.png",
+    "id": "BP-6pqouzz4",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "model_name": "serviceblueprint",
+            "name": "Cisco UCS"
+        }
+    ],
+    "last_updated": "2022-11-10",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Cisco UCS",
+    "resource_name_template": "",
+    "resource_type": {
+        "icon": "",
+        "id": "RT-o6ep0kav",
+        "label": "Service",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "service",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Delete UCS Service profile",
+            "continue_on_failure": false,
+            "deploy_seq": 2,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-6mk8z6p9",
+            "name": "Delete UCS Service profile",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

@@ -1,0 +1,12 @@
+{
+    "description": "Download the latest rate card for Azure pricing information",
+    "id": "OHK-toj47bho",
+    "last_updated": "2022-01-20",
+    "max_retries": 0,
+    "name": "Download Azure rate card",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Download Azure rate card Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

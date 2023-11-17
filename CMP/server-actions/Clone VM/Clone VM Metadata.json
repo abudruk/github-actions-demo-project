@@ -1,0 +1,14 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Clone VM",
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "far fa-clone",
+    "icon": "vm.png",
+    "id": "SVA-nxdhsico",
+    "label": "Clone VM",
+    "last_updated": "2022-02-01",
+    "requires_approval": false,
+    "sequence": null,
+    "submit_button_label": ""
+}

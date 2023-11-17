@@ -1,0 +1,15 @@
+{
+    "action_input_default_values": [],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Refresh All Server Utilization",
+    "create_date": "2021-12-31 08:18:50.334550",
+    "description": "Execute any action whose name starts with \"Refresh Utilization \". Updates server\n            utilization stats used in reports. See sample action \"Refresh Utilization for VMware\n            Servers\".",
+    "enabled": false,
+    "icon": "refresh_Z7H2Kol.png",
+    "id": "RJB-y7lj1srh",
+    "last_run": null,
+    "last_updated": "2022-01-21",
+    "name": "Refresh All Server Utilization",
+    "schedule": "45 3 * * *",
+    "type": "orchestration_hook"
+}

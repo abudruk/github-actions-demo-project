@@ -1,0 +1,33 @@
+{
+    "description": "\nThis XUI renders the OpenStack reports such as optimization report and monthly VM reports with their cpu, memory and network utilizations.\n\n\nCurrent Version: v1.0\n",
+    "enabled": true,
+    "icon": "OpenStack.png",
+    "id": "XUI-bs1zvtkk",
+    "label": "OpenStack Reports",
+    "last_updated": "2023-08-09",
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "openstack_reports",
+    "package_contents": [
+        "static/js/common.js",
+        "static/js/jspdf.min.js",
+        "static/js/jspdf.plugin.autotable.min.js",
+        "static/js/optimization_report.js",
+        "static/js/pdf_common.js",
+        "static/js/html2canvas.min.js",
+        "static/js/monthly_performance_report.js",
+        "static/css/monthly_performance_report.css",
+        "static/css/common.css",
+        "static/images/optimization_report.png",
+        "static/images/monthly_performance_report.png",
+        "static/images/OpenStack.png",
+        "urls.py",
+        "utils.py",
+        "views.py",
+        "__init__.py",
+        "templates/optimization_report.html",
+        "templates/monthly_performance_report.html",
+        "templates/_cbloader.html"
+    ],
+    "version": ""
+}

@@ -1,0 +1,22 @@
+{
+    "commandline_args": "",
+    "credentials": "YOUR_CREDENTIALS",
+    "description": "",
+    "execution_timeout": 600,
+    "id": "OHK-w22gf2fj",
+    "last_updated": "2022-09-28",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Install Jenkins",
+    "remove_after_run": true,
+    "resource_technologies": [],
+    "run_with_sudo": true,
+    "script_filename": "Install Jenkins Script.py",
+    "shared": false,
+    "target_os_families": [
+        "Linux -> CentOS",
+        "Linux -> Red Hat"
+    ],
+    "type": "Remote Script"
+}

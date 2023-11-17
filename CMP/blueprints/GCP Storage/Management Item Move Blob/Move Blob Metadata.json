@@ -1,0 +1,15 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Move Blob",
+    "dialog_message": "",
+    "enabled": false,
+    "extra_classes": "",
+    "id": "RSA-iwgkdyx9",
+    "label": "Move Blob",
+    "last_updated": "2022-09-28",
+    "list_view_visible": true,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "requires_approval": false,
+    "submit_button_label": ""
+}

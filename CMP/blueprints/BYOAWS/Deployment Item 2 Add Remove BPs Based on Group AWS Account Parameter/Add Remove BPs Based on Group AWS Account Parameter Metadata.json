@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-st52zapb",
+    "last_updated": "2022-10-13",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Add Remove BPs Based on Group AWS Account Parameter",
+    "resource_technologies": [],
+    "script_filename": "Add Remove BPs Based on Group AWS Account Parameter Script.py",
+    "shared": true,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

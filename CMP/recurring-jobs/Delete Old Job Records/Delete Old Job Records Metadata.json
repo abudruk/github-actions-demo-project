@@ -1,0 +1,15 @@
+{
+    "action_input_default_values": [],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Delete Old Job Records",
+    "create_date": "2021-12-31 08:18:50.446183",
+    "description": "Find any job record in the database older than the threshold and delete it, also removing its log file from disk.",
+    "enabled": true,
+    "icon": "cloudbolt_exI5cac.jpg",
+    "id": "RJB-dmbeaff2",
+    "last_run": null,
+    "last_updated": "2022-01-20",
+    "name": "Delete Old Job Records",
+    "schedule": "15 2 * * *",
+    "type": "orchestration_hook"
+}

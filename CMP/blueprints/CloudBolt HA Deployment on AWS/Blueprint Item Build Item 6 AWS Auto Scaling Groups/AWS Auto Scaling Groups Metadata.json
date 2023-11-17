@@ -1,0 +1,76 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "blueprint_image": null,
+    "deployment_items": [
+        {
+            "action_name": "create_auto_scaling_group",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-rzk9o8xz",
+            "name": "Create Auto Scaling Group",
+            "parameter_defaults": [
+                {
+                    "label": "Desired Capacity",
+                    "name": "desired_capacity_a355",
+                    "value": "2"
+                },
+                {
+                    "label": "Health Check Period (In seconds)",
+                    "name": "health_check_period_a355",
+                    "value": "300"
+                },
+                {
+                    "label": "Max Size",
+                    "name": "max_size_a355",
+                    "value": "2"
+                },
+                {
+                    "label": "Metric Type",
+                    "name": "metric_type_a355",
+                    "value": "ASGAverageCPUUtilization"
+                },
+                {
+                    "label": "Min Size",
+                    "name": "min_size_a355",
+                    "value": "2"
+                },
+                {
+                    "label": "Target Value",
+                    "name": "target_value_a355",
+                    "value": "75"
+                }
+            ],
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "This blueprint creates auto scaling group in VPC selected or created in a region\r\nAuto scaling group is also attached with the existing Application Load Balancer provided.\r\nScaling Policy is also created as per user inputs of metric type and target value.",
+    "favorited": false,
+    "id": "BP-k0dc6c8e",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [],
+    "last_updated": "2023-03-03",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "AWS Auto Scaling Groups",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "",
+        "id": "RT-ky65jpf8",
+        "label": "Service",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "service",
+        "plural_label": null
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": []
+}

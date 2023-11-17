@@ -1,0 +1,44 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "blueprint_image": null,
+    "deployment_items": [
+        {
+            "action_name": "aws_shared_file_system",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": "",
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-kywjvn16",
+            "name": "AWS Shared File System",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "This blueprint will only create file system and mount  targets in respective zones selected by user in parent CloudBolt HA Deployment on AWS Blueprint. This needs to be mounted in whichever instances will be generated or created.",
+    "favorited": false,
+    "id": "BP-meeuk42w",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [],
+    "last_updated": "2023-03-03",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "AWS Shared File System",
+    "resource_name_template": null,
+    "resource_type": {
+        "icon": "fas fa-box",
+        "id": "RT-nj1z74l0",
+        "label": "Storage",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "storage",
+        "plural_label": "Storage"
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": []
+}

@@ -1,0 +1,26 @@
+{
+    "description": null,
+    "enabled": true,
+    "icon": "data_dog_ITgEEF9.png",
+    "id": "XUI-rfkajkfc",
+    "label": "Datadog",
+    "last_updated": "2022-12-27",
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "data_dog",
+    "package_contents": [
+        "__init__.py",
+        "uninstall_agent.py",
+        "data_dog_scripts.py",
+        "data_dog_helper.py",
+        "urls.py",
+        "forms.py",
+        "install_agent.py",
+        "views.py",
+        "templates/admin_page.html",
+        "templates/data_dog_server_tab.html",
+        "templates/tab-servers.html",
+        "templates/tab-dashboard.html"
+    ],
+    "version": ""
+}

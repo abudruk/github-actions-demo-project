@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-61mql5x2",
+    "last_updated": "2023-10-19",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Start AWS RDS Aurora Database Cluster",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Start AWS RDS Aurora Database Cluster Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

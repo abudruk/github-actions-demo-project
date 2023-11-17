@@ -1,0 +1,15 @@
+{
+    "action_input_default_values": [],
+    "allow_parallel_jobs": false,
+    "base_action_name": "Cleanup .zip files from tmp folder in CB",
+    "create_date": "2022-01-21 05:32:40.712974",
+    "description": "",
+    "enabled": true,
+    "icon": "View-and-Cleanup-Temporary-Files-in-Windows-10.jpg",
+    "id": "RJB-618zbtvs",
+    "last_run": null,
+    "last_updated": "2022-01-21",
+    "name": "Cleanup .zip files from tmp folder in CB",
+    "schedule": "0 2 * * *",
+    "type": "orchestration_hook"
+}

@@ -1,0 +1,13 @@
+{
+    "action_input_default_values": [],
+    "base_action_name": "Unlock Workspace",
+    "dialog_message": "",
+    "enabled": true,
+    "extra_classes": "fas fa-unlock",
+    "id": "RSA-gukd8v9n",
+    "label": "Unlock Workspace",
+    "last_updated": "2022-01-21",
+    "list_view_visible": true,
+    "requires_approval": false,
+    "submit_button_label": ""
+}

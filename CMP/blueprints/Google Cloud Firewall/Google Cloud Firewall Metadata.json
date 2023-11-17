@@ -1,0 +1,71 @@
+{
+    "any_group_can_deploy": true,
+    "auto_historical_resources": false,
+    "deployment_items": [
+        {
+            "action_name": "Google Cloud Firewall Build",
+            "continue_on_failure": false,
+            "deploy_seq": 1,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-03h6vctl",
+            "name": "Google Cloud Firewall Build",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "plugin"
+        }
+    ],
+    "description": "",
+    "discovery_plugin": {
+        "href": "/api/v3/cmp/actions/OHK-2abe9231/",
+        "title": "Google Cloud Firewall Sync"
+    },
+    "favorited": false,
+    "icon": "google_cloud.png",
+    "id": "BP-1c66me4u",
+    "is_manageable": true,
+    "is_orderable": true,
+    "labels": [
+        {
+            "model_name": "serviceblueprint",
+            "name": "GCP",
+            "parent": {
+                "model-name": "serviceblueprint",
+                "name": "Technology Type"
+            }
+        }
+    ],
+    "last_updated": "2022-09-28",
+    "management_actions": [],
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Google Cloud Firewall",
+    "resource_name_template": "",
+    "resource_type": {
+        "icon": "fa fa-shield-alt",
+        "id": "RT-6rx6jaha",
+        "label": "Firewall Rule",
+        "lifecycle": "ACTIVE",
+        "list_view_columns": [],
+        "name": "firewall_rule",
+        "plural_label": "Firewall Rules"
+    },
+    "sequence": 0,
+    "show_recipient_field_on_order_form": false,
+    "teardown_items": [
+        {
+            "action_name": "Google Cloud Firewall Teardown",
+            "continue_on_failure": false,
+            "deploy_seq": 2,
+            "description": null,
+            "enabled_environments": [],
+            "execute_in_parallel": false,
+            "id": "BDI-s1922xh2",
+            "name": "Google Cloud Firewall Teardown",
+            "run_on_scale_up": true,
+            "show_on_order_form": true,
+            "tier_type": "teardown_plugin"
+        }
+    ]
+}

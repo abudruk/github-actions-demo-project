@@ -1,0 +1,35 @@
+{
+    "action_inputs": [
+        {
+            "allow_multiple": false,
+            "available_all_servers": false,
+            "description": null,
+            "field_dependency_controlling_set": [],
+            "field_dependency_dependent_set": [],
+            "global_options": [],
+            "hide_if_default_value": false,
+            "id": "CF-qlipvpq2",
+            "label": "Name Of New Ami",
+            "name": "name_of_new_ami",
+            "placeholder": null,
+            "relevant_osfamilies": [],
+            "required": true,
+            "show_as_attribute": false,
+            "show_on_servers": false,
+            "type": "STR",
+            "value_pattern_string": null
+        }
+    ],
+    "description": "Create Amazon Machine Image from Instance",
+    "id": "OHK-mhwcjdk5",
+    "last_updated": "2022-02-01",
+    "max_retries": 0,
+    "name": "Create Amazon Machine Image from Instance",
+    "resource_technologies": [
+        "Amazon Web Services"
+    ],
+    "script_filename": "Sub File for Hook of Create Amazon Machine Image from Instance Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

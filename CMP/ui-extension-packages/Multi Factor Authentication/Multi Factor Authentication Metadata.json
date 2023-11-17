@@ -1,0 +1,26 @@
+{
+    "description": "Enable multi factor authentication for login into CMP on a user by user basis.",
+    "enabled": true,
+    "icon_url": "",
+    "id": "XUI-tf5xgj1t",
+    "label": "Multi Factor Authentication",
+    "last_updated": "2022-11-01",
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "mfa",
+    "package_contents": [
+        "totp.py",
+        "forms.py",
+        "utils.py",
+        "urls.py",
+        "xui_settings.py",
+        "middleware.py",
+        "views.py",
+        "__init__.py",
+        "templates/verify_second_factor_totp.html",
+        "templates/mfa_management_tab.html",
+        "templates/admin_page.html",
+        "templates/configure.html",
+        "templates/tab-overview.html"
+    ]
+}

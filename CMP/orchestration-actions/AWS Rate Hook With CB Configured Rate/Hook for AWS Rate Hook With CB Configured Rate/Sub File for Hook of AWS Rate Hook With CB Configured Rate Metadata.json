@@ -1,0 +1,12 @@
+{
+    "description": "",
+    "id": "OHK-hjwnhisq",
+    "last_updated": "2022-01-20",
+    "max_retries": 0,
+    "name": "AWS Rate Hook With CB Configured Rate",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of AWS Rate Hook With CB Configured Rate Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

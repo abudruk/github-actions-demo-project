@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-rybplb82",
+    "last_updated": "2023-10-19",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Stop AWS RDS Aurora Database Cluster",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Stop AWS RDS Aurora Database Cluster Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-5e8tkqfp",
+    "last_updated": "2023-04-26",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Restart Azure Web App",
+    "resource_technologies": [],
+    "script_filename": "Sub File for Hook of Restart Azure Web App Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}

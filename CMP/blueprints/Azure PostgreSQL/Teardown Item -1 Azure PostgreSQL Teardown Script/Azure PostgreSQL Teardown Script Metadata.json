@@ -1,0 +1,14 @@
+{
+    "description": "",
+    "id": "OHK-uvf4qelo",
+    "last_updated": "2023-07-10",
+    "max_retries": 0,
+    "maximum_version_required": "",
+    "minimum_version_required": "8.6",
+    "name": "Azure PostgreSQL Teardown Script",
+    "resource_technologies": [],
+    "script_filename": "Azure PostgreSQL Teardown Script Script.py",
+    "shared": false,
+    "target_os_families": [],
+    "type": "CloudBolt Plug-in"
+}
