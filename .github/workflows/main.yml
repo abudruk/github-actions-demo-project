@@ -35,7 +35,7 @@ jobs:
 
       - name: List all changed files
         run: |
-          IFS=$'\t' read -ra changed_files_array <<< "${{ steps.changed-files.outputs.all_changed_files }}"
+          IFS=$'\n' read -ra changed_files_array <<< "${{ steps.changed-files.outputs.all_changed_files }}"
           for folder in "${changed_files_array[@]}"; do
             echo "$file was changed"
           done
