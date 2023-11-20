@@ -35,7 +35,14 @@ jobs:
 
       - name: List all changed files
         run: |
-          IFS=$'.zip' read -ra changed_files_array <<< "${{ steps.changed-files.outputs.all_changed_files }}"
+
+          # Replace '.zip' with a character that doesn't appear in the paths
+
+          changed_files = "${{ steps.changed-files.outputs.all_changed_files }}"
+
+          files_string_delimited="${changed_files//.zip/$'\x01'}"
+          
+          IFS=$'\x01' read -ra changed_files_array <<< "$files_string_delimited"
 
           for file in ${changed_files_array[@]}; do
             echo "$file was changed"
