@@ -44,8 +44,9 @@ jobs:
           # files_with_semicolon="${changed_files//.zip/;}"
           files_with_semicolon=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | sed 's/.zip/;/')
 
-
-          IFS=$'\x01' read -ra changed_files_array <<< "$files_with_semicolon"
+          echo "files_with_semicolon $files_with_semicolon"
+          
+          IFS=$';' read -ra changed_files_array <<< "$files_with_semicolon"
 
           for file in ${changed_files_array[@]}; do
             echo "$file was changed"
