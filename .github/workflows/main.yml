@@ -76,10 +76,10 @@ jobs:
           echo "changed_files_array :  ${changed_files_array[@]} "
 
           for file in "${changed_files_array[@]}"; do
-            file = "${file}.zip"
-            echo "Moving $file"
-            BASENAME=$(basename "$file")
-            mv "$file" "${{ github.workspace }}/tmp/$BASENAME"
+            file_with_extension = "${file}.zip"
+            echo "Moving $file_with_extension"
+            BASENAME=$(basename "$file_with_extension")
+            mv "$file_with_extension" "${{ github.workspace }}/tmp/$BASENAME"
           done
 
       - name: Create a single tar of all the files in the current directory
