@@ -78,7 +78,7 @@ jobs:
                 echo "sha : $sha"
                 echo "library-image-url : $libraryimageurl}"
 
-                jq 'map(if .name == "$name" then .artifact_path = "$artifact_path" | .sha = "$sha" | .library-image-url = "$libraryimageurl" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+                jq 'map(if .name == "$name" then .artifact_path = "$artifact_path" | .sha = "$sha" | .["library-image-url"] = "$libraryimageurl" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
                 mv modified_${{ matrix.type }}_new.json ${{ matrix.type }}.json
               done
