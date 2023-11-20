@@ -48,7 +48,7 @@ jobs:
 
           IFS=';' read -ra changed_files_array <<< "$files_with_semicolon"
 
-
+          echo "changed_files_array :  ${changed_files_array[@]} "
           for file in ${changed_files_array[@]}; do
             echo "$file was changed"
           done
