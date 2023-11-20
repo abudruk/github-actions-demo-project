@@ -35,15 +35,9 @@ jobs:
 
       - name: List all changed files
         run: |
+          IFS=$'.zip' read -ra changed_files_array <<< "${{ steps.changed-files.outputs.all_changed_files }}"
 
-          changed_files="${{ steps.changed-files.outputs.all_changed_files }}"
-          # Convert the string to an array
-
-          IFS=$'\n' read -rd '' -a changed_files_array <<< "$changed_files"
-
-          echo "Changed Files array : $changed_files"
-          
-          for folder in ${changed_files_array[@]}; do
+          for file in ${changed_files_array[@]}; do
             echo "$file was changed"
           done
 
