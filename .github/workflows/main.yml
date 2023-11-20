@@ -77,7 +77,7 @@ jobs:
 
           for file in "${changed_files_array[@]}"; do
             file_with_extension = "${file}.zip"
-            echo "Moving $file_with_extension"
+            echo "Moving ${file_with_extension}"
             BASENAME=$(basename "$file_with_extension")
             mv "$file_with_extension" "${{ github.workspace }}/tmp/$BASENAME"
           done
