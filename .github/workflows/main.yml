@@ -69,7 +69,7 @@ jobs:
                 name=$(echo "$object" | jq -r '.name')
                 artifact_path=$(echo "$object" | jq -r '.artifact_path')
                 sha=$(echo "$object" | jq -r '.sha')
-                libraryimageurl=$(echo "$object" | jq -r '.library-image-url')
+                libraryimageurl=$(echo "$object" | jq -r '.["library-image-url"]')
                 
                 
 
