@@ -82,17 +82,17 @@ jobs:
 
                 # jq 'map(if .name == "$name" then .artifact_path = "$artifact_path" | .sha = "$sha" | .["library-image-url"] = "$libraryimageurl" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
-                mv "modified_${{ matrix.type }}_new.json" ${{ matrix.type }}.json
+                mv "modified_${{ matrix.type }}_new.json" "${{ matrix.type }}.json"
               done
               
-              
+
               # echo "Uploading File ${{ matrix.type }}.json to folder ${folder}"   
               # aws s3 cp ${{ matrix.type }}.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
             fi
           done
 
       - name: Print and Format JSON 
-          cat ${{ matrix.type }}.json  | jq
+          cat "${{ matrix.type }}.json"  | jq
 
 
   # ------------------------------------------------------------------------------------------------------------------------------------------------
