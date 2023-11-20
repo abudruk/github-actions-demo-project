@@ -47,7 +47,8 @@ jobs:
           echo "changed_files_array :  ${changed_files_array[@]} "
 
           for file in "${changed_files_array[@]}"; do
-            echo '"${file}".zip was changed'
+            file = "$file".zip
+            echo "$file was changed"
           done
 
           
