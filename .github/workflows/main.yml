@@ -87,8 +87,8 @@ jobs:
               # aws s3 cp ${{ matrix.type }}.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
             fi
           done
-          
-      - name: Print and Format JSON content
+
+      - name: Print and Format JSON content 
         run: |
           cat ${{ matrix.type }}.json  | jq
 
