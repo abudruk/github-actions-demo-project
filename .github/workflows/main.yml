@@ -47,38 +47,38 @@ jobs:
             folder="${folder%/}"  # Remove trailing slash
             echo "Processing folder: $folder"
 
-            # Download JSON file from the folder
-            echo "Downloading  File : ${{ matrix.type }}.json"
+          #   # Download JSON file from the folder
+          #   echo "Downloading  File : ${{ matrix.type }}.json"
 
-            # Check if File Exists 
-            echo "Check if File Exists at $folder/${{ matrix.type }}.json"
-            if aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" 2>&1 | grep -q "Not Found"; then
-              echo "File not found in S3. Skipping download."
-            else
-              # Download the file 
-              echo " Download the file $folder/${{ matrix.type }}.json" 
-              aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
-              aws s3 cp "s3://abbybucketcloudformation-dont-delete/${{ matrix.type }}.json" "./local_{{ matrix.type }}_json.json"
-              echo "File downloaded successfully."
+          #   # Check if File Exists 
+          #   echo "Check if File Exists at $folder/${{ matrix.type }}.json"
+          #   if aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" 2>&1 | grep -q "Not Found"; then
+          #     echo "File not found in S3. Skipping download."
+          #   else
+          #     # Download the file 
+          #     echo " Download the file $folder/${{ matrix.type }}.json" 
+          #     aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
+          #     aws s3 cp "s3://abbybucketcloudformation-dont-delete/${{ matrix.type }}.json" "./local_{{ matrix.type }}_json.json"
+          #     echo "File downloaded successfully."
 
-              echo "Quering and Updating File where name is ADO Pipeline" 
+          #     echo "Quering and Updating File where name is ADO Pipeline" 
 
-              jq -c '.[]' "local_{{ matrix.type }}_json.json" | while read -r object; do
-                echo "Object : $object"
-                name=$(echo "$object" | jq -r '.name')
-                artifact_path=$(echo "$object" | jq -r '.artifact_path')
-                sha=$(echo "$object" | jq -r '.sha')
-                name=$(echo "$object" | jq -r '.name')
+          #     jq -c '.[]' "local_{{ matrix.type }}_json.json" | while read -r object; do
+          #       echo "Object : $object"
+          #       name=$(echo "$object" | jq -r '.name')
+          #       artifact_path=$(echo "$object" | jq -r '.artifact_path')
+          #       sha=$(echo "$object" | jq -r '.sha')
+          #       name=$(echo "$object" | jq -r '.name')
 
-                jq 'map(if .name == "$name" then .artifact_path = "$artifact_path" | .sha = "$sha" | .library-image-url = "$library-image-url" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+          #       jq 'map(if .name == "$name" then .artifact_path = "$artifact_path" | .sha = "$sha" | .library-image-url = "$library-image-url" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
-                mv modified_${{ matrix.type }}_new.json ${{ matrix.type }}.json
+          #       mv modified_${{ matrix.type }}_new.json ${{ matrix.type }}.json
               
               
-              # echo "Uploading File ${{ matrix.type }}.json to folder ${folder}"   
-              # aws s3 cp ${{ matrix.type }}.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
-            fi
-          done
+          #     # echo "Uploading File ${{ matrix.type }}.json to folder ${folder}"   
+          #     # aws s3 cp ${{ matrix.type }}.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
+          #   fi
+          # done
 
 
   # ------------------------------------------------------------------------------------------------------------------------------------------------
