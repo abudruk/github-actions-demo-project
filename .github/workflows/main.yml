@@ -46,6 +46,7 @@ jobs:
           for folder in "${folders[@]}"; do
             folder="${folder%/}"  # Remove trailing slash
             echo "Processing folder: $folder"
+          done
 
           #   # Download JSON file from the folder
           #   echo "Downloading  File : ${{ matrix.type }}.json"
