@@ -33,57 +33,68 @@ jobs:
           files: |
              **.zip
 
-      - name: List all changed files
+      # - name: List all changed files
+      #   run: |
+
+      #     # Replace ".zip" with ";" in entire string
+      #     changed_files_with_semicolon=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | sed 's/.zip/;/g')
+
+      #     echo "files_with_semicolon $changed_files_with_semicolon"
+
+      #     # split the string based on ';'  to  get proper array 
+      #     IFS=';' read -ra changed_files_array <<< "$changed_files_with_semicolon"
+
+      #     echo "changed_files_array :  ${changed_files_array[@]} "
+
+      #     for file in "${changed_files_array[@]}"; do
+      #       echo "${file}.zip was changed"
+      #     done
+
+          
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Create ${{ matrix.type }} Artifacts
+        working-directory: CMP/${{ matrix.type }}
         run: |
+          shopt -s globstar
+          mkdir -p "${{github.workspace}}/tmp"
+          # IFS=$'\n' read -rd '' -a changed_files_array <<< "${{ steps.changed-files.outputs.all_changed_files }}"
 
           # Replace ".zip" with ";" in entire string
-          files_with_semicolon=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | sed 's/.zip/;/g')
+          changed_files_with_semicolon=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | sed 's/.zip/;/g')
 
-          echo "files_with_semicolon $files_with_semicolon"
+          echo "files_with_semicolon $changed_files_with_semicolon"
 
           # split the string based on ';'  to  get proper array 
-          IFS=';' read -ra changed_files_array <<< "$files_with_semicolon"
+          IFS=';' read -ra changed_files_array <<< "$changed_files_with_semicolon"
 
           echo "changed_files_array :  ${changed_files_array[@]} "
 
           for file in "${changed_files_array[@]}"; do
-            file = "$file".zip
-            echo "${file}.zip was changed"
+            file = "${file}.zip"
+            echo "Moving $file"
+            BASENAME=$(basename "$file")
+            mv "$file" "${{ github.workspace }}/tmp/$BASENAME"
           done
 
-          
-      # - name: Set up AWS CLI
-      #   uses: aws-actions/configure-aws-credentials@v2
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ap-south-1
+      - name: Create a single tar of all the files in the current directory
+        working-directory: tmp
+        env:
+          MATRIX_TYPE: ${{ matrix.type }}
+        run: |
+          echo "Creating a tar of all the files in the current directory"
+          tar -cvzf "$MATRIX_TYPE".tar.gz *
 
-      # - name: Create ${{ matrix.type }} Artifacts
-      #   working-directory: CMP/${{ matrix.type }}
-      #   run: |
-      #     shopt -s globstar
-      #     mkdir -p "${{github.workspace}}/tmp"
-      #     IFS=$'\n' read -rd '' -a changed_files_array <<< "${{ steps.changed-files.outputs.all_changed_files }}"
-      #     for folder in "${changed_files_array[@]}"; do
-      #       echo "Moving $file"
-      #       BASENAME=$(basename "$file")
-      #       mv "$file" "${{ github.workspace }}/tmp/$BASENAME"
-      #     done
-
-      # - name: Create a single tar of all the files in the current directory
-      #   working-directory: tmp
-      #   env:
-      #     MATRIX_TYPE: ${{ matrix.type }}
-      #   run: |
-      #     echo "Creating a tar of all the files in the current directory"
-      #     tar -cvzf "$MATRIX_TYPE".tar.gz *
-
-      # - uses: actions/upload-artifact@v3
-      #   with:
-      #     name: ${{ matrix.type }}
-      #     path: |
-      #       **/${{ matrix.type }}.tar.gz
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.type }}
+          path: |
+            **/${{ matrix.type }}.tar.gz
 
 
 
