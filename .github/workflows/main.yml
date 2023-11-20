@@ -67,14 +67,14 @@ jobs:
               jq -c '.[]' "local_{{ matrix.type }}_json.json" | while read -r object; do
                 echo "Object : $object"
                 name=$(echo "$object" | jq -r '.name')
-                # artifact_path=$(echo "$object" | jq -r '.artifact_path')
+                artifact_path=$(echo "$object" | jq -r '.artifact_path')
                 # sha=$(echo "$object" | jq -r '.sha')
                 # libraryimageurl=$(echo "$object" | jq -r '.library-image-url')
                 
                 
 
                 echo "name : $name"
-                # echo "artifact_path : $artifact_path"
+                echo "artifact_path : $artifact_path"
                 # echo "sha : $sha"
                 # echo "library-image-url : $libraryimageurl"
 
