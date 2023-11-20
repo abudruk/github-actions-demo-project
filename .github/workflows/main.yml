@@ -36,27 +36,18 @@ jobs:
       - name: List all changed files
         run: |
 
-          # Replace '.zip' with a character that doesn't appear in the paths
-
-          # changed_files = "${{ steps.changed-files.outputs.all_changed_files }}"
-
-          # Replace ".zip" with ";"
-          # files_with_semicolon="${changed_files//.zip/;}"
+          # Replace ".zip" with ";" in entire string
           files_with_semicolon=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | sed 's/.zip/;/g')
 
           echo "files_with_semicolon $files_with_semicolon"
 
-
+          # split the string based on ';'  to  get proper array 
           IFS=';' read -ra changed_files_array <<< "$files_with_semicolon"
-
-
-          # changed_files_array=$(echo "$changed_files_array" | tr -s ' ')
 
           echo "changed_files_array :  ${changed_files_array[@]} "
 
-
           for file in "${changed_files_array[@]}"; do
-            echo "$file was changed"
+            echo '"${file}".zip was changed'
           done
 
           
