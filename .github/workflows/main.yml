@@ -55,7 +55,7 @@ jobs:
           echo "changed_files_array :  ${changed_files_array[@]} "
 
 
-          for file in ${changed_files_array[@]}; do
+          for file in "${changed_files_array[@]}"; do
             echo "$file was changed"
           done
 
