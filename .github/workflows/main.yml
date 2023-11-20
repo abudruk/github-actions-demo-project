@@ -59,7 +59,7 @@ jobs:
           aws-region: ap-south-1
 
       - name: Create ${{ matrix.type }} Artifacts
-        working-directory: CMP/${{ matrix.type }}
+        # working-directory: CMP/${{ matrix.type }}
         run: |
           shopt -s globstar
           mkdir -p "${{github.workspace}}/tmp"
@@ -78,7 +78,7 @@ jobs:
           for file in "${changed_files_array[@]}"; do
             echo "Moving ${file}.zip"
             BASENAME=$(basename "${file}.zip")
-            mv "CMP/${{ matrix.type }}/${file}.zip" "${{ github.workspace }}/tmp/$BASENAME"
+            mv "${file}.zip" "${{ github.workspace }}/tmp/$BASENAME"
           done
 
       - name: Create a single tar of all the files in the current directory
