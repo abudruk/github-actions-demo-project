@@ -92,6 +92,7 @@ jobs:
           done
 
       - name: Print and Format JSON 
+        run: |
           cat "${{ matrix.type }}.json"  | jq
 
 
