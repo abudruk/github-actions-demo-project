@@ -80,7 +80,7 @@ jobs:
 
                 jq 'map(if .name == "$name" then .artifact_path = "$artifact_path" | .sha = "$sha" | .["library-image-url"] = "$libraryimageurl" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
-                mv modified_${{ matrix.type }}_new.json local_{{ matrix.type }}_json.json
+                mv modified_${{ matrix.type }}_new.json "./local_{{ matrix.type }}_json.json"
               done
               
               # echo "Uploading File ${{ matrix.type }}.json to folder ${folder}"   
@@ -90,7 +90,7 @@ jobs:
 
       - name: Print and Format JSON content local_{{ matrix.type }}_json.json
         run: |
-          cat local_{{ matrix.type }}_json.json  | jq
+          cat "local_{{ matrix.type }}_json.json"  | jq
 
 
   # ------------------------------------------------------------------------------------------------------------------------------------------------
