@@ -89,8 +89,8 @@ jobs:
           done
           
       - name: Print and Format JSON content
-      run: |
-        cat ${{ matrix.type }}.json  | jq
+        run: |
+          cat ${{ matrix.type }}.json  | jq
 
 
   # ------------------------------------------------------------------------------------------------------------------------------------------------
