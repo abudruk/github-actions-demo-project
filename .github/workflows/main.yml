@@ -41,7 +41,8 @@ jobs:
           changed_files = "${{ steps.changed-files.outputs.all_changed_files }}"
 
           # Replace ".zip" with ";"
-          files_with_semicolon="${changed_files//.zip/;}"
+          # files_with_semicolon="${changed_files//.zip/;}"
+          files_with_semicolon=$(echo "$changed_files" | sed 's/.zip/;/')
 
 
           IFS=$'\x01' read -ra changed_files_array <<< "$files_with_semicolon"
