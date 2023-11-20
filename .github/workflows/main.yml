@@ -37,11 +37,8 @@ jobs:
         run: |
 
           # Replace '.zip' with a character that doesn't appear in the paths
+          files_string_delimited="${steps.changed-files.outputs.all_changed_files//.zip/$'\x01'}"
 
-          changed_files = "${{ steps.changed-files.outputs.all_changed_files }}"
-
-          files_string_delimited="${changed_files//.zip/$'\x01'}"
-          
           IFS=$'\x01' read -ra changed_files_array <<< "$files_string_delimited"
 
           for file in ${changed_files_array[@]}; do
