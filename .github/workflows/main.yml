@@ -5,6 +5,81 @@ on:
       - main
 
 jobs:
+  changed_files:
+    runs-on: ubuntu-latest  
+    name: Test changed-files
+    strategy:
+      matrix:
+        type:
+          - blueprints
+          # - ui-extension-packages
+          # - cb-applets
+          # - orchestration-actions
+          # - recurring-jobs
+          # - server-actions
+          # - resource-actions
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+
+      
+          
+    - name: Set up AWS CLI
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-south-1
+    
+    - name: List folders in S3 bucket
+      id: list-folders
+      run: |
+        folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
+        echo "::set-output name=folders::${folders}"
+
+    - name: Download and Update and Upload JSON objects
+      run: |
+        echo "Folders ${{ steps.list-folders.outputs.folders }}"
+        IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
+        for folder in "${folders[@]}"; do
+          folder="${folder%/}"  # Remove trailing slash
+          echo "Processing folder: $folder"
+
+          # Download JSON file from the folder
+          echo "Downloading  File : ${{ matrix.type }}.json"
+
+          # Check if File Exists 
+          echo "Check if File Exists at $folder/${{ matrix.type }}.json"
+          if aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" 2>&1 | grep -q "Not Found"; then
+            echo "File not found in S3. Skipping download."
+          else
+            # Download the file 
+            echo " Download the file $folder/${{ matrix.type }}.json" 
+            aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
+            aws s3 cp "s3://abbybucketcloudformation-dont-delete/${{ matrix.type }}.json" "./local_{{ matrix.type }}_json.json"
+            echo "File downloaded successfully."
+
+            echo "Quering and Updating File where name is ADO Pipeline" 
+
+            jq -c '.[]' "local_{{ matrix.type }}_json.json" | while read -r object; do
+              echo "Object : $object"
+              name=$(echo "$object" | jq -r '.name')
+              artifact_path=$(echo "$object" | jq -r '.artifact_path')
+              sha=$(echo "$object" | jq -r '.sha')
+              name=$(echo "$object" | jq -r '.name')
+
+              jq 'map(if .name == "$name" then .artifact_path = "$artifact_path" | .sha = "$sha" | .library-image-url = "$library-image-url" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+
+              mv modified_${{ matrix.type }}_new.json ${{ matrix.type }}.json
+            
+            
+            # echo "Uploading File ${{ matrix.type }}.json to folder ${folder}"   
+            # aws s3 cp ${{ matrix.type }}.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
+          fi
+        done
+
+        
   # ------------------------------------------------------------------------------------------------------------------------------------------------
   # Event `pull_request`: Compare the last commit of the main branch or last remote commit of the PR branch -> to the current commit of a PR branch.
   # ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -398,79 +473,7 @@ jobs:
 
 
      
-  changed_files:
-    runs-on: ubuntu-latest  
-    name: Test changed-files
-    strategy:
-      matrix:
-        type:
-          - blueprints
-          - ui-extension-packages
-          - cb-applets
-          - orchestration-actions
-          - recurring-jobs
-          - server-actions
-          - resource-actions
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
 
-      
-          
-    - name: Set up AWS CLI
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-south-1
-    
-    - name: List folders in S3 bucket
-      id: list-folders
-      run: |
-        folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
-        echo "::set-output name=folders::${folders}"
-
-    - name: Download and Update and Upload JSON objects
-      run: |
-        echo "Folders ${{ steps.list-folders.outputs.folders }}"
-        IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
-        for folder in "${folders[@]}"; do
-          folder="${folder%/}"  # Remove trailing slash
-          echo "Processing folder: $folder"
-
-          # Download JSON file from the folder
-          echo "Downloading  File : ${{ matrix.type }}.json"
-
-          # Check if File Exists 
-          echo "Check if File Exists at $folder/${{ matrix.type }}.json"
-          if aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" 2>&1 | grep -q "Not Found"; then
-            echo "File not found in S3. Skipping download."
-          else
-            # Download the file 
-            echo " Download the file $folder/${{ matrix.type }}.json" 
-            aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
-            aws s3 cp "s3://abbybucketcloudformation-dont-delete/${{ matrix.type }}.json" "./local_{{ matrix.type }}_json.json"
-            echo "File downloaded successfully."
-
-            echo "Quering and Updating File where name is ADO Pipeline" 
-
-            jq -c '.[]' "local_{{ matrix.type }}_json.json" | while read -r object; do
-              echo "Object : $object"
-              name=$(echo "$object" | jq -r '.name')
-              artifact_path=$(echo "$object" | jq -r '.artifact_path')
-              sha=$(echo "$object" | jq -r '.sha')
-              name=$(echo "$object" | jq -r '.name')
-
-              jq 'map(if .name == "$name" then .artifact_path = "$artifact_path" | .sha = "$sha" | .library-image-url = "$library-image-url" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
-
-              mv modified_${{ matrix.type }}_new.json ${{ matrix.type }}.json
-            
-            
-            # echo "Uploading File ${{ matrix.type }}.json to folder ${folder}"   
-            # aws s3 cp ${{ matrix.type }}.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
-          fi
-        done
 
           
 
