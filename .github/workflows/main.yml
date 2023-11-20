@@ -69,12 +69,14 @@ jobs:
                 name=$(echo "$object" | jq -r '.name')
                 artifact_path=$(echo "$object" | jq -r '.artifact_path')
                 sha=$(echo "$object" | jq -r '.sha')
-                library-image-url=$(echo "$object" | jq -r '.library-image-url')
+                libraryimageurl=$(echo "$object" | jq -r '.library-image-url')
+                
+                
 
                 echo "name : $name"
                 echo "artifact_path : $artifact_path"
                 echo "sha : $sha"
-                echo "library-image-url : $library-image-url"
+                echo "library-image-url : $libraryimageurl"
 
                 # jq 'map(if .name == "$name" then .artifact_path = "$artifact_path" | .sha = "$sha" | .library-image-url = "$library-image-url" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
