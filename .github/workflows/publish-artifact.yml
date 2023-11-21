@@ -16,13 +16,14 @@ jobs:
   upload-to-s3:
     name: Upload to ${{ github.event.inputs.environment }} S3 Bucket
     environment:
+      GH_TOKEN: ${{ secrets.PAT_TOKEN }}
       name: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     
     steps:
       - name: Download Artifacts from Run ID
         env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GH_TOKEN: ${{ environment.PAT_TOKEN }}
         id: download-artifacts
         run: |
           gh run download ${{ github.event.inputs.run_id }} \
