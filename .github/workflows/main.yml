@@ -345,7 +345,7 @@ jobs:
           echo "::set-output name=folders::${folders}"
 
 
-      - name: Download and Update and Upload JSON objects
+      - name: Download , Update and Upload JSON objects
         run: |
           echo "Folders ${{ steps.list-folders.outputs.folders }}"
           IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
@@ -428,27 +428,27 @@ jobs:
       #   with:
       #     status: ${{ job.status }}
       #     steps: ${{ toJson(steps) }}
-  # deploy-to-staging:
-  #   name: Deploy to Staging
-  #   needs:
-  #     - generate-assets
-  #   if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'Staging')
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Set up AWS CLI
-  #       uses: aws-actions/configure-aws-credentials@v2
-  #       with:
-  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         aws-region: ap-south-1
-          
-  #     - name: Deploy to Staging
-  #       run: |
-  #         gh workflow run publish-artifact.yml \
-  #         --field="run_id=${{ github.run_id }}" \
-  #         --field="environment=Staging" \
-  #         --ref=develop \
-  #         --repo CloudBoltSoftware/content-library
+  deploy-to-staging:
+    name: Deploy to Staging
+    needs:
+      - generate-assets
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'Staging')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Deploy to Staging
+        run: |
+          gh workflow run publish-artifact.yml \
+          --field="run_id=${{ github.run_id }}" \
+          --field="environment=Staging" \
+          --ref=develop \
+          --repo abudruk/github-actions-demo-project
      
   # changed_files:
   #   name: Test changed-files
