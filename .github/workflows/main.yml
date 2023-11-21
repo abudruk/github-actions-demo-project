@@ -5,12 +5,6 @@ on:
       - main
 
 jobs:
-  
-
-
-  ------------------------------------------------------------------------------------------------------------------------------------------------
-  Event `pull_request`: Compare the last commit of the main branch or last remote commit of the PR branch -> to the current commit of a PR branch.
-  ------------------------------------------------------------------------------------------------------------------------------------------------
   archive-collections:
     name: Archive Collections
     strategy:
