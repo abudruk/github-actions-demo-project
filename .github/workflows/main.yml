@@ -444,7 +444,7 @@ jobs:
 
       - name: Deploy to Staging
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           gh workflow run publish-artifact.yml \
           --field="run_id=${{ github.run_id }}" \
