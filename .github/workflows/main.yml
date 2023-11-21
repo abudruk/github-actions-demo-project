@@ -432,7 +432,7 @@ jobs:
     name: Deploy to Staging
     needs:
       - generate-assets
-    # if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'Staging')
+    # if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'Staging')
     runs-on: ubuntu-latest
     steps:
       - name: Set up AWS CLI
@@ -449,7 +449,7 @@ jobs:
           gh workflow run publish-artifact.yml \
           --field="run_id=${{ github.run_id }}" \
           --field="environment=Staging" \
-          --ref=develop \
+          --ref=main \
           --repo abudruk/github-actions-demo-project
      
   # changed_files:
