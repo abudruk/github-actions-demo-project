@@ -89,8 +89,7 @@ jobs:
           MATRIX_TYPE: ${{ matrix.type }}
         run: |
           echo "Creating a tar of all the files in the current directory"
-          # tar -cvzf "$MATRIX_TYPE".tar.gz *
-          tar -cvzf "${{ matrix.type }}.tar.gz" *
+          tar -cvzf "$MATRIX_TYPE".tar.gz *
 
       - uses: actions/upload-artifact@v3
         with:
@@ -444,6 +443,8 @@ jobs:
           aws-region: ap-south-1
 
       - name: Deploy to Staging
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run publish-artifact.yml \
           --field="run_id=${{ github.run_id }}" \
