@@ -327,10 +327,18 @@ jobs:
       #     cat "./asset_files/${{ matrix.type }}.json" | jq
 
       # Download blueprint.json file from bucket and update and reupload again 
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
       - name: List folders in S3 bucket
         id: list-folders
         run: |
-          folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text --debug)
+          folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
           echo "::set-output name=folders::${folders}"
 
 
@@ -439,12 +447,12 @@ jobs:
   #         fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
 
           
-  #     - name: Set up AWS CLI
-  #       uses: aws-actions/configure-aws-credentials@v2
-  #       with:
-  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         aws-region: ap-south-1
+      # - name: Set up AWS CLI
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ap-south-1
       
   #     - name: List folders in S3 bucket
   #       id: list-folders
