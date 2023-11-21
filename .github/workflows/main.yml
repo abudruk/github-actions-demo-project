@@ -320,17 +320,17 @@ jobs:
             jq -n '[inputs]' ./$LAST_DIRNAME/*.json > "$LAST_DIRNAME/$MATRIX_TYPE".json
           done
 
-      - name: Print and Format JSON 
-        run: |
-          echo "current dir:"
-          pwd
-          cat "./asset_files/${{ matrix.type }}.json" | jq
+      # - name: Print and Format JSON 
+      #   run: |
+      #     echo "current dir:"
+      #     pwd
+      #     cat "./asset_files/${{ matrix.type }}.json" | jq
 
       # Download blueprint.json file from bucket and update and reupload again 
       - name: List folders in S3 bucket
         id: list-folders
         run: |
-          folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
+          folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text --debug)
           echo "::set-output name=folders::${folders}"
 
 
