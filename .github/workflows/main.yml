@@ -322,7 +322,9 @@ jobs:
 
       - name: Print and Format JSON 
         run: |
-          cat "${LAST_DIRNAME}/${MATRIX_TYPE}.json"  | jq
+          echo "current dir:"
+          pwd
+          cat "./asset_files/${{ matrix.type }}.json" | jq
 
 
       # #Download blueprint.json file from bucket and update and reupload again 
