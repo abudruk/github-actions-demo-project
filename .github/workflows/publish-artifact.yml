@@ -28,7 +28,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           gh run download ${{ github.event.inputs.run_id }} -n "blueprints Assets" --repo abudruk/github-actions-demo-project
-          tar -xvzf "blueprints Assets/assets.tar.gz"
+          tar -xvzf blueprints\ Assets/assets.tar.gz
           
 
           # # We need to use a heredoc to output multiline strings to GITHUB_OUTPUT
