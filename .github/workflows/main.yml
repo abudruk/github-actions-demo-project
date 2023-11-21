@@ -123,7 +123,7 @@ jobs:
 
       - name: print directory tree
         run: |
-          apt-get install tree -y
+          sudo apt-get install tree -y
           echo "Current directory"
           pwd
           echo "Tree from pwd"
@@ -141,7 +141,7 @@ jobs:
 
       - name: print directory tree
         run: |
-          apt-get install tree -y
+          sudo apt-get install tree -y
           tree
 
       - name: Generate SHA file for every zip file
@@ -388,7 +388,7 @@ jobs:
 
       - name: display directory tree
         run: |
-          apt-get install tree -y
+          sudo apt-get install tree -y
           tree -L 5
 
       - name: Remove '*Metadata.json' files
@@ -398,7 +398,7 @@ jobs:
 
       - name: display directory tree
         run: |
-          apt-get install tree -y
+          sudo apt-get install tree -y
           tree -L 5
 
       - name: Create a single tar of all the files in the current directory
