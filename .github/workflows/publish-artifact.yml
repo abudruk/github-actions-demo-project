@@ -27,14 +27,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          gh run download ${{ github.event.inputs.run_id }} -n "blueprints Assets" --repo abudruk/github-actions-demo-project
+          gh run download ${{ github.event.inputs.run_id }} \
+          -n "blueprints Assets" \
+          --repo abudruk/github-actions-demo-project 
           tar -xvzf blueprints\ Assets/assets.tar.gz
-          
-
-          # # We need to use a heredoc to output multiline strings to GITHUB_OUTPUT
-          # echo "VERSIONS<<EOF" >> $GITHUB_OUTPUT
-          # echo "$(cat VERSIONS/VERSIONS)" >> $GITHUB_OUTPUT
-          # echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
