@@ -18,9 +18,13 @@ jobs:
     environment:
       name: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
-
+    
     steps:
+      - uses: actions/checkout@v3
+
       - name: Download Artifacts from Run ID
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         id: download-artifacts
         run: |
           gh run download ${{ github.event.inputs.run_id }} \
