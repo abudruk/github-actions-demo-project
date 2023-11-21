@@ -17,7 +17,7 @@
             "tier_type": "plugin"
         }
     ],
-    "description": "Aws Lambda blueprint used to create the lambda function using different runtime version as python, node, java. Used for the serverless application.",
+    "description": "Aws Lambda blueprint used to create the lambda function using different runtime version as python, node, java. Used for the serverless application...",
     "discovery_plugin": {
         "href": "/api/v3/cmp/actions/OHK-vb3a5gqq/",
         "title": "AWS Lambda sync"
