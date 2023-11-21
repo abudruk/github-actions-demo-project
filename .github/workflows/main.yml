@@ -14,12 +14,12 @@ jobs:
       matrix:
         type:
           - blueprints
-          - ui-extension-packages
-          - cb-applets
-          - orchestration-actions
-          - recurring-jobs
-          - server-actions
-          - resource-actions
+          # - ui-extension-packages
+          # - cb-applets
+          # - orchestration-actions
+          # - recurring-jobs
+          # - server-actions
+          # - resource-actions
 
     runs-on: ubuntu-latest
 
@@ -107,12 +107,12 @@ jobs:
       matrix:
         type:
           - blueprints
-          - ui-extension-packages
-          - cb-applets
-          - orchestration-actions
-          - recurring-jobs
-          - server-actions
-          - resource-actions
+          # - ui-extension-packages
+          # - cb-applets
+          # - orchestration-actions
+          # - recurring-jobs
+          # - server-actions
+          # - resource-actions
     steps:
       - name: Cleanup Files
         run: |
@@ -432,7 +432,7 @@ jobs:
     name: Deploy to Staging
     needs:
       - generate-assets
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'Staging')
+    # if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'Staging')
     runs-on: ubuntu-latest
     steps:
       - name: Set up AWS CLI
