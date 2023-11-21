@@ -23,9 +23,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download Artifacts from Run ID
+        id: download-artifacts
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-        id: download-artifacts
         run: |
           gh run download ${{ github.event.inputs.run_id }} \
           -n "blueprints Assets" \
