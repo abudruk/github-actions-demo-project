@@ -30,6 +30,14 @@ jobs:
           gh run download ${{ github.event.inputs.run_id }} \
           -n "blueprints Assets" \
           --repo abudruk/github-actions-demo-project
+
+      - name: print directory tree
+        run: |
+          sudo apt-get install -y tree
+          echo "Current directory"
+          pwd
+          echo "Tree from pwd"
+          tree
       
       - name: Extract contents from the downloaded file
         run: |
@@ -49,6 +57,7 @@ jobs:
           pwd
           echo "Tree from pwd"
           tree
+
 
       - name: Filter and Distribute Assets based off of version
         run: |
