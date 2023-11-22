@@ -31,9 +31,17 @@ jobs:
           -n "blueprints Assets" \
           --repo abudruk/github-actions-demo-project
       
+      - name: print directory tree
+        run: |
+          sudo apt-get install -y tree
+          echo "Current directory"
+          pwd
+          echo "Tree from pwd"
+          tree
+          
       - name: Extract contents from the downloaded file
         run: |
-          tar -xvzf "blueprints Assets/assets.tar.gz"
+          tar -xvzf "./blueprints Assets/assets.tar.gz"
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
