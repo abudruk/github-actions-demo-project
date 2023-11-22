@@ -38,6 +38,8 @@ jobs:
           pwd
           echo "Tree from pwd"
           tree
+          echo "Listing Files"
+          ls
           
       - name: Extract contents from the downloaded file
         run: |
@@ -236,18 +238,20 @@ jobs:
           AWS_DEFAULT_REGION: ap-south-1
 
         run: |
-          CREDENTIALS=$(\
-          aws sts assume-role \
-          --role-arn "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/Abby_GitHub_Action_Upload_Content_Library" \
-          --role-session-name "s3-sync-role" \
-          --duration-seconds 3600\
-          )
-          export AWS_ACCESS_KEY_ID=$(echo $CREDENTIALS | jq -r '.Credentials.AccessKeyId')
-          export AWS_SECRET_ACCESS_KEY=$(echo $CREDENTIALS | jq -r '.Credentials.SecretAccessKey')
-          export AWS_SESSION_TOKEN=$(echo $CREDENTIALS | jq -r '.Credentials.SessionToken')
+          # CREDENTIALS=$(\
+          # aws sts assume-role \
+          # --role-arn "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/Abby_GitHub_Action_Upload_Content_Library" \
+          # --role-session-name "s3-sync-role" \
+          # --duration-seconds 3600\
+          # )
+          # export AWS_ACCESS_KEY_ID=$(echo $CREDENTIALS | jq -r '.Credentials.AccessKeyId')
+          # export AWS_SECRET_ACCESS_KEY=$(echo $CREDENTIALS | jq -r '.Credentials.SecretAccessKey')
+          # export AWS_SESSION_TOKEN=$(echo $CREDENTIALS | jq -r '.Credentials.SessionToken')
           # Delete Everything in the bucket
           # aws s3 rm s3://${{ secrets.S3_BUCKET }} --recursive
           # Overwrite with what we want the bucket to look like
+
+          
           aws s3 sync . s3://abbybucketcloudformation-dont-delete/
 
           # invalidate cloudfront distribution cache
