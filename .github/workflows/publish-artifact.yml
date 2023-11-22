@@ -33,7 +33,7 @@ jobs:
       
       - name: Extract contents from the downloaded file
         run: |
-          tar -xvzf "blueprints Assets/assets.tar.gz"
+          tar -xvzf "assets.tar.gz"
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
