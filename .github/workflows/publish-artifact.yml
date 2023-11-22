@@ -238,7 +238,7 @@ jobs:
         run: |
           CREDENTIALS=$(\
           aws sts assume-role \
-          --role-arn "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHub_Action_Upload_Content_Library" \
+          --role-arn "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/Abby_GitHub_Action_Upload_Content_Library" \
           --role-session-name "s3-sync-role" \
           --duration-seconds 3600\
           )
