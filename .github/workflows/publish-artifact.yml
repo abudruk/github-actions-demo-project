@@ -27,6 +27,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
+          mkdir "blueprints Assets"
+          cd blueprints\ Assets
           gh run download ${{ github.event.inputs.run_id }} \
           -n "blueprints Assets" \
           --repo abudruk/github-actions-demo-project
@@ -41,7 +43,8 @@ jobs:
           
       - name: Extract contents from the downloaded file
         run: |
-          tar -xvzf ./blueprint\ Assets.zip/archive.tar.gz
+
+          tar -xvzf blueprints\ Assets/assets.tar.gz
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
@@ -231,7 +234,8 @@ jobs:
           rm -rf .github
           rm -rf .git
           rm -rf .gitignore
-          rm -rf assets.tar.                                              
+          rm -rf assets.tar.gz
+          rm -rf CMP                                            
       
 
       - name: Sync current directory to S3 
@@ -254,7 +258,10 @@ jobs:
           # aws s3 rm s3://${{ secrets.S3_BUCKET }} --recursive
           # Overwrite with what we want the bucket to look like
           
-          aws s3 sync . s3://abbybucketcloudformation-dont-delete/
+          aws s3 sync . s3://abbybucketcloudformation-dont-delete/ \
+          --exclude "*" \
+          --include "zip/*" \
+          --include "images/*" \
 
           # invalidate cloudfront distribution cache
           #aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
