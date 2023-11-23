@@ -390,7 +390,7 @@ jobs:
               
 
               echo "Uploading File ${{ matrix.type }}.json to folder ${folder}"   
-              aws s3 cp ${{ matrix.type }}.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
+              aws s3 mv ${{ matrix.type }}.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
             fi
           done
 
