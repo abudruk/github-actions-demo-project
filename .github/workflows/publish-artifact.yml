@@ -36,12 +36,12 @@ jobs:
           sudo apt-get install -y tree
           echo "Current directory"
           pwd
-          echo "Tree from pwd"
-          tree
+          echo "Listing Files"
+          ls
           
       - name: Extract contents from the downloaded file
         run: |
-          tar -xvzf "assets.tar.gz"
+          tar -xvzf ./blueprint\ Assets.zip/archive.tar.gz
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
@@ -56,7 +56,7 @@ jobs:
           echo "Current directory"
           pwd
           echo "Tree from pwd"
-          tree
+          ls
 
       - name: Filter and Distribute Assets based off of version
         run: |
@@ -220,13 +220,18 @@ jobs:
           echo "Current directory"
           pwd
           echo "Tree from pwd"
-          tree
+          ls
 
       - name: Remove Directories
         continue-on-error: true
         run: |
           ls -R
           rm -rf "asset_files"
+          rm -rf "blueprints Assets"
+          rm -rf .github
+          rm -rf .git
+          rm -rf .gitignore
+          rm -rf assets.tar.                                              
       
 
       - name: Sync current directory to S3 
@@ -248,6 +253,7 @@ jobs:
           # Delete Everything in the bucket
           # aws s3 rm s3://${{ secrets.S3_BUCKET }} --recursive
           # Overwrite with what we want the bucket to look like
+          
           aws s3 sync . s3://abbybucketcloudformation-dont-delete/
 
           # invalidate cloudfront distribution cache
@@ -256,4 +262,5 @@ jobs:
       - name: display directory tree
         run: |
           sudo apt-get install -y tree
-          tree -L 5
+          # tree -L 5
+          ls
