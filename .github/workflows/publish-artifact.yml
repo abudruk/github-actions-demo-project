@@ -19,13 +19,15 @@ jobs:
       name: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     
-    - name: Set current directory
-      id: set-directory
-      run: |
-        echo "::set-output name=current_directory::$(pwd)"
+    
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set current directory
+        id: set-directory
+        run: |
+          echo "::set-output name=current_directory::$(pwd)"
 
       - name: Download Artifacts from Run ID
         id: download-artifacts
