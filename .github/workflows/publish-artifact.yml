@@ -19,13 +19,15 @@ jobs:
       name: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     
-    - name: Set current directory
-      id: set-directory
-      run: |
-        echo "::set-output name=current_directory::$(pwd)"
+    
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set current directory
+        id: set-directory
+        run: |
+          echo "::set-output name=current_directory::$(pwd)"
 
       - name: Download Artifacts from Run ID
         id: download-artifacts
@@ -33,7 +35,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           # Array of artifact names
-          artifacts=("blueprints Assets" "cb-applets Assets")
+          artifacts=("blueprints Assets" "cb-applets Assets" "orchestration-actions Assets" "recurring-jobs Assets" "resource-actions Assets" "ui-extension-packages Assets" "server-actions Assets")
           # Loop over each artifact
           for artifact in "${artifacts[@]}"; do
             # Create the directory
