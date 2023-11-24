@@ -19,6 +19,11 @@ jobs:
       name: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     
+    - name: Set current directory
+      id: set-directory
+      run: |
+        echo "::set-output name=current_directory::$(pwd)"
+
     steps:
       - uses: actions/checkout@v4
 
@@ -27,11 +32,19 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          mkdir "blueprints Assets"
-          cd blueprints\ Assets
-          gh run download ${{ github.event.inputs.run_id }} \
-          -n "blueprints Assets" \
-          --repo abudruk/github-actions-demo-project
+          # Array of artifact names
+          artifacts=("blueprints Assets" "cb-applets Assets")
+          # Loop over each artifact
+          for artifact in "${artifacts[@]}"; do
+            # Create the directory
+            echo "Create directory with name"
+            mkdir -p "$artifact"
+            echo "Change Directory to $artifact"
+            cd "$artifact"
+            gh run download ${{ github.event.inputs.run_id }} \
+            -n "$artifact" \
+            --repo abudruk/github-actions-demo-project
+            cd "$(dirname "${{ steps.set-directory.outputs.current_directory }}")"
       
       - name: print directory tree
         run: |

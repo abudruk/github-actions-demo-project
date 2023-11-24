@@ -14,12 +14,12 @@ jobs:
       matrix:
         type:
           - blueprints
-          # - ui-extension-packages
-          # - cb-applets
-          # - orchestration-actions
-          # - recurring-jobs
-          # - server-actions
-          # - resource-actions
+          - ui-extension-packages
+          - cb-applets
+          - orchestration-actions
+          - recurring-jobs
+          - server-actions
+          - resource-actions
 
     runs-on: ubuntu-latest
 
@@ -107,12 +107,12 @@ jobs:
       matrix:
         type:
           - blueprints
-          # - ui-extension-packages
-          # - cb-applets
-          # - orchestration-actions
-          # - recurring-jobs
-          # - server-actions
-          # - resource-actions
+          - ui-extension-packages
+          - cb-applets
+          - orchestration-actions
+          - recurring-jobs
+          - server-actions
+          - resource-actions
     steps:
       - name: Cleanup Files
         run: |
@@ -383,12 +383,9 @@ jobs:
 
                 jq "map(if .name == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" else . end)" ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
-                # jq 'map(if .name == "$name" then .artifact_path = "$artifact_path" | .sha = "$sha" | .["library-image-url"] = "$libraryimageurl" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
-
                 mv "modified_${{ matrix.type }}_new.json" "${{ matrix.type }}.json"
               done
               
-
               echo "Uploading File ${{ matrix.type }}.json to folder ${folder}"   
               aws s3 mv ${{ matrix.type }}.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
             fi
@@ -399,6 +396,7 @@ jobs:
         run: |
           sudo apt-get install tree -y
           tree -L 5
+          ls
 
       - name: Remove '*Metadata.json' files
         run: |
