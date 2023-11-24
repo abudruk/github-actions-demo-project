@@ -47,6 +47,7 @@ jobs:
             -n "$artifact" \
             --repo abudruk/github-actions-demo-project
             cd "$(dirname "${{ steps.set-directory.outputs.current_directory }}")"
+          done
       
       - name: print directory tree
         run: |
