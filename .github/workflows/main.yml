@@ -160,6 +160,8 @@ jobs:
 
       - name: Download All Artifacts
         id: download-artifact
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           if gh run download "${{ github.run_id }}" -n "${{ matrix.type }}" --repo abudruk/github-actions-demo-project | tar -xz -C "downloads/${{ matrix.type }}" --strip-components=1; then
             echo "Artifact downloaded successfully."
