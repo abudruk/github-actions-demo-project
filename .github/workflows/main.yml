@@ -147,12 +147,12 @@ jobs:
       matrix:
         type:
           - blueprints
-          - ui-extension-packages
-          - cb-applets
-          - orchestration-actions
-          - recurring-jobs
-          - server-actions
-          - resource-actions
+          # - ui-extension-packages
+          # - cb-applets
+          # - orchestration-actions
+          # - recurring-jobs
+          # - server-actions
+          # - resource-actions
     steps:
       - name: Cleanup Files
         run: |
