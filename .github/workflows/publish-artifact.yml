@@ -59,8 +59,13 @@ jobs:
           
       - name: Extract contents from the downloaded file
         run: |
-
-          tar -xvzf blueprints\ Assets/assets.tar.gz
+          # Array of artifact names
+          artifacts=("blueprints Assets" "cb-applets Assets" "orchestration-actions Assets" "recurring-jobs Assets" "resource-actions Assets" "ui-extension-packages Assets" "server-actions Assets")
+          # Loop over each artifact
+          for artifact in "${artifacts[@]}"; do
+            echo "Etracting File  ${artifact}/assets.tar.gz "
+            tar -xvzf "${artifact}/assets.tar.gz"
+          done
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
