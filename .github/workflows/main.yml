@@ -146,11 +146,11 @@ jobs:
     strategy:
       matrix:
         type:
-          - blueprints
-          - ui-extension-packages
-          # - cb-applets
+          # - blueprints
+          # - ui-extension-packages
+          - cb-applets
           # - orchestration-actions
-          - recurring-jobs
+          # - recurring-jobs
           # - server-actions
           # - resource-actions
     steps:
@@ -161,7 +161,7 @@ jobs:
       - name: Download All Artifacts
         id: download-artifact
         run: |
-          if gh run download ${{ github.run_id }} -n "${{ matrix.type }}"" --repo abudruk/github-actions-demo-project --path "downloads/${{matrix.type}}"; then
+          if gh run download "${{ github.run_id }}" -n "${{ matrix.type }}" --repo abudruk/github-actions-demo-project --path "downloads/${{matrix.type}}"; then
             echo "Artifact downloaded successfully."
             echo "::set-output name=artifact_downloaded::true"
           else
