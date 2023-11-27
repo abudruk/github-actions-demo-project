@@ -62,8 +62,8 @@ jobs:
         working-directory: CMP/${{ matrix.type }}
         run: |
           shopt -s globstar
-          mkdir -p "${{github.workspace}}/tmp/${{ matrix.type }}/"
-
+          mkdir -p "${{github.workspace}}/tmp/${{ matrix.type }}"
+          pwd
           # Replace ".zip" with ";" in entire string
           changed_files_with_semicolon=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | sed 's/.zip/;/g')
 
