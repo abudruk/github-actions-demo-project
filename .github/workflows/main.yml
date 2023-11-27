@@ -146,9 +146,9 @@ jobs:
     strategy:
       matrix:
         type:
-          - blueprints
+          # - blueprints
           - ui-extension-packages
-          - cb-applets
+          # - cb-applets
           # - orchestration-actions
           # - recurring-jobs
           # - server-actions
