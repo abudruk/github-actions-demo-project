@@ -158,20 +158,22 @@ jobs:
         run: |
           rm -rf ./*
 
-      - name: Check if artifact exists
+      - name: Download All Artifacts
+        id: download-artifact
         run: |
-          if [ -e downloads/${{matrix.type}} ]; then
-            echo "Artifact found. Proceeding with download."
+          if gh run download ${{ github.run_id }} -n "${{ matrix.type }}"" --repo abudruk/github-actions-demo-project --path "downloads/${{matrix.type}}"; then
+            echo "Artifact downloaded successfully."
+            echo "::set-output name=artifact_downloaded::true"
           else
-            echo "Artifact not found. Skipping download."
-            exit 0  # Exit the workflow successfully
+            echo "Artifact doesn't exist or failed to download. Set output to false."
+            echo "::set-output name=artifact_downloaded::false"
           fi
 
-      - name: Download All Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ matrix.type }}
-          path: downloads/${{matrix.type}}
+      # - name: Download All Artifacts
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: ${{ matrix.type }}
+      #     path: downloads/${{matrix.type}}
 
       - name: print directory tree
         run: |
@@ -182,6 +184,7 @@ jobs:
           tree
 
       - name: Untar all artifacts in tmp directory
+        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
         run: |
           rm -f *.zip
           echo "current dir:"
