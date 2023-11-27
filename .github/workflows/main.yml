@@ -347,6 +347,15 @@ jobs:
 
       - name: Download , Update and Upload JSON objects
         run: |
+
+          if [[ "${{ matrix.type }}" == "blueprints" || "${{ matrix.type }}" == "recurring-jobs" || "${{ matrix.type }}" == "orchestration-actions" ]]; then
+            comparing_key='name' 
+          else
+            comparing_key='label'
+          fi
+
+          echo "Comparing key is : ${comparing_key}"
+
           echo "Folders ${{ steps.list-folders.outputs.folders }}"
           IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
           for folder in "${folders[@]}"; do
@@ -370,7 +379,7 @@ jobs:
               echo "Quering and Updating File where name is ADO Pipeline" 
 
               jq -c '.[]' "./asset_files/${{ matrix.type }}.json" | while read -r object; do
-                echo "Object : $object"
+                # echo "Object : $object"
                 name=$(echo "$object" | jq -r '.name')
                 artifact_path=$(echo "$object" | jq -r '.artifact_path')
                 sha=$(echo "$object" | jq -r '.sha')
@@ -380,8 +389,9 @@ jobs:
                 echo "artifact_path : $artifact_path"
                 echo "sha : $sha"
                 echo "library-image-url : $libraryimageurl}"
+                
 
-                jq "map(if .name == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" else . end)" ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+                jq "map(if .\"$comparing_key\" == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" else . end)" ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
                 mv "modified_${{ matrix.type }}_new.json" "${{ matrix.type }}.json"
               done
