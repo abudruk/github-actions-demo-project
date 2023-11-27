@@ -190,7 +190,7 @@ jobs:
       - name: Generate SHA file for every zip file
         shell: bash -l {0}
         run: |
-          for f in downloads/${{matrix.type}}/tmp/*.zip; do
+          for f in downloads/${{matrix.type}}/tmp/${{matrix.type}}/*.zip; do
             echo "Generating SHA for $f"
             sha256sum "$f" >> sha256sum.txt
           done
@@ -305,7 +305,7 @@ jobs:
             echo "Extracted Metadata from $ZIP to $DST"
           }
 
-          for f in downloads/${{matrix.type}}/tmp/*.zip; do
+          for f in downloads/${{matrix.type}}/tmp/${{matrix.type}}/*.zip; do
             echo "Processing $f ..."
             set_variable "ZIPFILE" "$f"
             set_variable "BASENAME" "$(basename "$ZIPFILE")"
