@@ -62,7 +62,7 @@ jobs:
         working-directory: CMP/${{ matrix.type }}
         run: |
           shopt -s globstar
-          # mkdir -p "${{github.workspace}}/tmp/${{ matrix.type }}"
+          mkdir -p "${{github.workspace}}/tmp/${{ matrix.type }}"
 
           echo "pwd : "
           pwd
@@ -98,24 +98,24 @@ jobs:
 
             BASENAME=$(basename "${file}")
 
-            
+            echo "BASENAME : $BASENAME"
             if [ -e "${file}" ]; then
               #apply xargs to remove any trailing whitespaces in string 
-              mv "$(echo "$file" | xargs)" "${{ github.workspace }}/tmp/$BASENAME"
+              mv "$(echo "$file" | xargs)" "${{ github.workspace }}/tmp/${{ matrix.type }}/$BASENAME"
             else
               echo "Warning: Source file does not exist. Move operation skipped."
             fi
           done
 
       - name: Create a single tar of all the files in the current directory
-        working-directory: CMP/${{ matrix.type }}
+        working-directory: tmp/${{ matrix.type }}
         env:
           MATRIX_TYPE: ${{ matrix.type }}
         run: |
-          echo "pwd tar single: "
+          echo "pwd : "
           pwd 
 
-          echo "File is this directory :"
+          echo "File is this director"
           ls
           echo "Creating a tar of all the files in the current directory"
           tar -cvzf "$MATRIX_TYPE".tar.gz *
