@@ -115,11 +115,16 @@ jobs:
           echo "pwd : "
           pwd 
 
+          WORKING_DIRECTORY="${{ github.workspace }}/tmp/${{ matrix.type }}" 
+
+          echo "WORKING_DIRECTORY : ${WORKING_DIRECTORY}"
+           
+
           echo "File is this director"
           ls
 
           echo "Check if Directory Exists"
-          if [ -d "tmp/${{ matrix.type }}" ]; then
+          if [ -d "${WORKING_DIRECTORY}" ]; then
             echo "Creating a tar of all the files in the current directory"
             tar -cvzf "$MATRIX_TYPE".tar.gz *
           else
