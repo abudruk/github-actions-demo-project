@@ -211,7 +211,6 @@ jobs:
         env:
           minimum_version: "9.4.6.1"
         run: |
-          set -x
           # WARNING: This script will skip collections with special characters in their name.
           function set_variable {
             local varname="$1"
