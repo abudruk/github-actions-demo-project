@@ -397,8 +397,18 @@ jobs:
       - name: List folders in S3 bucket
         id: list-folders
         run: |
-          folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
-          echo "::set-output name=folders::${folders}"
+          retries=3
+          for ((i=0; i<retries; i++)); do
+            folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
+            if [ $? -eq 0 ]; then
+              echo "::set-output name=folders::${folders}"
+              break
+            else
+              echo "Retrying..."
+            fi
+          done
+          # folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
+          # echo "::set-output name=folders::${folders}"
 
 
       - name: Download , Update and Upload JSON objects
