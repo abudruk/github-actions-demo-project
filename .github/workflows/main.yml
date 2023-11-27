@@ -163,7 +163,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          if gh run download "${{ github.run_id }}" -n "${{ matrix.type }}" --repo abudruk/github-actions-demo-project | tar -xz -C "downloads/${{ matrix.type }}" --strip-components=1; then
+          if gh run download "${{ github.run_id }}" -n "${{ matrix.type }}" --repo "abudruk/github-actions-demo-project" | tar -xz -C "downloads/${{ matrix.type }}" --strip-components=1; then
             echo "Artifact downloaded successfully."
             echo "::set-output name=artifact_downloaded::true"
           else
