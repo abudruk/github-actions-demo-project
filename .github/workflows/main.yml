@@ -124,11 +124,11 @@ jobs:
           ls
 
           echo "Check if Directory Exists"
-          if [ -d "$WORKING_DIRECTORY" ]; then
+          if [ -z "$(ls -A $WORKING_DIRECTORY)" ]; then
+            echo "Directory does not exist."
+          else
             echo "Creating a tar of all the files in the current directory"
             tar -cvzf "$MATRIX_TYPE".tar.gz *
-          else
-            echo "Directory does not exist."
           fi
 
       - uses: actions/upload-artifact@v3
