@@ -39,14 +39,14 @@ jobs:
           # Loop over each artifact
           for artifact in "${artifacts[@]}"; do
             # Create the directory
-            echo "Create directory with name"
+            echo "Create directory with name "
             mkdir -p "$artifact"
             echo "Change Directory to $artifact"
             cd "$artifact"
             gh run download ${{ github.event.inputs.run_id }} \
             -n "$artifact" \
             --repo abudruk/github-actions-demo-project
-            cd "$(dirname "${{ steps.set-directory.outputs.current_directory }}")"
+            cd ..
           done
       
       - name: print directory tree
