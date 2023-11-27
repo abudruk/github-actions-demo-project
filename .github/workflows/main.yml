@@ -59,7 +59,7 @@ jobs:
           aws-region: ap-south-1
 
       - name: Create ${{ matrix.type }} Artifacts
-        # working-directory: CMP/${{ matrix.type }}
+        working-directory: CMP/${{ matrix.type }}
         run: |
           shopt -s globstar
           mkdir -p "${{github.workspace}}/tmp"
