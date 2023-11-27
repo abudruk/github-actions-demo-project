@@ -96,8 +96,13 @@ jobs:
 
             BASENAME=$(basename "${file}")
 
-            #apply xargs to remove any trailing whitespaces in string 
-            mv "$(echo "$file" | xargs)" "${{ github.workspace }}/tmp/$BASENAME"
+            
+            if [ -e "${file}" ]; then
+              #apply xargs to remove any trailing whitespaces in string 
+              mv "$(echo "$file" | xargs)" "${{ github.workspace }}/tmp/$BASENAME"
+            else
+              echo "Warning: Source file does not exist. Move operation skipped."
+            fi
           done
 
       - name: Create a single tar of all the files in the current directory
