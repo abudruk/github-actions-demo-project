@@ -146,9 +146,9 @@ jobs:
     strategy:
       matrix:
         type:
-          # - blueprints
+          - blueprints
           - ui-extension-packages
-          # - cb-applets
+          - cb-applets
           # - orchestration-actions
           # - recurring-jobs
           # - server-actions
@@ -387,7 +387,7 @@ jobs:
       # Download blueprint.json file from bucket and update and reupload again 
 
       - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -509,7 +509,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
