@@ -84,17 +84,17 @@ jobs:
               value=$(echo "$element" | awk -F'/' '{print $NF}')
               changed_files_new_array+=("${value}/${value}.zip")
           done
+
           
-          ls
 
           echo "New changed files array : $changed_files_new_array"
 
-          ls
+          
 
           for file in "${changed_files_new_array[@]}"; do
-            echo "Moving ${file}.zip"
+            echo "Moving ${file}"
 
-            BASENAME=$(basename "${file}.zip")
+            BASENAME=$(basename "${file}")
 
             #apply xargs to remove any trailing whitespaces in string 
             mv "$(echo "$file".zip | xargs)" "${{ github.workspace }}/tmp/$BASENAME"
