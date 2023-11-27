@@ -177,7 +177,7 @@ jobs:
           rm -f *.zip
           echo "current dir:"
           pwd
-          cd downloads/${{matrix.type}}/tmp/
+          cd downloads/${{matrix.type}}/tmp/${{matrix.type}}
           echo "Untarring ${{ matrix.type }}.tar.gz"
           tar -xvzf "${{ matrix.type }}.tar.gz"
           cd ../../../
