@@ -160,7 +160,7 @@ jobs:
 
       - name: Check if artifact exists
         run: |
-          if [ -e "${{matrix.type}}".zip ]; then
+          if [ -e downloads/${{matrix.type}} ]; then
             echo "Artifact found. Proceeding with download."
           else
             echo "Artifact not found. Skipping download."
@@ -359,6 +359,13 @@ jobs:
         run: |
           rm -vrf sha256sum.txt
           rm -vrf sha256sum_png.txt
+
+      - name: print directory tree
+        run: |
+          echo "working-directory"
+          pwd
+          echo "List files"
+          ls
 
       - name: Create ${{ matrix.type }}.json
         env:
