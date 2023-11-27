@@ -74,7 +74,24 @@ jobs:
 
           echo "changed_files_array :  ${changed_files_array[@]} "
 
-          for file in "${changed_files_array[@]}"; do
+
+          # Initialize an empty array to store the extracted values
+          changed_files_new_array=()
+
+          # Loop through each element, extract the last part, and add it to the array
+          for element in "${changed_files_array[@]}"; do
+              # Use awk to extract the last part after the last '/'
+              value=$(echo "$element" | awk -F'/' '{print $NF}')
+              changed_files_new_array+=("${value}/${value}.zip")
+          done
+          
+          ls
+
+          echo "New changed files array : $changed_files_new_array"
+
+          ls
+
+          for file in "${changed_files_new_array[@]}"; do
             echo "Moving ${file}.zip"
 
             BASENAME=$(basename "${file}.zip")
@@ -389,7 +406,7 @@ jobs:
                 echo "artifact_path : $artifact_path"
                 echo "sha : $sha"
                 echo "library-image-url : $libraryimageurl}"
-                
+
 
                 jq "map(if .\"$comparing_key\" == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" else . end)" ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
