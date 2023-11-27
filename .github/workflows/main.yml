@@ -160,7 +160,7 @@ jobs:
 
       - name: Check if artifact exists
         run: |
-          if [ -z "$(ls -A ${{ matrix.type }}" ]; then
+          if [ -z "$(ls -A ${{ matrix.type }})" ]; then
             echo "Artifact not found. Skipping download."
             exit 0  # Exit the workflow successfully
           fi
