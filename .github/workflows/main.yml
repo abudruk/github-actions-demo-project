@@ -62,7 +62,7 @@ jobs:
         working-directory: CMP/${{ matrix.type }}
         run: |
           shopt -s globstar
-          mkdir -p "${{github.workspace}}/tmp/${{ matrix.type }}"
+          # mkdir -p "${{github.workspace}}/tmp/${{ matrix.type }}"
 
           echo "pwd : "
           pwd
@@ -108,14 +108,14 @@ jobs:
           done
 
       - name: Create a single tar of all the files in the current directory
-        working-directory: tmp/${{ matrix.type }}
+        working-directory: CMP/${{ matrix.type }}
         env:
           MATRIX_TYPE: ${{ matrix.type }}
         run: |
-          echo "pwd : "
+          echo "pwd tar single: "
           pwd 
 
-          echo "File is this directory"
+          echo "File is this directory :"
           ls
           echo "Creating a tar of all the files in the current directory"
           tar -cvzf "$MATRIX_TYPE".tar.gz *
