@@ -61,6 +61,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
+      - name: Set Matrix Type
+        id: set-matrix-type
+        run: echo "matrix-type=${{ matrix.type }}" >> $GITHUB_OUTPUT
+
       - name: Create ${{ matrix.type }} Artifacts
         working-directory: CMP/${{ matrix.type }}
         run: |
@@ -149,10 +153,13 @@ jobs:
           cd tmp
           echo "List"
           ls
-          echo "${{ matrix.type }}=${{ matrix.type }}" >> $GITHUB_OUTPUT
+          # echo "${{ matrix.type }}=${{ matrix.type }}" >> $GITHUB_OUTPUT
+
+    # outputs:
+    #   matrix-type: ${{ matrix.type }}
 
     outputs:
-      matrix-type: ${{ matrix.type }}
+      matrix-type: ${{ steps.set-matrix-type.outputs.matrix-type }}
 
       # blueprints: ${{ steps.set-artifact-output.outputs.blueprints }}
       # ui-extension-packages: ${{ steps.set-artifact-output.outputs.ui-extension-packages }}
