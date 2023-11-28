@@ -168,18 +168,18 @@ jobs:
           rm -rf ./*  
 
 
-      - name: Download All Artifacts
-        id: download-artifact
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          if gh run download "${{ github.run_id }}" -n "${{ matrix.type }}" --repo "abudruk/github-actions-demo-project"; then
-            echo "Artifact downloaded successfully."
-            echo "::set-output name=artifact_downloaded::true"
-          else
-            echo "Artifact doesn't exist or failed to download. Set output to false."
-            echo "::set-output name=artifact_downloaded::false"
-          fi
+      # - name: Download All Artifacts
+      #   id: download-artifact
+      #   env:
+      #     GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+      #   run: |
+      #     if gh run download "${{ github.run_id }}" -n "${{ matrix.type }}" --repo "abudruk/github-actions-demo-project"; then
+      #       echo "Artifact downloaded successfully."
+      #       echo "::set-output name=artifact_downloaded::true"
+      #     else
+      #       echo "Artifact doesn't exist or failed to download. Set output to false."
+      #       echo "::set-output name=artifact_downloaded::false"
+      #     fi
 
       # - name: Wait for Artifacts
       #   run: sleep 40s  # Adjust the delay as needed
@@ -209,11 +209,11 @@ jobs:
       #       echo "::set-output name=artifact_exists::false"
       #     fi
 
-      # - name: Download All Artifacts
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: ${{ matrix.type }}
-      #     path: downloads/${{matrix.type}}
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.type }}
+          path: downloads/${{matrix.type}}
 
       - name: print directory tree
         run: |
