@@ -185,13 +185,18 @@ jobs:
       - name: Check if Artifact Exists
         id: check-artifact
         run: |
-          if gh run list-artifacts ${{ github.run_id }} | grep -q '${{ matrix.type }}'; then
-            echo "artifact exists"
+          artifacts=$(curl -sH "Authorization: Bearer "${{ secrets.PAT_TOKEN }}" \
+                       -H "Accept: application/vnd.github.v3+json" \
+                       https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts)
+          
+          if echo "$artifacts" | jq -e '.[] | select(.name == "${{ matrix.type }}")' > /dev/null; then
+            echo "Artifact Exists"
             echo "::set-output name=artifact_exists::true"
           else
-            echo "artifact doesnt exists"
+            echo "Artifact Does Not Exists"
             echo "::set-output name=artifact_exists::false"
           fi
+
       # - name: Download All Artifacts
       #   uses: actions/download-artifact@v3
       #   with:
