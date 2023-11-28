@@ -183,7 +183,7 @@ jobs:
       #     fi
 
       - name: Wait for Artifacts
-        run: sleep 10s  # Adjust the delay as needed
+        run: sleep 40s  # Adjust the delay as needed
 
 
       - name: Check if Artifact Exists
