@@ -16,10 +16,10 @@ jobs:
           - blueprints
           - ui-extension-packages
           - cb-applets
-          # - orchestration-actions
+          - orchestration-actions
           - recurring-jobs
-          # - server-actions
-          # - resource-actions
+          - server-actions
+          - resource-actions
 
     runs-on: ubuntu-latest
 
@@ -156,9 +156,9 @@ jobs:
       ui-extension-packages: ${{ steps.set-artifact-output.outputs.ui-extension-packages }}
       cb-applets: ${{ steps.set-artifact-output.outputs.cb-applets }}
       recurring-jobs: ${{ steps.set-artifact-output.outputs.recurring-jobs }}
-      # blueprints: ${{ steps.set-artifact-output.outputs.blueprints }}
-      # blueprints: ${{ steps.set-artifact-output.outputs.blueprints }}
-      # blueprints: ${{ steps.set-artifact-output.outputs.blueprints }}
+      orchestration-actions: ${{ steps.set-artifact-output.outputs.orchestration-actions }}
+      server-actions: ${{ steps.set-artifact-output.outputs.server-actions }}
+      resource-actions: ${{ steps.set-artifact-output.outputs.resource-actions }}
 
 
   generate-assets:
