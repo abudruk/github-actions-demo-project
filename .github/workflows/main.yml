@@ -152,13 +152,15 @@ jobs:
           echo "${{ matrix.type }}=${{ matrix.type }}" >> $GITHUB_OUTPUT
 
     outputs:
-      blueprints: ${{ steps.set-artifact-output.outputs.blueprints }}
-      ui-extension-packages: ${{ steps.set-artifact-output.outputs.ui-extension-packages }}
-      cb-applets: ${{ steps.set-artifact-output.outputs.cb-applets }}
-      recurring-jobs: ${{ steps.set-artifact-output.outputs.recurring-jobs }}
-      orchestration-actions: ${{ steps.set-artifact-output.outputs.orchestration-actions }}
-      server-actions: ${{ steps.set-artifact-output.outputs.server-actions }}
-      resource-actions: ${{ steps.set-artifact-output.outputs.resource-actions }}
+      matrix-type: ${{ matrix.type }}
+
+      # blueprints: ${{ steps.set-artifact-output.outputs.blueprints }}
+      # ui-extension-packages: ${{ steps.set-artifact-output.outputs.ui-extension-packages }}
+      # cb-applets: ${{ steps.set-artifact-output.outputs.cb-applets }}
+      # recurring-jobs: ${{ steps.set-artifact-output.outputs.recurring-jobs }}
+      # orchestration-actions: ${{ steps.set-artifact-output.outputs.orchestration-actions }}
+      # server-actions: ${{ steps.set-artifact-output.outputs.server-actions }}
+      # resource-actions: ${{ steps.set-artifact-output.outputs.resource-actions }}
 
 
   generate-assets:
@@ -168,7 +170,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        type: ${{ needs.archive-collections.outputs.* }}
+        type: ${{fromJson(needs.archive-collections.outputs.matrix-type)}}
           # - blueprints
           # - ui-extension-packages
           # - cb-applets
