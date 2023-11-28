@@ -181,7 +181,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          if gh run download "${{ github.run_id }}" -n "${{ matrix.type }}" --repo "abudruk/github-actions-demo-project"; then
+          if gh run download "${{ github.run_id }}" -n "tmp/${{ matrix.type }}" --repo "abudruk/github-actions-demo-project"; then
             echo "Artifact downloaded successfully."
             echo "::set-output name=artifact_downloaded::true"
           else
