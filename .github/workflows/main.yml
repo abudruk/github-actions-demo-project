@@ -16,12 +16,15 @@ jobs:
           - blueprints
           - ui-extension-packages
           - cb-applets
-          - orchestration-actions
+          # - orchestration-actions
           - recurring-jobs
-          - server-actions
-          - resource-actions
+          # - server-actions
+          # - resource-actions
 
     runs-on: ubuntu-latest
+
+    
+
 
     steps:
       - uses: actions/checkout@v4
@@ -138,6 +141,7 @@ jobs:
             **/${{ matrix.type }}.tar.gz
 
       - name: print Files tree
+        id: set-artifact-output
         run: |
           sudo apt-get install tree -y
           echo "Current directory"
@@ -145,6 +149,16 @@ jobs:
           cd tmp
           echo "List"
           ls
+          echo "${{ matrix.type }}=${{ matrix.type }}" >> $GITHUB_OUTPUT
+
+    outputs:
+      blueprints: ${{ steps.set-artifact-output.outputs.blueprints }}
+      ui-extension-packages: ${{ steps.set-artifact-output.outputs.ui-extension-packages }}
+      cb-applets: ${{ steps.set-artifact-output.outputs.cb-applets }}
+      recurring-jobs: ${{ steps.set-artifact-output.outputs.recurring-jobs }}
+      # blueprints: ${{ steps.set-artifact-output.outputs.blueprints }}
+      # blueprints: ${{ steps.set-artifact-output.outputs.blueprints }}
+      # blueprints: ${{ steps.set-artifact-output.outputs.blueprints }}
 
 
   generate-assets:
@@ -154,19 +168,19 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        type:
-          - blueprints
-          - ui-extension-packages
-          - cb-applets
-          # - orchestration-actions
-          # - recurring-jobs
-          # - server-actions
-          # - resource-actions
+        type: ${{ needs.archive-collections.outputs.* }}
+          # - blueprints
+          # - ui-extension-packages
+          # - cb-applets
+          # # - orchestration-actions
+          # # - recurring-jobs
+          # # - server-actions
+          # # - resource-actions
     steps:
       - name: Cleanup Files
         run: |
           rm -rf ./*  
-          
+
 
       # - name: Download All Artifacts
       #   id: download-artifact
@@ -183,6 +197,7 @@ jobs:
       #     fi
 
       - name: Download All Artifacts
+        # if: ${{ needs.archive-collections.outputs. }}
         uses: actions/download-artifact@v3
         with:
           name: ${{ matrix.type }}
