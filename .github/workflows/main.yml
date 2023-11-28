@@ -189,7 +189,11 @@ jobs:
                        -H "Accept: application/vnd.github.v3+json" \
                        https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts)
           
-          if echo "$artifacts" | jq -e '.[] | select(.name == "${{ matrix.type }}")' > /dev/null; then
+          filtered_artifacts=$(echo "$json_data" | jq '.artifacts[] | select(.name == "blueprints")')
+
+          echo "filtered_artifacts ${filtered_artifacts}"
+
+          if $filtered_artifacts > /dev/null; then
             echo "Artifact Exists"
             echo "::set-output name=artifact_exists::true"
           else
