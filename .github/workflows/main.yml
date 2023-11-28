@@ -182,6 +182,10 @@ jobs:
       #       echo "::set-output name=artifact_downloaded::false"
       #     fi
 
+      - name: Wait for Artifacts
+        run: sleep 10s  # Adjust the delay as needed
+
+
       - name: Check if Artifact Exists
         id: check-artifact
         env:
