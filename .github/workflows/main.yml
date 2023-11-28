@@ -210,6 +210,7 @@ jobs:
       #     fi
 
       - name: Download All Artifacts
+        id: download-artifact
         uses: dhope-nagesh/download-artifact@main
         with:
           name: ${{ matrix.type }}
@@ -224,7 +225,7 @@ jobs:
           tree
 
       - name: Untar all artifacts in tmp directory
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -f *.zip
           echo "current dir:"
@@ -235,13 +236,13 @@ jobs:
           cd ../../../
 
       - name: print directory tree
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           sudo apt-get install tree -y
           tree
 
       - name: Generate SHA file for every zip file
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         shell: bash -l {0}
         run: |
           for f in downloads/${{matrix.type}}/tmp/${{matrix.type}}/*.zip; do
@@ -252,7 +253,7 @@ jobs:
           cd ../../../
 
       - name: Move all .zip files to ./zip/ and rename with SHA and add path to metadata.json
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         shell: bash -l {0}
         env:
           minimum_version: "9.4.6.1"
@@ -381,38 +382,38 @@ jobs:
           done
 
       - name: Remove tmp directory
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -vrf tmp
 
       - name: Remove CMP directory
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -vrf CMP
 
       - name: Remove metadata directory
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -vrf metadata
 
       - name: Remove OneFuse directory
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -vrf OneFuse
 
       - name: Remove downloads directory
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -vrf downloads
 
       - name: Remove sha256sum.txt
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -vrf sha256sum.txt
           rm -vrf sha256sum_png.txt
 
       - name: print directory tree
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           echo "working-directory"
           pwd
@@ -420,7 +421,7 @@ jobs:
           ls
 
       - name: Create ${{ matrix.type }}.json
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         env:
           MATRIX_TYPE: "${{ matrix.type }}"
         run: |
@@ -441,7 +442,7 @@ jobs:
       # Download blueprint.json file from bucket and update and reupload again 
 
       - name: Set up AWS CLI
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -449,7 +450,7 @@ jobs:
           aws-region: ap-south-1
 
       - name: List folders in S3 bucket
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         id: list-folders
         run: |
           retries=3
@@ -467,7 +468,7 @@ jobs:
 
 
       - name: Download , Update and Upload JSON objects
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
 
           if [[ "${{ matrix.type }}" == "blueprints" || "${{ matrix.type }}" == "recurring-jobs" || "${{ matrix.type }}" == "orchestration-actions" ]]; then
@@ -525,32 +526,32 @@ jobs:
 
 
       - name: display directory tree
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           sudo apt-get install tree -y
           tree -L 5
           ls
 
       - name: Remove '*Metadata.json' files
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           shopt -s globstar
           rm -vf **/*Metadata.json
 
       - name: display directory tree
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           sudo apt-get install tree -y
           tree -L 5
 
       - name: Create a single tar of all the files in the current directory
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           echo "Creating a tar.gz of all the files in the current directory"
           tar --exclude-vcs --ignore-failed-read -czvf assets.tar.gz *
 
       - uses: actions/upload-artifact@v3
-        if: steps.download-artifact.outputs.artifact_downloaded == 'true'
+        if: steps.download-artifact.outputs.artifact-found == 'true'
         with:
           name: ${{ matrix.type }} Assets
           path: |
