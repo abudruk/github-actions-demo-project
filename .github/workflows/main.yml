@@ -166,37 +166,27 @@ jobs:
       - name: Cleanup Files
         run: |
           rm -rf ./*  
-
-
-      - name: print Files tree
-        run: |
-          sudo apt-get install tree -y
-          echo "Current directory"
-          pwd
-
-          cd tmp
-          echo "List"
-          ls
-
-      - name: Download All Artifacts
-        id: download-artifact
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          cd tmp
-          if gh run download "${{ github.run_id }}" -n "${{ matrix.type }}" --repo "abudruk/github-actions-demo-project"; then
-            echo "Artifact downloaded successfully."
-            echo "::set-output name=artifact_downloaded::true"
-          else
-            echo "Artifact doesn't exist or failed to download. Set output to false."
-            echo "::set-output name=artifact_downloaded::false"
-          fi
+          
 
       # - name: Download All Artifacts
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: ${{ matrix.type }}
-      #     path: downloads/${{matrix.type}}
+      #   id: download-artifact
+      #   env:
+      #     GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+      #   run: |
+      #     cd tmp
+      #     if gh run download "${{ github.run_id }}" -n "${{ matrix.type }}" --repo "abudruk/github-actions-demo-project"; then
+      #       echo "Artifact downloaded successfully."
+      #       echo "::set-output name=artifact_downloaded::true"
+      #     else
+      #       echo "Artifact doesn't exist or failed to download. Set output to false."
+      #       echo "::set-output name=artifact_downloaded::false"
+      #     fi
+
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.type }}
+          path: downloads/${{matrix.type}}
 
       - name: print directory tree
         run: |
