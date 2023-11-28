@@ -170,7 +170,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        type: ${{fromJson(needs.archive-collections.outputs.matrix-type)}}
+        type: ${{ needs.archive-collections.outputs.matrix-type }}
           # - blueprints
           # - ui-extension-packages
           # - cb-applets
