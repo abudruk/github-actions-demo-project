@@ -193,7 +193,7 @@ jobs:
 
 
           echo "Artifacts"
-          echo "$artifacts"
+          echo $artifacts
           
           filtered_artifacts=$(echo "$artifacts" | jq '.artifacts[] | select(.name == "${{ matrix.type }}")')
 
