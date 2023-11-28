@@ -211,7 +211,7 @@ jobs:
 
       - name: Download All Artifacts
         id: download-artifact
-        uses: dhope-nagesh/download-artifact@main
+        uses: abudruk/download-artifact@main
         with:
           name: ${{ matrix.type }}
           path: downloads/${{matrix.type}}
