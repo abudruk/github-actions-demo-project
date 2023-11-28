@@ -166,7 +166,7 @@ jobs:
       - name: Cleanup Files
         run: |
           rm -rf ./*  
-          
+
 
       # - name: Download All Artifacts
       #   id: download-artifact
@@ -182,11 +182,21 @@ jobs:
       #       echo "::set-output name=artifact_downloaded::false"
       #     fi
 
-      - name: Download All Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ matrix.type }}
-          path: downloads/${{matrix.type}}
+      - name: Check if Artifact Exists
+        id: check-artifact
+        run: |
+          if gh run list-artifacts ${{ github.run_id }} | grep -q '${{ matrix.type }}'; then
+            echo "artifact exists"
+            echo "::set-output name=artifact_exists::true"
+          else
+            echo "artifact doesnt exists"
+            echo "::set-output name=artifact_exists::false"
+          fi
+      # - name: Download All Artifacts
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: ${{ matrix.type }}
+      #     path: downloads/${{matrix.type}}
 
       - name: print directory tree
         run: |
