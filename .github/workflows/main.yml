@@ -137,6 +137,14 @@ jobs:
           path: |
             **/${{ matrix.type }}.tar.gz
 
+      - name: print Files tree
+        run: |
+          sudo apt-get install tree -y
+          echo "Current directory"
+          pwd
+          echo "List"
+          ls
+
 
   generate-assets:
     name: Generate Assets
