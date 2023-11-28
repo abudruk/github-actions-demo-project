@@ -168,53 +168,52 @@ jobs:
           rm -rf ./*  
 
 
-      # - name: Download All Artifacts
-      #   id: download-artifact
-      #   env:
-      #     GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-      #   run: |
-      #     cd tmp
-      #     if gh run download "${{ github.run_id }}" -n "${{ matrix.type }}" --repo "abudruk/github-actions-demo-project"; then
-      #       echo "Artifact downloaded successfully."
-      #       echo "::set-output name=artifact_downloaded::true"
-      #     else
-      #       echo "Artifact doesn't exist or failed to download. Set output to false."
-      #       echo "::set-output name=artifact_downloaded::false"
-      #     fi
+      - name: Download All Artifacts
+        id: download-artifact
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          if gh run download "${{ github.run_id }}" -n "${{ matrix.type }}" --repo "abudruk/github-actions-demo-project"; then
+            echo "Artifact downloaded successfully."
+            echo "::set-output name=artifact_downloaded::true"
+          else
+            echo "Artifact doesn't exist or failed to download. Set output to false."
+            echo "::set-output name=artifact_downloaded::false"
+          fi
 
       # - name: Wait for Artifacts
       #   run: sleep 40s  # Adjust the delay as needed
 
 
-      - name: Check if Artifact Exists
-        id: check-artifact
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          ARTIFACTS=$(curl -sSL -H "Accept: application/vnd.github.v3+json" \
-                       -H "Authorization: Bearer $GH_TOKEN" \
-                       -H "X-GitHub-Api-Version: 2022-11-28" \
-                       https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts)
+      # - name: Check if Artifact Exists
+      #   id: check-artifact
+      #   env:
+      #     GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+      #   run: |
+      #     ARTIFACTS=$(curl -sSL -H "Accept: application/vnd.github.v3+json" \
+      #                  -H "Authorization: Bearer $GH_TOKEN" \
+      #                  -H "X-GitHub-Api-Version: 2022-11-28" \
+      #                  https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts)
 
-          echo "Fetched Artifacts: $ARTIFACTS"
+      #     echo "Fetched Artifacts: $ARTIFACTS"
           
-          filtered_artifacts=$(echo "$ARTIFACTS" | jq '.artifacts[] | select(.name == "${{ matrix.type }}")')
+      #     filtered_artifacts=$(echo "$ARTIFACTS" | jq '.artifacts[] | select(.name == "${{ matrix.type }}")')
 
-          echo "filtered_artifacts $filtered_artifacts"
+      #     echo "filtered_artifacts $filtered_artifacts"
 
-          if $filtered_artifacts > /dev/null; then
-            echo "Artifact Exists"
-            echo "::set-output name=artifact_exists::true"
-          else
-            echo "Artifact Does Not Exists"
-            echo "::set-output name=artifact_exists::false"
-          fi
+      #     if $filtered_artifacts > /dev/null; then
+      #       echo "Artifact Exists"
+      #       echo "::set-output name=artifact_exists::true"
+      #     else
+      #       echo "Artifact Does Not Exists"
+      #       echo "::set-output name=artifact_exists::false"
+      #     fi
 
-      - name: Download All Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ matrix.type }}
-          path: downloads/${{matrix.type}}
+      # - name: Download All Artifacts
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: ${{ matrix.type }}
+      #     path: downloads/${{matrix.type}}
 
       - name: print directory tree
         run: |
