@@ -142,6 +142,7 @@ jobs:
           sudo apt-get install tree -y
           echo "Current directory"
           pwd
+          cd tmp
           echo "List"
           ls
 
