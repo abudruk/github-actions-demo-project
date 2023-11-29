@@ -49,7 +49,10 @@ jobs:
 
 
 
-          echo "assets_artifacts=$filtered_assets_artifacts" >> $GITHUB_OUTPUT    
+          # echo "assets_artifacts=$filtered_assets_artifacts" >> $GITHUB_OUTPUT 
+
+
+          echo "::set-output name=assets_artifacts::$filtered_assets_artifacts"   
 
           # if $filtered_artifacts > /dev/null; then
           #   echo "Artifact Exists"
@@ -68,6 +71,9 @@ jobs:
           # artifacts=("blueprints Assets" "cb-applets Assets" "orchestration-actions Assets" "recurring-jobs Assets" "resource-actions Assets" "ui-extension-packages Assets" "server-actions Assets")
           # Loop over each artifact
           artifacts = ${{steps.check-artifact.outputs.assets_artifacts}}
+
+          echo "artifacts $artifacts"
+          
           for artifact in "${artifacts[@]}"; do
             # Create the directory
             echo "Create directory with name "
