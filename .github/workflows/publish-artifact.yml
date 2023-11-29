@@ -72,9 +72,10 @@ jobs:
           # Loop over each artifact
           artifacts = ${{steps.check-artifact.outputs.assets_artifacts}}
 
-          echo "artifacts $artifacts"
-          
-          for artifact in "${artifacts[@]}"; do
+          artifactNames=($(echo "$artifacts" | jq -r '.[].name'))
+
+                    
+          for artifact in "${artifactNames[@]}"; do
             # Create the directory
             echo "Create directory with name "
             mkdir -p "$artifact"
