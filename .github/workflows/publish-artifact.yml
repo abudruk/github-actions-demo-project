@@ -52,7 +52,8 @@ jobs:
           # echo "assets_artifacts=$filtered_assets_artifacts" >> $GITHUB_OUTPUT 
 
 
-          echo "::set-output name=assets_artifacts::$filtered_assets_artifacts"   
+          echo "::set-output name=assets_artifacts::$(echo "$filtered_assets_artifacts" | jq -c)"
+  
 
           # if $filtered_artifacts > /dev/null; then
           #   echo "Artifact Exists"
