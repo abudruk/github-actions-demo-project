@@ -33,6 +33,23 @@ jobs:
           files: |
              **.zip
 
+      # - name: List all changed files
+      #   run: |
+
+      #     # Replace ".zip" with ";" in entire string
+      #     changed_files_with_semicolon=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | sed 's/.zip/;/g')
+
+      #     echo "files_with_semicolon $changed_files_with_semicolon"
+
+      #     # split the string based on ';'  to  get proper array 
+      #     IFS=';' read -ra changed_files_array <<< "$changed_files_with_semicolon"
+
+      #     echo "changed_files_array :  ${changed_files_array[@]} "
+
+      #     for file in "${changed_files_array[@]}"; do
+      #       echo "${file}.zip was changed"
+      #     done
+
           
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
@@ -42,12 +59,11 @@ jobs:
           aws-region: ap-south-1
 
       - name: Create ${{ matrix.type }} Artifacts
-        working-directory: CMP/${{ matrix.type }}
+        # working-directory: CMP/${{ matrix.type }}
         run: |
           shopt -s globstar
-          mkdir -p "${{github.workspace}}/tmp/${{ matrix.type }}"
+          mkdir -p "${{github.workspace}}/tmp"
 
-    
           # Replace ".zip" with ";" in entire string
           changed_files_with_semicolon=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | sed 's/.zip/;/g')
 
@@ -58,69 +74,28 @@ jobs:
 
           echo "changed_files_array :  ${changed_files_array[@]} "
 
+          for file in "${changed_files_array[@]}"; do
+            echo "Moving ${file}.zip"
 
-          # Initialize an empty array to store the extracted values
-          changed_files_new_array=()
+            BASENAME=$(basename "${file}.zip")
 
-          # Loop through each element, extract the last part, and add it to the array
-          for element in "${changed_files_array[@]}"; do
-              # Use awk to extract the last part after the last '/'
-              value=$(echo "$element" | awk -F'/' '{print $NF}')
-              changed_files_new_array+=("${value}/${value}.zip")
-          done
-
-          
-
-          echo "New changed files array : $changed_files_new_array"
-
-          
-
-          for file in "${changed_files_new_array[@]}"; do
-            echo "Moving ${file}"
-
-            BASENAME=$(basename "${file}")
-
-            echo "BASENAME : $BASENAME"
-            if [ -e "${file}" ]; then
-              #apply xargs to remove any trailing whitespaces in string 
-              mv "$(echo "$file" | xargs)" "${{ github.workspace }}/tmp/${{ matrix.type }}/$BASENAME"
-            else
-              echo "Warning: Source file does not exist. Move operation skipped."
-            fi
+            #apply xargs to remove any trailing whitespaces in string 
+            mv "$(echo "$file".zip | xargs)" "${{ github.workspace }}/tmp/$BASENAME"
           done
 
       - name: Create a single tar of all the files in the current directory
-        working-directory: tmp/${{ matrix.type }}
+        working-directory: tmp
         env:
           MATRIX_TYPE: ${{ matrix.type }}
         run: |
-
-          WORKING_DIRECTORY="${{ github.workspace }}/tmp/${{ matrix.type }}" 
-
-          echo "WORKING_DIRECTORY : ${WORKING_DIRECTORY}"
-    
-          echo "Check if the content is present in this directory : ${WORKING_DIRECTORY} "
-          if [ -z "$(ls -A $WORKING_DIRECTORY)" ]; then
-            echo "Directory does not exist."
-          else
-            echo "Creating a tar of all the files in the current directory"
-            tar -cvzf "$MATRIX_TYPE".tar.gz *
-          fi
+          echo "Creating a tar of all the files in the current directory"
+          tar -cvzf "$MATRIX_TYPE".tar.gz *
 
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.type }}
           path: |
             **/${{ matrix.type }}.tar.gz
-
-      - name: print Files tree
-        run: |
-          sudo apt-get install tree -y
-          echo "Current directory"
-          pwd
-          cd tmp
-          echo "List"
-          ls
 
 
   generate-assets:
@@ -141,12 +116,10 @@ jobs:
     steps:
       - name: Cleanup Files
         run: |
-          rm -rf ./*  
-
+          rm -rf ./*
 
       - name: Download All Artifacts
-        id: download-artifact
-        uses: abudruk/download-artifact@main #This is reference to forked repository
+        uses: actions/download-artifact@v3
         with:
           name: ${{ matrix.type }}
           path: downloads/${{matrix.type}}
@@ -160,27 +133,24 @@ jobs:
           tree
 
       - name: Untar all artifacts in tmp directory
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -f *.zip
           echo "current dir:"
           pwd
-          cd downloads/${{matrix.type}}/tmp/${{matrix.type}}
+          cd downloads/${{matrix.type}}/tmp/
           echo "Untarring ${{ matrix.type }}.tar.gz"
           tar -xvzf "${{ matrix.type }}.tar.gz"
           cd ../../../
 
       - name: print directory tree
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           sudo apt-get install tree -y
           tree
 
       - name: Generate SHA file for every zip file
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         shell: bash -l {0}
         run: |
-          for f in downloads/${{matrix.type}}/tmp/${{matrix.type}}/*.zip; do
+          for f in downloads/${{matrix.type}}/tmp/*.zip; do
             echo "Generating SHA for $f"
             sha256sum "$f" >> sha256sum.txt
           done
@@ -188,11 +158,11 @@ jobs:
           cd ../../../
 
       - name: Move all .zip files to ./zip/ and rename with SHA and add path to metadata.json
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         shell: bash -l {0}
         env:
           minimum_version: "9.4.6.1"
         run: |
+          set -x
           # WARNING: This script will skip collections with special characters in their name.
           function set_variable {
             local varname="$1"
@@ -295,7 +265,7 @@ jobs:
             echo "Extracted Metadata from $ZIP to $DST"
           }
 
-          for f in downloads/${{matrix.type}}/tmp/${{matrix.type}}/*.zip; do
+          for f in downloads/${{matrix.type}}/tmp/*.zip; do
             echo "Processing $f ..."
             set_variable "ZIPFILE" "$f"
             set_variable "BASENAME" "$(basename "$ZIPFILE")"
@@ -317,46 +287,31 @@ jobs:
           done
 
       - name: Remove tmp directory
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -vrf tmp
 
       - name: Remove CMP directory
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -vrf CMP
 
       - name: Remove metadata directory
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -vrf metadata
 
       - name: Remove OneFuse directory
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -vrf OneFuse
 
       - name: Remove downloads directory
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -vrf downloads
 
       - name: Remove sha256sum.txt
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           rm -vrf sha256sum.txt
           rm -vrf sha256sum_png.txt
 
-      - name: List the files in current Directory
-        if: steps.download-artifact.outputs.artifact-found == 'true'
-        run: |
-          echo "working-directory"
-          pwd
-          echo "List files"
-          ls
-
       - name: Create ${{ matrix.type }}.json
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         env:
           MATRIX_TYPE: "${{ matrix.type }}"
         run: |
@@ -374,48 +329,24 @@ jobs:
       #     pwd
       #     cat "./asset_files/${{ matrix.type }}.json" | jq
 
-
-
       # Download blueprint.json file from bucket and update and reupload again 
 
       - name: Set up AWS CLI
-        if: steps.download-artifact.outputs.artifact-found == 'true'
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
       - name: List folders in S3 bucket
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         id: list-folders
         run: |
-          retries=3
-          for ((i=0; i<retries; i++)); do
-            folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
-            if [ $? -eq 0 ]; then
-              echo "::set-output name=folders::${folders}"
-              break
-            else
-              echo "Retrying..."
-            fi
-          done
-          # folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
-          # echo "::set-output name=folders::${folders}"
+          folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
+          echo "::set-output name=folders::${folders}"
 
 
       - name: Download , Update and Upload JSON objects
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
-
-          if [[ "${{ matrix.type }}" == "blueprints" || "${{ matrix.type }}" == "recurring-jobs" || "${{ matrix.type }}" == "orchestration-actions" ]]; then
-            comparing_key='name' 
-          else
-            comparing_key='label'
-          fi
-
-          echo "Comparing key is : ${comparing_key}"
-
           echo "Folders ${{ steps.list-folders.outputs.folders }}"
           IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
           for folder in "${folders[@]}"; do
@@ -439,7 +370,7 @@ jobs:
               echo "Quering and Updating File where name is ADO Pipeline" 
 
               jq -c '.[]' "./asset_files/${{ matrix.type }}.json" | while read -r object; do
-                # echo "Object : $object"
+                echo "Object : $object"
                 name=$(echo "$object" | jq -r '.name')
                 artifact_path=$(echo "$object" | jq -r '.artifact_path')
                 sha=$(echo "$object" | jq -r '.sha')
@@ -450,8 +381,7 @@ jobs:
                 echo "sha : $sha"
                 echo "library-image-url : $libraryimageurl}"
 
-
-                jq "map(if .\"$comparing_key\" == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" else . end)" ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+                jq "map(if .name == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" else . end)" ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
                 mv "modified_${{ matrix.type }}_new.json" "${{ matrix.type }}.json"
               done
@@ -463,45 +393,48 @@ jobs:
 
 
       - name: display directory tree
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           sudo apt-get install tree -y
           tree -L 5
           ls
 
       - name: Remove '*Metadata.json' files
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           shopt -s globstar
           rm -vf **/*Metadata.json
 
       - name: display directory tree
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           sudo apt-get install tree -y
           tree -L 5
 
       - name: Create a single tar of all the files in the current directory
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           echo "Creating a tar.gz of all the files in the current directory"
           tar --exclude-vcs --ignore-failed-read -czvf assets.tar.gz *
 
       - uses: actions/upload-artifact@v3
-        if: steps.download-artifact.outputs.artifact-found == 'true'
         with:
           name: ${{ matrix.type }} Assets
           path: |
             **/*.tar.gz
 
+      # - uses: act10ns/slack@v2
+      #   if: failure()
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DEVOPS_GITHUB_ACTION_ALERTS_WEBHOOK }}
+      #   with:
+      #     status: ${{ job.status }}
+      #     steps: ${{ toJson(steps) }}
   deploy-to-staging:
     name: Deploy to Staging
     needs:
       - generate-assets
+    # if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'Staging')
     runs-on: ubuntu-latest
     steps:
       - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -517,4 +450,98 @@ jobs:
           --ref=main \
           --repo abudruk/github-actions-demo-project
      
-  
+  # changed_files:
+  #   name: Test changed-files
+  #   strategy:
+  #     matrix:
+  #       type:
+  #         - blueprints
+  #         # - ui-extension-packages
+  #         # - cb-applets
+  #         # - orchestration-actions
+  #         # - recurring-jobs
+  #         # - server-actions
+  #         # - resource-actions
+
+  #   runs-on: ubuntu-latest  
+    
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+
+          
+      # - name: Set up AWS CLI
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ap-south-1
+      
+  #     - name: List folders in S3 bucket
+  #       id: list-folders
+  #       run: |
+  #         folders=$(aws s3api list-objects-v2 --bucket abbybucketcloudformation-dont-delete --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
+  #         echo "::set-output name=folders::${folders}"
+
+  #     - name: Download and Update and Upload JSON objects
+  #       run: |
+  #         echo "Folders ${{ steps.list-folders.outputs.folders }}"
+  #         IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
+  #         for folder in "${folders[@]}"; do
+  #           folder="${folder%/}"  # Remove trailing slash
+  #           echo "Processing folder: $folder"
+
+
+  #           # Download JSON file from the folder
+  #           echo "Downloading  File : ${{ matrix.type }}.json"
+
+  #           # Check if File Exists 
+  #           echo "Check if File Exists at $folder/${{ matrix.type }}.json"
+  #           if aws s3api head-object --bucket "abbybucketcloudformation-dont-delete" --key "$folder/${{ matrix.type }}.json" 2>&1 | grep -q "Not Found"; then
+  #             echo "File not found in S3. Skipping download."
+  #           else
+  #             # Download the file 
+  #             echo " Download the file $folder/${{ matrix.type }}.json" 
+  #             aws s3 cp "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json" .
+  #             aws s3 cp "s3://abbybucketcloudformation-dont-delete/${{ matrix.type }}.json" "./local_{{ matrix.type }}_json.json"
+  #             echo "File downloaded successfully."
+
+  #             echo "Quering and Updating File where name is ADO Pipeline" 
+
+  #             jq -c '.[]' "local_{{ matrix.type }}_json.json" | while read -r object; do
+  #               echo "Object : $object"
+  #               name=$(echo "$object" | jq -r '.name')
+  #               artifact_path=$(echo "$object" | jq -r '.artifact_path')
+  #               sha=$(echo "$object" | jq -r '.sha')
+  #               libraryimageurl=$(echo "$object" | jq -r '.["library-image-url"]')
+                
+                
+
+  #               echo "name : $name"
+  #               echo "artifact_path : $artifact_path"
+  #               echo "sha : $sha"
+  #               echo "library-image-url : $libraryimageurl}"
+
+  #               jq "map(if .name == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" else . end)" ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+
+  #               # jq 'map(if .name == "$name" then .artifact_path = "$artifact_path" | .sha = "$sha" | .["library-image-url"] = "$libraryimageurl" else . end)' ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+
+  #               mv "modified_${{ matrix.type }}_new.json" "${{ matrix.type }}.json"
+  #             done
+              
+
+  #             # echo "Uploading File ${{ matrix.type }}.json to folder ${folder}"   
+  #             # aws s3 cp ${{ matrix.type }}.json "s3://abbybucketcloudformation-dont-delete/$folder/${{ matrix.type }}.json"
+  #           fi
+  #         done
+
+  #     - name: Print and Format JSON 
+  #       run: |
+  #         cat "${{ matrix.type }}.json"  | jq
+     
+
+
+          
+
+            
