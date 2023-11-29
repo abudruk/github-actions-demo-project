@@ -43,7 +43,7 @@ jobs:
 
           echo "Fetched Artifacts: $ARTIFACTS"
           
-          filtered_artifacts=$(echo "$ARTIFACTS" | jq '.artifacts[] | map(select(.name | contains("Assets")))')
+          filtered_artifacts=$(echo "$ARTIFACTS" | jq '.artifacts | map(select(.name | contains("Assets")))')
 
           echo "filtered_artifacts $filtered_artifacts"
 
