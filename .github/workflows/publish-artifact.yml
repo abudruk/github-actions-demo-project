@@ -73,18 +73,24 @@ jobs:
           # Loop over each artifact
          
 
-          artifactNames=($(echo "${{steps.check-artifact.outputs.assets_artifacts}}" | jq -r '.[].name'))
+          artifacts=${{steps.check-artifact.outputs.assets_artifacts}}"
 
-          echo "artifactNames : ${artifactNames}"
-          
-          for artifact in "${artifactNames[@]}"; do
+
+          for artifact in $(echo "$artifacts" | jq -c '.[]'); do
             # Create the directory
             echo "Create directory with name "
-            mkdir -p "$artifact"
-            echo "Change Directory to $artifact"
-            cd "$artifact"
+
+            echo "$artifact" 
+
+            artifact_name=$(echo "$artifact" | jq -r '.name')
+
+            echo "$artifact_name"  
+            
+            mkdir -p "$artifact_name"
+            echo "Change Directory to $artifact_name"
+            cd "$artifact_name"
             gh run download ${{ github.event.inputs.run_id }} \
-            -n "$artifact" \
+            -n "$artifact_name" \
             --repo abudruk/github-actions-demo-project
             cd ..
           done
