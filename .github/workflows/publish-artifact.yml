@@ -43,9 +43,13 @@ jobs:
             mkdir -p "$artifact"
             echo "Change Directory to $artifact"
             cd "$artifact"
-            gh run download ${{ github.event.inputs.run_id }} \
-            -n "$artifact" \
-            --repo abudruk/github-actions-demo-project
+
+            uses: actions/download-artifact@v3
+            with:
+              name: "$artifact_name"
+            # gh run download ${{ github.event.inputs.run_id }} \
+            # -n "$artifact" \
+            # --repo abudruk/github-actions-demo-project
             cd ..
           done
       
