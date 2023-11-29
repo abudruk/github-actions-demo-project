@@ -43,278 +43,282 @@ jobs:
 
           echo "Fetched Artifacts: $ARTIFACTS"
           
-          filtered_artifacts=$(echo "$ARTIFACTS" | jq '.artifacts | map(select(.name | contains("Assets")))')
+          filtered_assets_artifacts=$(echo "$ARTIFACTS" | jq '.artifacts | map(select(.name | contains("Assets")))')
 
-          echo "filtered_artifacts $filtered_artifacts"
+          echo "filtered_artifacts $filtered_assets_artifacts"
 
-      #     # if $filtered_artifacts > /dev/null; then
-      #     #   echo "Artifact Exists"
-      #     #   echo "::set-output name=artifact_exists::true"
-      #     # else
-      #     #   echo "Artifact Does Not Exists"
-      #     #   echo "::set-output name=artifact_exists::false"
-      #     # fi
 
-      # - name: Download Artifacts from Run ID
-      #   id: download-artifacts
-      #   env:
-      #     GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-      #   run: |
-      #     # Array of artifact names
-      #     artifacts=("blueprints Assets" "cb-applets Assets" "orchestration-actions Assets" "recurring-jobs Assets" "resource-actions Assets" "ui-extension-packages Assets" "server-actions Assets")
-      #     # Loop over each artifact
-      #     for artifact in "${artifacts[@]}"; do
-      #       # Create the directory
-      #       echo "Create directory with name "
-      #       mkdir -p "$artifact"
-      #       echo "Change Directory to $artifact"
-      #       cd "$artifact"
-      #       gh run download ${{ github.event.inputs.run_id }} \
-      #       -n "$artifact" \
-      #       --repo abudruk/github-actions-demo-project
-      #       cd ..
-      #     done
+
+          echo "assets_artifacts=$filtered_assets_artifacts" >> $GITHUB_OUTPUT    
+
+          # if $filtered_artifacts > /dev/null; then
+          #   echo "Artifact Exists"
+          #   echo "::set-output name=artifact_exists::true"
+          # else
+          #   echo "Artifact Does Not Exists"
+          #   echo "::set-output name=artifact_exists::false"
+          # fi
+
+      - name: Download Artifacts from Run ID
+        id: download-artifacts
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          # Array of artifact names
+          # artifacts=("blueprints Assets" "cb-applets Assets" "orchestration-actions Assets" "recurring-jobs Assets" "resource-actions Assets" "ui-extension-packages Assets" "server-actions Assets")
+          # Loop over each artifact
+          for artifact in "${assets_artifacts[@]}"; do
+            # Create the directory
+            echo "Create directory with name "
+            mkdir -p "$artifact"
+            echo "Change Directory to $artifact"
+            cd "$artifact"
+            gh run download ${{ github.event.inputs.run_id }} \
+            -n "$artifact" \
+            --repo abudruk/github-actions-demo-project
+            cd ..
+          done
       
-      # - name: print directory tree
-      #   run: |
-      #     sudo apt-get install -y tree
-      #     echo "Current directory"
-      #     pwd
-      #     echo "Listing Files"
-      #     ls
+      - name: print directory tree
+        run: |
+          sudo apt-get install -y tree
+          echo "Current directory"
+          pwd
+          echo "Listing Files"
+          ls
           
-      # - name: Extract contents from the downloaded file
-      #   run: |
-      #     # Array of artifact names
-      #     artifacts=("blueprints Assets" "cb-applets Assets" "orchestration-actions Assets" "recurring-jobs Assets" "resource-actions Assets" "ui-extension-packages Assets" "server-actions Assets")
-      #     # Loop over each artifact
-      #     for artifact in "${artifacts[@]}"; do
-      #       echo "Etracting File  ${artifact}/assets.tar.gz "
-      #       tar -xvzf "${artifact}/assets.tar.gz"
-      #     done
+      - name: Extract contents from the downloaded file
+        run: |
+          # Array of artifact names
+          artifacts=("blueprints Assets" "cb-applets Assets" "orchestration-actions Assets" "recurring-jobs Assets" "resource-actions Assets" "ui-extension-packages Assets" "server-actions Assets")
+          # Loop over each artifact
+          for artifact in "${artifacts[@]}"; do
+            echo "Etracting File  ${artifact}/assets.tar.gz "
+            tar -xvzf "${artifact}/assets.tar.gz"
+          done
 
-      # - name: Set up AWS CLI
-      #   uses: aws-actions/configure-aws-credentials@v2
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ap-south-1
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
 
-      # - name: print directory tree
-      #   run: |
-      #     sudo apt-get install -y tree
-      #     echo "Current directory"
-      #     pwd
-      #     echo "Tree from pwd"
-      #     ls
+      - name: print directory tree
+        run: |
+          sudo apt-get install -y tree
+          echo "Current directory"
+          pwd
+          echo "Tree from pwd"
+          ls
 
-      # - name: Filter and Distribute Assets based off of version
-      #   run: |
-      #     # Previously, we filtered out prereleases, but we are now including them so we can publish content to test with before the release is out.
-      #     VERSIONS=("2023.4.8" "2023.4.9" "2023.5.1")
-      #     COLLECTIONS=("blueprints")
-      #     UNPACK_LOCATION="asset_files"
+      - name: Filter and Distribute Assets based off of version
+        run: |
+          # Previously, we filtered out prereleases, but we are now including them so we can publish content to test with before the release is out.
+          VERSIONS=("2023.4.8" "2023.4.9" "2023.5.1")
+          COLLECTIONS=("blueprints")
+          UNPACK_LOCATION="asset_files"
 
 
-      #     # This code looks a little weird because its attempting to reconcile 2 different versioning schemas
-      #     # Year.Quarter.Hotfix and Major.Minor.Patch.Hotfix
-      #     compare_versions () {
-      #       local version_to_test="$1"
-      #       local reference_version="$2"
+          # This code looks a little weird because its attempting to reconcile 2 different versioning schemas
+          # Year.Quarter.Hotfix and Major.Minor.Patch.Hotfix
+          compare_versions () {
+            local version_to_test="$1"
+            local reference_version="$2"
             
-      #       # Scrubs for empty/null arguments since max version can be empty
-      #       # Keep in mind that we're treating an empty string as "accept all versions"
-      #       # so when the test version is empty, we assume thats its always greater
-      #       # and when the reference version is empty, we assume the test version is always smaller
-      #       if [ -z "$version_to_test" ]; then
-      #         if [ -z "$reference_version" ]; then
-      #           echo "0"
-      #           return 0
-      #         else
-      #           echo "1"
-      #         fi
-      #       elif [ -z "$reference_version" ]; then
-      #         echo "-1"
-      #         return 0
-      #       fi
+            # Scrubs for empty/null arguments since max version can be empty
+            # Keep in mind that we're treating an empty string as "accept all versions"
+            # so when the test version is empty, we assume thats its always greater
+            # and when the reference version is empty, we assume the test version is always smaller
+            if [ -z "$version_to_test" ]; then
+              if [ -z "$reference_version" ]; then
+                echo "0"
+                return 0
+              else
+                echo "1"
+              fi
+            elif [ -z "$reference_version" ]; then
+              echo "-1"
+              return 0
+            fi
 
 
-      #       IFS='.' read -r -a test_version_array <<< "$version_to_test"
-      #       IFS='.' read -r -a reference_version_array <<< "$reference_version"
-      #       local test_version_array_length=${#test_version_array[@]}
-      #       local reference_version_array_length=${#reference_version_array[@]}
-      #       index_number="0"
+            IFS='.' read -r -a test_version_array <<< "$version_to_test"
+            IFS='.' read -r -a reference_version_array <<< "$reference_version"
+            local test_version_array_length=${#test_version_array[@]}
+            local reference_version_array_length=${#reference_version_array[@]}
+            index_number="0"
 
-      #       if [ "$test_version_array_length" -le "$reference_version_array_length" ]; then
-      #         while [ "$index_number" -lt "$test_version_array_length" ]; do 
-      #           local test_version_array_digit="${test_version_array[$index_number]}"
-      #           local reference_version_array_digit="${reference_version_array[$index_number]}"
+            if [ "$test_version_array_length" -le "$reference_version_array_length" ]; then
+              while [ "$index_number" -lt "$test_version_array_length" ]; do 
+                local test_version_array_digit="${test_version_array[$index_number]}"
+                local reference_version_array_digit="${reference_version_array[$index_number]}"
                 
-      #           if [ "$test_version_array_digit" -lt "$reference_version_array_digit" ]; then
-      #             echo "-1"
-      #             return 0
-      #           elif [ "$test_version_array_digit" -gt "$reference_version_array_digit" ]; then
-      #             echo "1"
-      #             return 0
-      #           fi
+                if [ "$test_version_array_digit" -lt "$reference_version_array_digit" ]; then
+                  echo "-1"
+                  return 0
+                elif [ "$test_version_array_digit" -gt "$reference_version_array_digit" ]; then
+                  echo "1"
+                  return 0
+                fi
 
-      #           index_number=$((index_number+1))
+                index_number=$((index_number+1))
 
-      #         done
+              done
 
-      #         if [ "$test_version_array_length" -lt "$reference_version_array_length" ]; then
-      #           echo "-1"
-      #         else
-      #           echo "0"
-      #         fi
+              if [ "$test_version_array_length" -lt "$reference_version_array_length" ]; then
+                echo "-1"
+              else
+                echo "0"
+              fi
 
-      #       else
+            else
 
-      #       while [ "$index_number" -lt "$reference_version_array_length" ]; do 
-      #           local test_version_array_digit="${test_version_array[$index_number]}"
-      #           local reference_version_array_digit="${reference_version_array[$index_number]}"
+            while [ "$index_number" -lt "$reference_version_array_length" ]; do 
+                local test_version_array_digit="${test_version_array[$index_number]}"
+                local reference_version_array_digit="${reference_version_array[$index_number]}"
                 
-      #           if [ "$test_version_array_digit" -lt "$reference_version_array_digit" ]; then
-      #             echo "-1"
-      #             return 0
-      #           elif [ "$test_version_array_digit" -gt "$reference_version_array_digit" ]; then
-      #             echo "1"
-      #             return 0
-      #           fi
+                if [ "$test_version_array_digit" -lt "$reference_version_array_digit" ]; then
+                  echo "-1"
+                  return 0
+                elif [ "$test_version_array_digit" -gt "$reference_version_array_digit" ]; then
+                  echo "1"
+                  return 0
+                fi
 
-      #           index_number=$((index_number+1))
+                index_number=$((index_number+1))
 
-      #         done
+              done
 
-      #         echo "1"
-      #         return 0
+              echo "1"
+              return 0
 
-      #       fi
-      #     }
+            fi
+          }
 
-      #     # Some of the jsons have html with double quotes inside of them and that confuses jq
-      #     # So, we use grep to find the key and thereafter the version so that html doesn't interfere
-      #     get_minimum_version_while_avoiding_html () {
-      #       json_string=$1
-      #       local minimum_version_key=$(grep -oP '"minimum_version_required":"(.*?)"' <<< "$json_string")
-      #       if [[ -z "$minimum_version_key" ]]; then 
-      #         echo ""
-      #       else
-      #         local min_version=$(grep -oP '\d+\.\d+(\.\d+)*' <<< "$minimum_version_key")
-      #         if [[ -z "$min_version" ]]; then
-      #           echo ""
-      #         else
-      #           echo "$min_version"
-      #         fi
-      #       fi
+          # Some of the jsons have html with double quotes inside of them and that confuses jq
+          # So, we use grep to find the key and thereafter the version so that html doesn't interfere
+          get_minimum_version_while_avoiding_html () {
+            json_string=$1
+            local minimum_version_key=$(grep -oP '"minimum_version_required":"(.*?)"' <<< "$json_string")
+            if [[ -z "$minimum_version_key" ]]; then 
+              echo ""
+            else
+              local min_version=$(grep -oP '\d+\.\d+(\.\d+)*' <<< "$minimum_version_key")
+              if [[ -z "$min_version" ]]; then
+                echo ""
+              else
+                echo "$min_version"
+              fi
+            fi
 
-      #     }
+          }
 
-      #     get_maximum_version_while_avoiding_html () {
-      #       json_string=$1
-      #       local maximum_version_key=$(grep -oP '"maximum_version_required":"(.*?)"' <<< "$json_string")
-      #       if [[ -z "$maximum_version_key" ]]; then 
-      #         echo ""
-      #       else
-      #         local max_version=$(grep -oP '\d+\.\d+(\.\d+)*' <<< "$maximum_version_key")
-      #         if [[ -z "$max_version" ]]; then 
-      #           echo ""
-      #         else
-      #           echo "$max_version"
-      #         fi
-      #       fi
-      #     }
-
-
-      #     # Distribute assets based off of version
-      #     # creating lists of assets as we go
-      #     VERSIONS=("${VERSIONS[@]/$UNPACK_LOCATION}") # remove the unpack location if it is a version
-      #     echo "CURRENT AVAILABLE CMP VERSIONS: $VERSIONS"
-      #     for collection in ${COLLECTIONS[@]}; do 
-      #       jq -c -r '.[]' "$UNPACK_LOCATION/$collection.json" | while read -r item; do
-      #         for version in ${VERSIONS[@]}; do
-      #           MINIMUM_VERSION=$( get_minimum_version_while_avoiding_html "$item" )
-      #           MAXIMUM_VERSION=$( get_maximum_version_while_avoiding_html "$item" )
-      #           MINIMUM_VERSION_COMPARISON=$( compare_versions "$MINIMUM_VERSION" "$version" )
-      #           MAXIMUM_VERSION_COMPARISON=$( compare_versions "$version" "$MAXIMUM_VERSION" )
-      #           echo "MINIMUM_VERSION: $MINIMUM_VERSION"
-      #           echo "MAXIMUM_VERSION: $MAXIMUM_VERSION"
-      #           echo "version: $version"
-      #           echo "MINIMUM_VERSION_COMPARISON: $MINIMUM_VERSION_COMPARISON"
-      #           echo "MAXIMUM_VERSION_COMPARISON: $MAXIMUM_VERSION_COMPARISON"
-      #           if [[ "$MINIMUM_VERSION_COMPARISON" -le "0" ]] && [[ "$MAXIMUM_VERSION_COMPARISON" -le "0" ]]; then
-      #             mkdir -p "$version"
-      #             printf '%s,\n' "$item" >> "$version/$collection.json" 
-      #           fi
-      #         done
-      #       done
-      #     done
+          get_maximum_version_while_avoiding_html () {
+            json_string=$1
+            local maximum_version_key=$(grep -oP '"maximum_version_required":"(.*?)"' <<< "$json_string")
+            if [[ -z "$maximum_version_key" ]]; then 
+              echo ""
+            else
+              local max_version=$(grep -oP '\d+\.\d+(\.\d+)*' <<< "$maximum_version_key")
+              if [[ -z "$max_version" ]]; then 
+                echo ""
+              else
+                echo "$max_version"
+              fi
+            fi
+          }
 
 
-      #     # add brackets to each json list file that we've created
-      #     # by replacing the contents of the file to one that has opening and closing brackets
-      #     for version in ${VERSIONS[@]}; do
-      #       for collection in ${COLLECTIONS[@]}; do
-      #         FILEPATH="$version/$collection.json"
-      #         if [[ -f $FILEPATH ]]; then
-      #           FILE_CONTENTS=$(<"$FILEPATH")
-      #           FILE_CONTENTS=${FILE_CONTENTS::-1}
-      #           echo "[$FILE_CONTENTS]" > $FILEPATH
-      #         fi
-      #       done
-      #     done
+          # Distribute assets based off of version
+          # creating lists of assets as we go
+          VERSIONS=("${VERSIONS[@]/$UNPACK_LOCATION}") # remove the unpack location if it is a version
+          echo "CURRENT AVAILABLE CMP VERSIONS: $VERSIONS"
+          for collection in ${COLLECTIONS[@]}; do 
+            jq -c -r '.[]' "$UNPACK_LOCATION/$collection.json" | while read -r item; do
+              for version in ${VERSIONS[@]}; do
+                MINIMUM_VERSION=$( get_minimum_version_while_avoiding_html "$item" )
+                MAXIMUM_VERSION=$( get_maximum_version_while_avoiding_html "$item" )
+                MINIMUM_VERSION_COMPARISON=$( compare_versions "$MINIMUM_VERSION" "$version" )
+                MAXIMUM_VERSION_COMPARISON=$( compare_versions "$version" "$MAXIMUM_VERSION" )
+                echo "MINIMUM_VERSION: $MINIMUM_VERSION"
+                echo "MAXIMUM_VERSION: $MAXIMUM_VERSION"
+                echo "version: $version"
+                echo "MINIMUM_VERSION_COMPARISON: $MINIMUM_VERSION_COMPARISON"
+                echo "MAXIMUM_VERSION_COMPARISON: $MAXIMUM_VERSION_COMPARISON"
+                if [[ "$MINIMUM_VERSION_COMPARISON" -le "0" ]] && [[ "$MAXIMUM_VERSION_COMPARISON" -le "0" ]]; then
+                  mkdir -p "$version"
+                  printf '%s,\n' "$item" >> "$version/$collection.json" 
+                fi
+              done
+            done
+          done
 
-      # - name: print directory tree
-      #   run: |
-      #     sudo apt-get install -y tree
-      #     echo "Current directory"
-      #     pwd
-      #     echo "Tree from pwd"
-      #     ls
 
-      # - name: Remove Directories
-      #   continue-on-error: true
-      #   run: |
-      #     ls -R
-      #     rm -rf "asset_files"
-      #     rm -rf "blueprints Assets"
-      #     rm -rf .github
-      #     rm -rf .git
-      #     rm -rf .gitignore
-      #     rm -rf assets.tar.gz
-      #     rm -rf CMP                                            
+          # add brackets to each json list file that we've created
+          # by replacing the contents of the file to one that has opening and closing brackets
+          for version in ${VERSIONS[@]}; do
+            for collection in ${COLLECTIONS[@]}; do
+              FILEPATH="$version/$collection.json"
+              if [[ -f $FILEPATH ]]; then
+                FILE_CONTENTS=$(<"$FILEPATH")
+                FILE_CONTENTS=${FILE_CONTENTS::-1}
+                echo "[$FILE_CONTENTS]" > $FILEPATH
+              fi
+            done
+          done
+
+      - name: print directory tree
+        run: |
+          sudo apt-get install -y tree
+          echo "Current directory"
+          pwd
+          echo "Tree from pwd"
+          ls
+
+      - name: Remove Directories
+        continue-on-error: true
+        run: |
+          ls -R
+          rm -rf "asset_files"
+          rm -rf "blueprints Assets"
+          rm -rf .github
+          rm -rf .git
+          rm -rf .gitignore
+          rm -rf assets.tar.gz
+          rm -rf CMP                                            
       
 
-      # - name: Sync current directory to S3 
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     AWS_DEFAULT_REGION: ap-south-1
+      - name: Sync current directory to S3 
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-south-1
 
-      #   run: |
-      #     CREDENTIALS=$(\
-      #     aws sts assume-role \
-      #     --role-arn "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/Abby_GitHub_Action_Upload_Content_Library" \
-      #     --role-session-name "s3-sync-role" \
-      #     --duration-seconds 3600\
-      #     )
-      #     export AWS_ACCESS_KEY_ID=$(echo $CREDENTIALS | jq -r '.Credentials.AccessKeyId')
-      #     export AWS_SECRET_ACCESS_KEY=$(echo $CREDENTIALS | jq -r '.Credentials.SecretAccessKey')
-      #     export AWS_SESSION_TOKEN=$(echo $CREDENTIALS | jq -r '.Credentials.SessionToken')
-      #     # Delete Everything in the bucket
-      #     # aws s3 rm s3://${{ secrets.S3_BUCKET }} --recursive
-      #     # Overwrite with what we want the bucket to look like
+        run: |
+          CREDENTIALS=$(\
+          aws sts assume-role \
+          --role-arn "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/Abby_GitHub_Action_Upload_Content_Library" \
+          --role-session-name "s3-sync-role" \
+          --duration-seconds 3600\
+          )
+          export AWS_ACCESS_KEY_ID=$(echo $CREDENTIALS | jq -r '.Credentials.AccessKeyId')
+          export AWS_SECRET_ACCESS_KEY=$(echo $CREDENTIALS | jq -r '.Credentials.SecretAccessKey')
+          export AWS_SESSION_TOKEN=$(echo $CREDENTIALS | jq -r '.Credentials.SessionToken')
+          # Delete Everything in the bucket
+          # aws s3 rm s3://${{ secrets.S3_BUCKET }} --recursive
+          # Overwrite with what we want the bucket to look like
           
-      #     aws s3 sync . s3://abbybucketcloudformation-dont-delete/ \
-      #     --exclude "*" \
-      #     --include "zip/*" \
-      #     --include "images/*" \
+          aws s3 sync . s3://abbybucketcloudformation-dont-delete/ \
+          --exclude "*" \
+          --include "zip/*" \
+          --include "images/*" \
 
-      #     # invalidate cloudfront distribution cache
-      #     #aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+          # invalidate cloudfront distribution cache
+          #aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
 
-      # - name: display directory tree
-      #   run: |
-      #     sudo apt-get install -y tree
-      #     # tree -L 5
-      #     ls
+      - name: display directory tree
+        run: |
+          sudo apt-get install -y tree
+          # tree -L 5
+          ls
