@@ -43,17 +43,17 @@ jobs:
 
           echo "Fetched Artifacts: $ARTIFACTS"
           
-          filtered_artifacts=$(echo "$ARTIFACTS" | jq '.artifacts[] | select(.name == "${{ matrix.type }}")')
+          filtered_artifacts=$(echo "$ARTIFACTS" | jq '.artifacts[] | map(select(.name | contains("Assets")))')
 
           echo "filtered_artifacts $filtered_artifacts"
 
-          if $filtered_artifacts > /dev/null; then
-            echo "Artifact Exists"
-            echo "::set-output name=artifact_exists::true"
-          else
-            echo "Artifact Does Not Exists"
-            echo "::set-output name=artifact_exists::false"
-          fi
+      #     # if $filtered_artifacts > /dev/null; then
+      #     #   echo "Artifact Exists"
+      #     #   echo "::set-output name=artifact_exists::true"
+      #     # else
+      #     #   echo "Artifact Does Not Exists"
+      #     #   echo "::set-output name=artifact_exists::false"
+      #     # fi
 
       # - name: Download Artifacts from Run ID
       #   id: download-artifacts
