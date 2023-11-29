@@ -52,7 +52,7 @@ jobs:
           # echo "assets_artifacts=$filtered_assets_artifacts" >> $GITHUB_OUTPUT 
 
 
-          echo "::set-output name=assets_artifacts::$(echo "$filtered_assets_artifacts" | jq -c)"
+          echo "::set-output name=assets_artifacts::$filtered_assets_artifacts"
 
       - name: Download Artifacts from Run ID
         id: download-artifacts
