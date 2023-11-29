@@ -53,15 +53,6 @@ jobs:
 
 
           echo "::set-output name=assets_artifacts::$(echo "$filtered_assets_artifacts" | jq -c)"
-  
-
-          # if $filtered_artifacts > /dev/null; then
-          #   echo "Artifact Exists"
-          #   echo "::set-output name=artifact_exists::true"
-          # else
-          #   echo "Artifact Does Not Exists"
-          #   echo "::set-output name=artifact_exists::false"
-          # fi
 
       - name: Download Artifacts from Run ID
         id: download-artifacts
@@ -73,10 +64,10 @@ jobs:
           # Loop over each artifact
          
 
-          artifacts="${{steps.check-artifact.outputs.assets_artifacts}}"
+          artifacts=${{steps.check-artifact.outputs.assets_artifacts}}
 
 
-          for artifact in $(echo "$artifacts" | jq -c '.[]'); do
+          for artifact in $artifacts; do
             # Create the directory
         
             artifact_name=$(echo "$artifact" | jq -r '.name')
