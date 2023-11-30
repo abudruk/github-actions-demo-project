@@ -95,7 +95,10 @@ jobs:
           MATRIX_TYPE: ${{ matrix.type }}
         run: |
 
-          WORKING_DIRECTORY="${{ github.workspace }}/tmp/${{ matrix.type }}" 
+          # WORKING_DIRECTORY="${{ github.workspace }}/tmp/${{ matrix.type }}" 
+
+          WORKING_DIRECTORY=$(pwd)
+
 
           echo "WORKING_DIRECTORY : ${WORKING_DIRECTORY}"
     
@@ -104,7 +107,7 @@ jobs:
             echo "Directory does not exist."
           else
             echo "Creating a tar of all the files in the current directory"
-            tar -cvzf "$MATRIX_TYPE".tar.gz *
+            tar -cvzf "$MATRIX_TYPE".tar.gz *.zip
           fi
 
       - uses: actions/upload-artifact@v3
@@ -420,7 +423,7 @@ jobs:
           IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
           for folder in "${folders[@]}"; do
             folder="${folder%/}"  # Remove trailing slash
-            echo "Processing folder: $folder"
+            echo "Processing folder : $folder"
 
 
             # Download JSON file from the folder
@@ -444,6 +447,7 @@ jobs:
                 artifact_path=$(echo "$object" | jq -r '.artifact_path')
                 sha=$(echo "$object" | jq -r '.sha')
                 libraryimageurl=$(echo "$object" | jq -r '.["library-image-url"]')
+                updated_date=$(date +'%Y-%m-%d')
                 
                 echo "name : $name"
                 echo "artifact_path : $artifact_path"
@@ -451,7 +455,7 @@ jobs:
                 echo "library-image-url : $libraryimageurl}"
 
 
-                jq "map(if .\"$comparing_key\" == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" else . end)" ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+                jq "map(if .\"$comparing_key\" == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" | .last_updated = \"$updated_date\" else . end)" ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
                 mv "modified_${{ matrix.type }}_new.json" "${{ matrix.type }}.json"
               done
@@ -514,7 +518,7 @@ jobs:
           gh workflow run publish-artifact.yml \
           --field="run_id=${{ github.run_id }}" \
           --field="environment=Staging" \
-          --ref=main \
+          --ref=condition_check \
           --repo abudruk/github-actions-demo-project
      
   

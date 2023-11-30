@@ -31,28 +31,28 @@ jobs:
 
 
 
-      - name: Check if Artifact Exists
-        id: check-artifact
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          ARTIFACTS=$(curl -sSL -H "Accept: application/vnd.github.v3+json" \
-                       -H "Authorization: Bearer $GH_TOKEN" \
-                       -H "X-GitHub-Api-Version: 2022-11-28" \
-                       https://api.github.com/repos/abudruk/github-actions-demo-project/actions/runs/${{ github.event.inputs.run_id }}/artifacts)
+      # - name: Check if Artifact Exists
+      #   id: check-artifact
+      #   env:
+      #     GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+      #   run: |
+      #     ARTIFACTS=$(curl -sSL -H "Accept: application/vnd.github.v3+json" \
+      #                  -H "Authorization: Bearer $GH_TOKEN" \
+      #                  -H "X-GitHub-Api-Version: 2022-11-28" \
+      #                  https://api.github.com/repos/abudruk/github-actions-demo-project/actions/runs/${{ github.event.inputs.run_id }}/artifacts)
 
-          echo "Fetched Artifacts: $ARTIFACTS"
+      #     echo "Fetched Artifacts: $ARTIFACTS"
           
-          filtered_assets_artifacts=$(echo "$ARTIFACTS" | jq '.artifacts | map(select(.name | contains("Assets")))')
+      #     filtered_assets_artifacts=$(echo "$ARTIFACTS" | jq '.artifacts | map(select(.name | contains("Assets")))')
 
-          echo "filtered_artifacts $filtered_assets_artifacts"
-
-
-
-          # echo "assets_artifacts=$filtered_assets_artifacts" >> $GITHUB_OUTPUT 
+      #     echo "filtered_artifacts $filtered_assets_artifacts"
 
 
-          echo "::set-output name=assets_artifacts::$filtered_assets_artifacts"
+
+      #     # echo "assets_artifacts=$filtered_assets_artifacts" >> $GITHUB_OUTPUT 
+
+
+      #     echo "::set-output name=assets_artifacts::$(echo "$filtered_assets_artifacts" | jq -c)"
 
       - name: Download Artifacts from Run ID
         id: download-artifacts
@@ -60,28 +60,19 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           # Array of artifact names
-          # artifacts=("blueprints Assets" "cb-applets Assets" "orchestration-actions Assets" "recurring-jobs Assets" "resource-actions Assets" "ui-extension-packages Assets" "server-actions Assets")
+          artifacts=("blueprints Assets" "cb-applets Assets" "orchestration-actions Assets" "recurring-jobs Assets" "resource-actions Assets" "ui-extension-packages Assets" "server-actions Assets")
           # Loop over each artifact
-         
 
-          artifacts=${{steps.check-artifact.outputs.assets_artifacts}}
-
-
-          for artifact in $artifacts; do
+          for artifact in "${artifacts[@]}"; do
             # Create the directory
-        
-            artifact_name=$(echo "$artifact" | jq -r '.name')
-
-            echo "$artifact_name"  
-
-            mkdir -p "$artifact_name"
-
-            echo "Change Directory to $artifact_name"
-            cd "$artifact_name"
-            gh run download ${{ github.event.inputs.run_id }} \
-            -n "$artifact_name" \
-            --repo abudruk/github-actions-demo-project
-            cd ..
+            echo "$artifact"  
+            if gh run download ${{ github.event.inputs.run_id }} -n "$artifact" --repo abudruk/github-actions-demo-project --dir "${artifact}"; then
+              echo "${artifact}  downloaded successfully"
+              
+            else
+              echo "Failed to download artifact ${artifact}"
+            fi
+            
           done
       
       - name: print directory tree
@@ -98,8 +89,12 @@ jobs:
           artifacts=("blueprints Assets" "cb-applets Assets" "orchestration-actions Assets" "recurring-jobs Assets" "resource-actions Assets" "ui-extension-packages Assets" "server-actions Assets")
           # Loop over each artifact
           for artifact in "${artifacts[@]}"; do
-            echo "Etracting File  ${artifact}/assets.tar.gz "
-            tar -xvzf "${artifact}/assets.tar.gz"
+            echo "Extracting File  ${artifact}/assets.tar.gz "
+            if tar -xvzf "${artifact}/assets.tar.gz"; then
+              echo "${artifact}  Extracted Successfully"
+            else
+              echo "Failed to Extract  ${artifact}"
+            fi
           done
 
       - name: Set up AWS CLI
