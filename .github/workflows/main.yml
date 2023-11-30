@@ -444,6 +444,7 @@ jobs:
                 artifact_path=$(echo "$object" | jq -r '.artifact_path')
                 sha=$(echo "$object" | jq -r '.sha')
                 libraryimageurl=$(echo "$object" | jq -r '.["library-image-url"]')
+                updated_date=$(date +'%Y-%m-%d')
                 
                 echo "name : $name"
                 echo "artifact_path : $artifact_path"
@@ -451,7 +452,7 @@ jobs:
                 echo "library-image-url : $libraryimageurl}"
 
 
-                jq "map(if .\"$comparing_key\" == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" else . end)" ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
+                jq "map(if .\"$comparing_key\" == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" | .last_updated = \"$updated_date\" else . end)" ${{ matrix.type }}.json > modified_${{ matrix.type }}_new.json
 
                 mv "modified_${{ matrix.type }}_new.json" "${{ matrix.type }}.json"
               done
