@@ -90,12 +90,15 @@ jobs:
           done
 
       - name: Create a single tar of all the files in the current directory
-        # working-directory: tmp/${{ matrix.type }}
+        working-directory: tmp/${{ matrix.type }}
         env:
           MATRIX_TYPE: ${{ matrix.type }}
         run: |
 
-          WORKING_DIRECTORY="${{ github.workspace }}/tmp/${{ matrix.type }}" 
+          # WORKING_DIRECTORY="${{ github.workspace }}/tmp/${{ matrix.type }}" 
+
+          WORKING_DIRECTORY=$(pwd)
+
 
           echo "WORKING_DIRECTORY : ${WORKING_DIRECTORY}"
     
