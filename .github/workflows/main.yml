@@ -90,7 +90,7 @@ jobs:
           done
 
       - name: Create a single tar of all the files in the current directory
-        working-directory: tmp/${{ matrix.type }}
+        # working-directory: tmp/${{ matrix.type }}
         env:
           MATRIX_TYPE: ${{ matrix.type }}
         run: |
