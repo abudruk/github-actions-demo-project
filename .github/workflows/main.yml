@@ -107,7 +107,7 @@ jobs:
             echo "Directory does not exist."
           else
             echo "Creating a tar of all the files in the current directory"
-            tar -cvzf "$MATRIX_TYPE".tar.gz *
+            tar -cvzf "$MATRIX_TYPE".tar.gz *.zip
           fi
 
       - uses: actions/upload-artifact@v3
