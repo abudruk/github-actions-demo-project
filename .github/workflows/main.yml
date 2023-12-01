@@ -518,7 +518,7 @@ jobs:
           gh workflow run publish-artifact.yml \
           --field="run_id=${{ github.run_id }}" \
           --field="environment=Staging" \
-          --ref=condition_check \
+          --ref=github-action-workflow \
           --repo abudruk/github-actions-demo-project
      
   
