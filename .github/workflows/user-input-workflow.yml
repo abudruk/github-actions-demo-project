@@ -54,10 +54,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Download zip file
+        run: curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
+
       - name: Unzip the provided file
         run: |
           echo "Unzipping File: ${{ github.event.inputs.blueprint_file_path }}"
-          unzip ${{ github.event.inputs.blueprint_file_path }}
+          unzip -o "$(basename "${{ github.event.inputs.blueprint_file_path }}")"
 
       - name: List the files
         run: |
