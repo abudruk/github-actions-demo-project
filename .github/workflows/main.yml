@@ -2,10 +2,10 @@ name: Display Changed Files
 on:
   pull_request:
     branches:
-      - main
+      - develop
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   archive-collections:
