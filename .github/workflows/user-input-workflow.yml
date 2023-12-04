@@ -17,23 +17,23 @@ on:
       #     - server-actions
       #     - resource-actions
 
-      blueprint_name:
-        description: "Name of Content"
+      # blueprint_name:
+      #   description: "Name of Content"
+      #   required: true
+
+      version:
+        description: "Version for Deployment"
         required: true
+        type: choice
+        options:
+          - 2023.5.21
+          - 2023.5.1
+          - 2023.4.9
+          - 2023.4.8
 
-      # version:
-      #   description: "Version for Deployment"
-      #   required: true
-      #   type: choice
-      #   options:
-      #     - 2023.5.21
-      #     - 2023.5.1
-      #     - 2023.4.9
-      #     - 2023.4.8
-
-      # blueprint_file_path:
-      #   description: 'Path to the zip file'
-      #   required: true
+      blueprint_file_path:
+        description: 'Path to the zip file'
+        required: true
 
 defaults:
   run:
@@ -51,25 +51,24 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
-      # - name: Checkout repository
-      #   uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      # - name: Unzip the provided file
-      #   run: |
-      #   echo "Unzipping File : ${{ github.event.inputs.blueprint_file_path }}"
+      - name: Unzip the provided file
+        run: |
+          echo "Unzipping File: ${{ github.event.inputs.blueprint_file_path }}"
+          unzip ${{ github.event.inputs.blueprint_file_path }}
 
-      #   unzip ${{ github.event.inputs.blueprint_file_path }}
-
-      # - name: List the files
-      #   run: |
-          
-      #     echo "Listing Files"
-      #     pwd
-      #     ls
+      - name: List the files
+        run: |
+          echo "Listing Files"
+          pwd
+          ls
     
       # generate a random workflow identifier for CB python script to use
       - name: Printing Inputes provided by User
         run: |
-          echo "Blueprint Name: ${{ github.event.inputs.blueprint_name }}"
+          echo "Version: ${{ github.event.inputs.version }}"
+          echo "Blueprint File Path: ${{ github.event.inputs.blueprint_file_path }}"
 
         
