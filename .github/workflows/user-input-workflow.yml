@@ -50,7 +50,7 @@ jobs:
       # generate a random workflow identifier for CB python script to use
       - name: Printing Inputes provided by User
         run: |
-        echo "Blueprint Name : ${{ inputs.content_type }}"
-        echo "Blueprint Name : ${{ inputs.blueprint_name }}"
-        echo "Blueprint Name : ${{ inputs.version }}"
+        echo "Content Type : ${{ github.event.inputs.content_type }}"
+        echo "Blueprint Name : ${{ github.event.inputs.blueprint_name }}"
+        echo "Version : ${{ github.event.inputs.version }}"
         
