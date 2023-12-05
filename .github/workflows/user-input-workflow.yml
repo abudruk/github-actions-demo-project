@@ -442,14 +442,18 @@ jobs:
           fi
 
           echo "Comparing key is : ${comparing_key}"
-
+          target_folder="${{ github.event.inputs.version }}"
           echo "Folders ${{ steps.list-folders.outputs.folders }}"
           IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
-          if echo "$folders" | grep -q "^${{ github.event.inputs.version }}/"; then
-            echo "Folder ${{ github.event.inputs.version }} is present in S3."
-            folder="${{ github.event.inputs.version }}"  # Remove trailing slash
-            echo "Processing folder : $folder"
+          # Remove trailing slash if present
+          folders=$(echo "$folders" | sed 's:/$::')
 
+          echo "folders after removal of forward slash: ${folders}"
+          if echo "$folders" | grep -q "$target_folder"; then
+            echo "Folder target_folder is present in S3."
+            folder="$target_folder"  # Remove trailing slash
+            echo "Processing folder : $folder"
+            
 
             # Download JSON file from the folder
             echo "Downloading  File : ${{ github.event.inputs.content_type }}.json"
