@@ -192,12 +192,13 @@ jobs:
           rm -f *.zip
           echo "current dir:"
           pwd
-          cd downloads/${{ github.event.inputs.content_type }}/tmp
+          cd ${{ github.event.inputs.content_type }}/tmp
           echo "Untarring ${{ github.event.inputs.content_type }}.tar.gz"
           tar -xvzf "${{ github.event.inputs.content_type }}.tar.gz"
           cd ../../../
       
       - name: print directory tree
+        working-directory: downloads
         if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           sudo apt-get install tree -y
@@ -207,7 +208,7 @@ jobs:
         if: steps.download-artifact.outputs.artifact-found == 'true'
         shell: bash -l {0}
         run: |
-          for f in downloads/${{ github.event.inputs.content_type }}/tmp/*.zip; do
+          for f in ${{ github.event.inputs.content_type }}/tmp/*.zip; do
             echo "Generating SHA for $f"
             sha256sum "$f" >> sha256sum.txt
           done
@@ -215,6 +216,7 @@ jobs:
           cd ../../../
 
       - name: Move all .zip files to ./zip/ and rename with SHA and add path to metadata.json
+        working-directory: downloads
         if: steps.download-artifact.outputs.artifact-found == 'true'
         shell: bash -l {0}
         env:
@@ -322,7 +324,7 @@ jobs:
             echo "Extracted Metadata from $ZIP to $DST"
           }
 
-          for f in downloads/${{ github.event.inputs.content_type }}/tmp/*.zip; do
+          for f in ${{ github.event.inputs.content_type }}/tmp/*.zip; do
             echo "Processing $f ..."
             set_variable "ZIPFILE" "$f"
             set_variable "BASENAME" "$(basename "$ZIPFILE")"
