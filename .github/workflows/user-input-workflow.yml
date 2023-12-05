@@ -166,188 +166,188 @@ jobs:
     needs:
       - archive-collections
     runs-on: ubuntu-latest
+    steps:
+      - name: Download All Artifacts
+          id: download-artifact
+          uses: abudruk/download-artifact@main #This is reference to forked repository
+          with:
+            name: ${{ github.event.inputs.content_type }}
+            path: downloads/${{ github.event.inputs.content_type }}
 
-    - name: Download All Artifacts
-        id: download-artifact
-        uses: abudruk/download-artifact@main #This is reference to forked repository
-        with:
-          name: ${{ github.event.inputs.content_type }}
-          path: downloads/${{ github.event.inputs.content_type }}
+      - name: print directory tree
+        run: |
+          sudo apt-get install tree -y
+          echo "Current directory"
+          pwd
+          echo "Tree from pwd"
+          ls
+          tree
 
-    - name: print directory tree
-      run: |
-        sudo apt-get install tree -y
-        echo "Current directory"
-        pwd
-        echo "Tree from pwd"
-        ls
-        tree
+      - name: Untar all artifacts in current directory
+        working-directory: downloads
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          echo "List Files "
+          ls
+          rm -f *.zip
+          echo "current dir:"
+          pwd
+          # cd downloads/${{matrix.type}}/tmp/${{matrix.type}}
+          echo "Untarring ${{ github.event.inputs.content_type }}.tar.gz"
+          tar -xvzf "${{ github.event.inputs.content_type }}.tar.gz"
+          cd ../../../
+      
+      - name: print directory tree
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          sudo apt-get install tree -y
+          tree
 
-    # - name: Untar all artifacts in current directory
-    #   working-directory: downloads
-    #   if: steps.download-artifact.outputs.artifact-found == 'true'
-    #   run: |
-    #     echo "List Files "
-    #     ls
-    #     rm -f *.zip
-    #     echo "current dir:"
-    #     pwd
-    #     # cd downloads/${{matrix.type}}/tmp/${{matrix.type}}
-    #     echo "Untarring ${{ github.event.inputs.content_type }}.tar.gz"
-    #     tar -xvzf "${{ github.event.inputs.content_type }}.tar.gz"
-    #     cd ../../../
-    
-    # - name: print directory tree
-    #   if: steps.download-artifact.outputs.artifact-found == 'true'
-    #   run: |
-    #     sudo apt-get install tree -y
-    #     tree
+      - name: Generate SHA file for every zip file
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        shell: bash -l {0}
+        run: |
+          for f in downloads/${{ github.event.inputs.content_type }}/*.zip; do
+            echo "Generating SHA for $f"
+            sha256sum "$f" >> sha256sum.txt
+          done
+          cat ./sha256sum.txt
+          cd ../../../
 
-    # - name: Generate SHA file for every zip file
-    #   if: steps.download-artifact.outputs.artifact-found == 'true'
-    #   shell: bash -l {0}
-    #   run: |
-    #     for f in downloads/${{ github.event.inputs.content_type }}/*.zip; do
-    #       echo "Generating SHA for $f"
-    #       sha256sum "$f" >> sha256sum.txt
-    #     done
-    #     cat ./sha256sum.txt
-    #     cd ../../../
+      - name: Move all .zip files to ./zip/ and rename with SHA and add path to metadata.json
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        shell: bash -l {0}
+        env:
+          minimum_version: "9.4.6.1"
+        run: |
+          # WARNING: This script will skip collections with special characters in their name.
+          function set_variable {
+            local varname="$1"
+            local value="$2"
+            local default="$3"
+            # if value is empty, set it to default value
+            if [ -z "$value" ]; then
+              value="$default"
+            fi
+            printf -v "$varname" '%s' "$value"
+            echo "Setting $varname to $value"
+          }
 
-    # - name: Move all .zip files to ./zip/ and rename with SHA and add path to metadata.json
-    #   if: steps.download-artifact.outputs.artifact-found == 'true'
-    #   shell: bash -l {0}
-    #   env:
-    #     minimum_version: "9.4.6.1"
-    #   run: |
-    #     # WARNING: This script will skip collections with special characters in their name.
-    #     function set_variable {
-    #       local varname="$1"
-    #       local value="$2"
-    #       local default="$3"
-    #       # if value is empty, set it to default value
-    #       if [ -z "$value" ]; then
-    #         value="$default"
-    #       fi
-    #       printf -v "$varname" '%s' "$value"
-    #       echo "Setting $varname to $value"
-    #     }
+          function find_sha_in_file {
+            local SHAFILE="$1"
+            local BASENAME="$2"
+            local SHA_VAR="$3"
+            set_variable "$SHA_VAR" "$(grep <"$SHAFILE" "$BASENAME" | tail -n 1 | awk '{print $1}')"
+          }
 
-    #     function find_sha_in_file {
-    #       local SHAFILE="$1"
-    #       local BASENAME="$2"
-    #       local SHA_VAR="$3"
-    #       set_variable "$SHA_VAR" "$(grep <"$SHAFILE" "$BASENAME" | tail -n 1 | awk '{print $1}')"
-    #     }
+          set_minimum_version_in_metadata() {
+            local DEFAULT_VERSION="${{env.minimum_version}}"
+            local MINIMUM_VERSION_REQUIRED=$(jq -r 'try(.minimum_version_required) // "empty"' "$METADATA_PATH")
 
-    #     set_minimum_version_in_metadata() {
-    #       local DEFAULT_VERSION="${{env.minimum_version}}"
-    #       local MINIMUM_VERSION_REQUIRED=$(jq -r 'try(.minimum_version_required) // "empty"' "$METADATA_PATH")
+            echo "DEFAULT_VERSION: $DEFAULT_VERSION"
+            echo "MINIMUM_VERSION_REQUIRED: $MINIMUM_VERSION_REQUIRED"
+            cat "$METADATA_PATH"
 
-    #       echo "DEFAULT_VERSION: $DEFAULT_VERSION"
-    #       echo "MINIMUM_VERSION_REQUIRED: $MINIMUM_VERSION_REQUIRED"
-    #       cat "$METADATA_PATH"
+            if [[ "$MINIMUM_VERSION_REQUIRED" == "empty" ]]; then
+              jq --arg version "$DEFAULT_VERSION" '.minimum_version_required = $version' "$METADATA_PATH" > "$METADATA_PATH.tmp"
+              mv "$METADATA_PATH.tmp" "$METADATA_PATH"
+            fi
 
-    #       if [[ "$MINIMUM_VERSION_REQUIRED" == "empty" ]]; then
-    #         jq --arg version "$DEFAULT_VERSION" '.minimum_version_required = $version' "$METADATA_PATH" > "$METADATA_PATH.tmp"
-    #         mv "$METADATA_PATH.tmp" "$METADATA_PATH"
-    #       fi
+          }
 
-    #     }
+          add_artifact_path_to_metadata() {
+            local METADATA_PATH="$1"
+            local ARTIFACT_PATH="$2"
+            local SHA="$3"
+            cat "$METADATA_PATH" | jq .
+            cat "$METADATA_PATH" | jq --arg artifactpath "$ARTIFACT_PATH" \
+              --arg sha "$SHA" '. + {"artifact_path": $artifactpath } + {"sha": $sha }' >"$METADATA_PATH.tmp"
+            mv "$METADATA_PATH.tmp" "$METADATA_PATH"
+          }
 
-    #     add_artifact_path_to_metadata() {
-    #       local METADATA_PATH="$1"
-    #       local ARTIFACT_PATH="$2"
-    #       local SHA="$3"
-    #       cat "$METADATA_PATH" | jq .
-    #       cat "$METADATA_PATH" | jq --arg artifactpath "$ARTIFACT_PATH" \
-    #         --arg sha "$SHA" '. + {"artifact_path": $artifactpath } + {"sha": $sha }' >"$METADATA_PATH.tmp"
-    #       mv "$METADATA_PATH.tmp" "$METADATA_PATH"
-    #     }
+          add_image_path_to_metadata() {
+            local METADATA_PATH="$1"
+            local IMAGE_PATH="$2"
+            echo "$IMAGE_PATH"
+            cat "$METADATA_PATH" | jq .
+            cat "$METADATA_PATH" | jq --arg imagepath "$IMAGE_PATH" '. + {"library-image-url": $imagepath }' >"$METADATA_PATH.tmp"
+            mv "$METADATA_PATH.tmp" "$METADATA_PATH"
+          }
 
-    #     add_image_path_to_metadata() {
-    #       local METADATA_PATH="$1"
-    #       local IMAGE_PATH="$2"
-    #       echo "$IMAGE_PATH"
-    #       cat "$METADATA_PATH" | jq .
-    #       cat "$METADATA_PATH" | jq --arg imagepath "$IMAGE_PATH" '. + {"library-image-url": $imagepath }' >"$METADATA_PATH.tmp"
-    #       mv "$METADATA_PATH.tmp" "$METADATA_PATH"
-    #     }
+          add_collection_type_to_metadata() {
+            local METADATA_PATH="$1"
+            local COLLECTION_TYPE="$2"
+            jq . "$METADATA_PATH"
+            cat "$METADATA_PATH" | jq --arg collectiontype "$COLLECTION_TYPE" '. + {"collection_type": $collectiontype }' >"$METADATA_PATH.tmp"
+            mv "$METADATA_PATH.tmp" "./$METADATA_PATH"
+          }
 
-    #     add_collection_type_to_metadata() {
-    #       local METADATA_PATH="$1"
-    #       local COLLECTION_TYPE="$2"
-    #       jq . "$METADATA_PATH"
-    #       cat "$METADATA_PATH" | jq --arg collectiontype "$COLLECTION_TYPE" '. + {"collection_type": $collectiontype }' >"$METADATA_PATH.tmp"
-    #       mv "$METADATA_PATH.tmp" "./$METADATA_PATH"
-    #     }
+          log_json() {
+            local JSON="$1"
+            echo "$JSON" | jq -r '.'
+          }
 
-    #     log_json() {
-    #       local JSON="$1"
-    #       echo "$JSON" | jq -r '.'
-    #     }
+          move_and_log_file() {
+            local SRC="$1"
+            local DST="$2"
+            mkdir -p "$(dirname "$DST")"
+            mv "$SRC" "$DST"
+            echo "Moved $SRC to $DST"
+          }
 
-    #     move_and_log_file() {
-    #       local SRC="$1"
-    #       local DST="$2"
-    #       mkdir -p "$(dirname "$DST")"
-    #       mv "$SRC" "$DST"
-    #       echo "Moved $SRC to $DST"
-    #     }
+          extract_icon_from_zip() {
+            local ZIP="$1"
+            local METADATA_PATH="$2"
+            cat "$METADATA_PATH"
+            local ICON=$(jq -r ".icon" "$METADATA_PATH")
+            mkdir -p "./tmp_images"
+            echo "ICON: $ICON"
+            unzip -j "$ZIP" -d "./tmp_images"
+            ls ./tmp_images
+            local ICON_SHA=$(sha256sum "./tmp_images/$ICON" | awk '{print $1}')
+            local EXTENSION="${ICON##*.}"
+            mkdir -p "./images"
+            set_variable "ICON_FILENAME" "$ICON_SHA.$EXTENSION"
+            echo "ICON_FILENAME: $ICON_FILENAME"
+            mv ./tmp_images/"$ICON" ./images/"$ICON_FILENAME"
+            rm -rf ./tmp_images
+          }
 
-    #     extract_icon_from_zip() {
-    #       local ZIP="$1"
-    #       local METADATA_PATH="$2"
-    #       cat "$METADATA_PATH"
-    #       local ICON=$(jq -r ".icon" "$METADATA_PATH")
-    #       mkdir -p "./tmp_images"
-    #       echo "ICON: $ICON"
-    #       unzip -j "$ZIP" -d "./tmp_images"
-    #       ls ./tmp_images
-    #       local ICON_SHA=$(sha256sum "./tmp_images/$ICON" | awk '{print $1}')
-    #       local EXTENSION="${ICON##*.}"
-    #       mkdir -p "./images"
-    #       set_variable "ICON_FILENAME" "$ICON_SHA.$EXTENSION"
-    #       echo "ICON_FILENAME: $ICON_FILENAME"
-    #       mv ./tmp_images/"$ICON" ./images/"$ICON_FILENAME"
-    #       rm -rf ./tmp_images
-    #     }
+          extract_metadata_from_zip() {
+            local ZIP="$1"
+            local DST="$2"
+            local COLLECTION_NAME="$3"
+            mkdir -p "$(dirname "$DST")"
+            unzip -p "$ZIP" "*.json" >"$DST"
+            echo "Extracted Metadata from $ZIP to $DST"
+          }
 
-    #     extract_metadata_from_zip() {
-    #       local ZIP="$1"
-    #       local DST="$2"
-    #       local COLLECTION_NAME="$3"
-    #       mkdir -p "$(dirname "$DST")"
-    #       unzip -p "$ZIP" "*.json" >"$DST"
-    #       echo "Extracted Metadata from $ZIP to $DST"
-    #     }
+          for f in downloads/${{ github.event.inputs.content_type }}/*.zip; do
+            echo "Processing $f ..."
+            set_variable "ZIPFILE" "$f"
+            set_variable "BASENAME" "$(basename "$ZIPFILE")"
+            find_sha_in_file "sha256sum.txt" "$BASENAME" "SHA"
+            set_variable "COLLECTION_PATH" "${ZIPFILE%.*}"
+            set_variable "COLLECTION_NAME" "${BASENAME%.*}"
+            extract_metadata_from_zip "$ZIPFILE" "metadata/$COLLECTION_NAME Metadata.json" "$COLLECTION_NAME"
+            set_variable "METADATA_PATH" "metadata/$COLLECTION_NAME Metadata.json"
+            set_variable "METADATA_FILENAME" "$(basename "$METADATA_PATH")"
+            extract_icon_from_zip "$ZIPFILE" "$METADATA_PATH"
+            set_variable "ARTIFACT_PATH" "zip/$SHA.zip"
+            add_artifact_path_to_metadata "$METADATA_PATH" "$ARTIFACT_PATH" "$SHA"
+            add_image_path_to_metadata "$METADATA_PATH" "images/$ICON_FILENAME"
+            log_json "$METADATA_PATH"
+            add_collection_type_to_metadata "$METADATA_PATH" "${{matrix.type}}"
+            set_minimum_version_in_metadata
+            move_and_log_file "$ZIPFILE" "./zip/${SHA}.zip"
+            move_and_log_file "$METADATA_PATH" "./asset_files/${METADATA_FILENAME}"
+          done
 
-    #     for f in downloads/${{ github.event.inputs.content_type }}/*.zip; do
-    #       echo "Processing $f ..."
-    #       set_variable "ZIPFILE" "$f"
-    #       set_variable "BASENAME" "$(basename "$ZIPFILE")"
-    #       find_sha_in_file "sha256sum.txt" "$BASENAME" "SHA"
-    #       set_variable "COLLECTION_PATH" "${ZIPFILE%.*}"
-    #       set_variable "COLLECTION_NAME" "${BASENAME%.*}"
-    #       extract_metadata_from_zip "$ZIPFILE" "metadata/$COLLECTION_NAME Metadata.json" "$COLLECTION_NAME"
-    #       set_variable "METADATA_PATH" "metadata/$COLLECTION_NAME Metadata.json"
-    #       set_variable "METADATA_FILENAME" "$(basename "$METADATA_PATH")"
-    #       extract_icon_from_zip "$ZIPFILE" "$METADATA_PATH"
-    #       set_variable "ARTIFACT_PATH" "zip/$SHA.zip"
-    #       add_artifact_path_to_metadata "$METADATA_PATH" "$ARTIFACT_PATH" "$SHA"
-    #       add_image_path_to_metadata "$METADATA_PATH" "images/$ICON_FILENAME"
-    #       log_json "$METADATA_PATH"
-    #       add_collection_type_to_metadata "$METADATA_PATH" "${{matrix.type}}"
-    #       set_minimum_version_in_metadata
-    #       move_and_log_file "$ZIPFILE" "./zip/${SHA}.zip"
-    #       move_and_log_file "$METADATA_PATH" "./asset_files/${METADATA_FILENAME}"
-    #     done
-
-    # - name: List the files in current Directory
-    #   if: steps.download-artifact.outputs.artifact-found == 'true'
-    #   run: |
-    #     echo "working-directory"
-    #     pwd
-    #     echo "List files"
-    #     ls
+      - name: List the files in current Directory
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          echo "working-directory"
+          pwd
+          echo "List files"
+          ls
 
