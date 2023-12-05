@@ -192,7 +192,7 @@ jobs:
           rm -f *.zip
           echo "current dir:"
           pwd
-          # cd downloads/${{matrix.type}}/tmp/${{matrix.type}}
+          cd downloads/${{ github.event.inputs.content_type }}/tmp
           echo "Untarring ${{ github.event.inputs.content_type }}.tar.gz"
           tar -xvzf "${{ github.event.inputs.content_type }}.tar.gz"
           cd ../../../
@@ -207,7 +207,7 @@ jobs:
         if: steps.download-artifact.outputs.artifact-found == 'true'
         shell: bash -l {0}
         run: |
-          for f in downloads/${{ github.event.inputs.content_type }}/*.zip; do
+          for f in downloads/${{ github.event.inputs.content_type }}/tmp/*.zip; do
             echo "Generating SHA for $f"
             sha256sum "$f" >> sha256sum.txt
           done
@@ -322,7 +322,7 @@ jobs:
             echo "Extracted Metadata from $ZIP to $DST"
           }
 
-          for f in downloads/${{ github.event.inputs.content_type }}/*.zip; do
+          for f in downloads/${{ github.event.inputs.content_type }}/tmp/*.zip; do
             echo "Processing $f ..."
             set_variable "ZIPFILE" "$f"
             set_variable "BASENAME" "$(basename "$ZIPFILE")"
