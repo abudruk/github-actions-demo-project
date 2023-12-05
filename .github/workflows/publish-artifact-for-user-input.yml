@@ -9,6 +9,8 @@ on:
         default: Development
       content_type:
         required: true
+      bucket:
+        required: true
 
 defaults:
   run:
@@ -19,7 +21,7 @@ jobs:
     name: Upload to ${{ github.event.inputs.environment }} S3 Bucket
     environment:
       name: ${{ github.event.inputs.environment }}
-      bucket: abbybucketcloudformation-dont-delete
+      bucket: ${{ github.event.inputs.bucket }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

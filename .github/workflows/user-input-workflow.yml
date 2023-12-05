@@ -558,5 +558,6 @@ jobs:
           --field="run_id=${{ github.run_id }}" \
           --field="environment=Staging" \
           --field="content_type=${content_type}" \
+          --field="bucket=${bucket}" \
           --ref=github-user-input-workflow-testing \
           --repo abudruk/github-actions-demo-project
