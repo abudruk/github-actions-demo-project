@@ -399,6 +399,11 @@ jobs:
             jq -n '[inputs]' ./$LAST_DIRNAME/*.json > "$LAST_DIRNAME/$MATRIX_TYPE".json
           done
 
+      - name: List the files after creation of content_type.json file in assets folder
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          pwd
+          tree
       # Download blueprint.json file from bucket and update and reupload again 
 
       - name: Set up AWS CLI
@@ -440,7 +445,7 @@ jobs:
 
           echo "Folders ${{ steps.list-folders.outputs.folders }}"
           IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
-          for folder in "${folders[@]}"; do
+          # for folder in "${folders[@]}"; do
           target_folder = ${{ github.event.inputs.content_type }}
           if echo "$folders" | grep -q "^$target_folder/"; then
             echo "Folder $target_folder is present in S3."
