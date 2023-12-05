@@ -445,9 +445,8 @@ jobs:
 
           echo "Folders ${{ steps.list-folders.outputs.folders }}"
           IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
-          # for folder in "${folders[@]}"; do
           if echo "$folders" | grep -q "^${{ github.event.inputs.content_type }}/"; then
-            echo "Folder $target_folder is present in S3."
+            echo "Folder ${{ github.event.inputs.content_type }} is present in S3."
             folder="${{ github.event.inputs.content_type }}"  # Remove trailing slash
             echo "Processing folder : $folder"
 
@@ -491,4 +490,3 @@ jobs:
           else
             echo "Folder ${{ github.event.inputs.content_type }} is NOT present in S3."
           fi
-          done
