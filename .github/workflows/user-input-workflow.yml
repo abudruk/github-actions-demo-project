@@ -66,9 +66,10 @@ jobs:
           echo "${VERSIONS}"
 
       - name: User Input with Dynamic Options
-        run: echo "Selected version: ${{ github.event.inputs.version }}"
         env:
           VERSION_OPTIONS: ${{ steps.get_versions.outputs.versions }}
+        run: |
+          echo "Selected Version: ${{ github.event.inputs.version }}"
 
       - name: List the files
         run: |
