@@ -448,8 +448,8 @@ jobs:
           # Remove trailing slash if present
           folders=$(echo "$folders" | sed 's:/$::')
 
-          echo "folders after removal of forward slash: ${folders}"
-          if echo "$folders" | grep -q "$target_folder"; then
+          echo "folders after removal of forward slash: ${folders[@]}"
+          if echo "${folders[@]}" | grep -q "$target_folder"; then
             echo "Folder target_folder is present in S3."
             folder="$target_folder"  # Remove trailing slash
             echo "Processing folder : $folder"
