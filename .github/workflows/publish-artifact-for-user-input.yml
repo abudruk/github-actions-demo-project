@@ -38,7 +38,7 @@ jobs:
           # artifact= "${{ github.event.inputs.content_type }} Assets"
           #Create the directory
           echo "Artifact Name: ${{ github.event.inputs.content_type }} Assets"  
-          if gh run download ${{ github.event.inputs.run_id }} -n "${{ github.event.inputs.content_type }} Assets" --repo abudruk/github-actions-demo-project --dir "${artifact}"; then
+          if gh run download ${{ github.event.inputs.run_id }} -n "${{ github.event.inputs.content_type }} Assets" --repo abudruk/github-actions-demo-project --dir "${{ github.event.inputs.content_type }} Assets"; then
             echo "${{ github.event.inputs.content_type }} Assets downloaded successfully"
           else
             echo "Failed to download artifact ${{ github.event.inputs.content_type }} Assets"
