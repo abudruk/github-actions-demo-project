@@ -60,11 +60,14 @@ jobs:
           echo "Listing Files"
           pwd
           ls
-          tree
+          # tree
+      
 
       - name: Download zip file
         run: |
           mkdir -p "${{github.workspace}}/tmp"
+          cd "${{github.workspace}}/tmp"
+          rm -rf ./*
           curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
 
       
@@ -83,6 +86,7 @@ jobs:
 
 
       - name: Unzip the provided file
+        working-directory: tmp
         run: |
           echo "Unzipping File: ${{ github.event.inputs.blueprint_file_path }}"
           unzip -o "$(basename "${{ github.event.inputs.blueprint_file_path }}")"
