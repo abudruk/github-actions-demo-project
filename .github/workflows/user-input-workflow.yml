@@ -70,10 +70,12 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: User Input with Dynamic Options
-        env:
-          VERSION_OPTIONS: ${{ needs.get_versions.outputs.versions }}
+        with:
+          env:
+            VERSION_OPTIONS: ${{ needs.get_versions.outputs.versions }}
         run: |
           echo "Selected Version: ${{ github.event.inputs.version }}"
+          echo "Available Versions: $VERSION_OPTIONS"
 
       - name: Checkout repository
         uses: actions/checkout@v2
