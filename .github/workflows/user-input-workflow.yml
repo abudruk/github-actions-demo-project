@@ -445,10 +445,10 @@ jobs:
           target_folder="${{ github.event.inputs.version }}"
           echo "Folders ${{ steps.list-folders.outputs.folders }}"
           IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
-          # Remove trailing slash if present
-          folders=$(echo "$folders" | sed 's:/$::')
+          
 
-          echo "folders after removal of forward slash: ${folders[@]}"
+          echo "folders array: ${folders[@]}"
+
           if echo "${folders[@]}" | grep -q "$target_folder"; then
             echo "Folder target_folder is present in S3."
             folder="$target_folder"  # Remove trailing slash
@@ -495,3 +495,68 @@ jobs:
           else
             echo "Folder ${{ github.event.inputs.version }} is NOT present in S3."
           fi
+
+      - name: display directory tree
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          sudo apt-get install tree -y
+          tree -L 5
+          ls
+
+      - name: Remove '*Metadata.json' files
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          shopt -s globstar
+          rm -vf **/*Metadata.json
+
+      - name: display directory tree
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          sudo apt-get install tree -y
+          tree -L 5
+          ls
+      
+      - name: Create a single tar of all the files in the current directory
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          echo "Creating a tar.gz of all the files in the current directory"
+          tar --exclude-vcs --ignore-failed-read -czvf assets.tar.gz *
+
+      - name: display directory tree
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          sudo apt-get install tree -y
+          tree -L 5
+          ls
+      
+      - uses: actions/upload-artifact@v3
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        with:
+          name: ${{ github.event.inputs.content_type }} Assets
+          path: |
+            **/*.tar.gz
+  
+  deploy-to-staging:
+    name: Deploy to Staging
+    needs:
+      - generate-assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Deploy to Staging
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+          content_type: ${{ github.event.inputs.content_type }}
+        run: |
+          gh workflow run publish-artifact-for-user-input.yml \
+          --field="run_id=${{ github.run_id }}" \
+          --field="environment=Staging" \
+          --field="content_type=${content_type}" \
+          --ref=github-user-input-workflow-testing \
+          --repo abudruk/github-actions-demo-project
