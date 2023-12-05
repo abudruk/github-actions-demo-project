@@ -48,6 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TF_IN_AUTOMATION: true
+      
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -166,6 +167,8 @@ jobs:
     needs:
       - archive-collections
     runs-on: ubuntu-latest
+    env:
+      bucket: abbybucketcloudformation-dont-delete
     steps:
       - name: Download All Artifacts
         id: download-artifact
@@ -357,3 +360,131 @@ jobs:
           echo "List files"
           ls
 
+      - name: Remove Downloads directory
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          rm -vrf downloads
+
+      - name: Remove metadata directory
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          rm -vrf metadata
+      
+      - name: Remove sha256sum.txt
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          rm -vrf sha256sum.txt
+          rm -vrf sha256sum_png.txt
+
+
+      - name: List the files in current Directory after removal of folders
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          echo "working-directory"
+          pwd
+          echo "List files"
+          ls
+          tree
+
+      - name: Create ${{ github.event.inputs.content_type }}.json
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        env:
+          MATRIX_TYPE: "${{ github.event.inputs.content_type }}"
+        run: |
+          for f in ./*/*.json; do
+            echo "Processing $f ..."
+            DIRNAME="$(dirname "$f")"
+            # awk print last directory
+            LAST_DIRNAME="$(awk -F/ '{print $NF}' <<<"$DIRNAME")"
+            jq -n '[inputs]' ./$LAST_DIRNAME/*.json > "$LAST_DIRNAME/$MATRIX_TYPE".json
+          done
+
+      # Download blueprint.json file from bucket and update and reupload again 
+
+      - name: Set up AWS CLI
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: List folders in S3 bucket
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        id: list-folders
+        run: |
+          retries=3
+          for ((i=0; i<retries; i++)); do
+            folders=$(aws s3api list-objects-v2 --bucket $bucket --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
+            if [ $? -eq 0 ]; then
+              echo "::set-output name=folders::${folders}"
+              break
+            else
+              echo "Retrying..."
+            fi
+          done
+          # folders=$(aws s3api list-objects-v2 --bucket $bucket --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
+          # echo "::set-output name=folders::${folders}"
+
+      - name: Download , Update and Upload JSON objects
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+
+          if [[ "${{ github.event.inputs.content_type }}" == "blueprints" || "${{ github.event.inputs.content_type }}" == "recurring-jobs" || "${{ github.event.inputs.content_type }}" == "orchestration-actions" ]]; then
+            comparing_key='name' 
+          else
+            comparing_key='label'
+          fi
+
+          echo "Comparing key is : ${comparing_key}"
+
+          echo "Folders ${{ steps.list-folders.outputs.folders }}"
+          IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
+          for folder in "${folders[@]}"; do
+          target_folder = ${{ github.event.inputs.content_type }}
+          if echo "$folders" | grep -q "^$target_folder/"; then
+            echo "Folder $target_folder is present in S3."
+            folder="${target_folder}"  # Remove trailing slash
+            echo "Processing folder : $folder"
+
+
+            # Download JSON file from the folder
+            echo "Downloading  File : ${{ github.event.inputs.content_type }}.json"
+
+            # Check if File Exists 
+            echo "Check if File Exists at $folder/${{ github.event.inputs.content_type }}.json"
+            if aws s3api head-object --bucket "$bucket" --key "$folder/${{ github.event.inputs.content_type }}.json" 2>&1 | grep -q "Not Found"; then
+              echo "File not found in S3. Skipping download."
+            else
+              # Download the file from Bitbucket
+              echo " Download the file $folder/${{ github.event.inputs.content_type }}.json" 
+              aws s3 cp "s3://$bucket/$folder/${{ github.event.inputs.content_type }}.json" .
+              echo "File downloaded successfully."
+
+              echo "Quering and Updating File where name is ADO Pipeline" 
+
+              jq -c '.[]' "./asset_files/${{ github.event.inputs.content_type }}.json" | while read -r object; do
+                # echo "Object : $object"
+                name=$(echo "$object" | jq -r '.name')
+                artifact_path=$(echo "$object" | jq -r '.artifact_path')
+                sha=$(echo "$object" | jq -r '.sha')
+                libraryimageurl=$(echo "$object" | jq -r '.["library-image-url"]')
+                updated_date=$(date +'%Y-%m-%d')
+                
+                echo "name : $name"
+                echo "artifact_path : $artifact_path"
+                echo "sha : $sha"
+                echo "library-image-url : $libraryimageurl}"
+
+
+                jq "map(if .\"$comparing_key\" == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" | .last_updated = \"$updated_date\" else . end)" ${{ github.event.inputs.content_type }}.json > modified_${{ github.event.inputs.content_type }}_new.json
+
+                mv "modified_${{ github.event.inputs.content_type }}_new.json" "${{ github.event.inputs.content_type }}.json"
+              done
+              
+              echo "Uploading File ${{ github.event.inputs.content_type }}.json to folder ${folder}"   
+              aws s3 mv ${{ github.event.inputs.content_type }}.json "s3://$bucket/$folder/${{ github.event.inputs.content_type }}.json"
+          else
+            echo "Folder $target_folder is NOT present in S3."
+          fi
+          done
