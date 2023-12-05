@@ -446,7 +446,7 @@ jobs:
             else
               echo "Failed to Create Folder with the name ${{ github.event.inputs.version }} inside bucket ${bucket}"
             fi
-          
+          fi
 
           echo "Folder target_folder is present in S3."
           folder="$target_folder"  # Remove trailing slash
