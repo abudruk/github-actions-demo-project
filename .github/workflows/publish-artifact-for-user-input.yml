@@ -117,7 +117,7 @@ jobs:
           # aws s3 rm s3://${{ secrets.S3_BUCKET }} --recursive
           # Overwrite with what we want the bucket to look like
           
-          aws s3 sync . s3://abbybucketcloudformation-dont-delete/ \
+          aws s3 sync . s3://$bucket/ \
           --exclude "*" \
           --include "zip/*" \
           --include "images/*" \
