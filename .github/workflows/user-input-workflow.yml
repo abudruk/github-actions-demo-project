@@ -446,10 +446,9 @@ jobs:
           echo "Folders ${{ steps.list-folders.outputs.folders }}"
           IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
           # for folder in "${folders[@]}"; do
-          target_folder = ${{ github.event.inputs.content_type }}
-          if echo "$folders" | grep -q "^$target_folder/"; then
+          if echo "$folders" | grep -q "^${{ github.event.inputs.content_type }}/"; then
             echo "Folder $target_folder is present in S3."
-            folder="${target_folder}"  # Remove trailing slash
+            folder="${{ github.event.inputs.content_type }}"  # Remove trailing slash
             echo "Processing folder : $folder"
 
 
@@ -490,6 +489,6 @@ jobs:
               echo "Uploading File ${{ github.event.inputs.content_type }}.json to folder ${folder}"   
               aws s3 mv ${{ github.event.inputs.content_type }}.json "s3://$bucket/$folder/${{ github.event.inputs.content_type }}.json"
           else
-            echo "Folder $target_folder is NOT present in S3."
+            echo "Folder ${{ github.event.inputs.content_type }} is NOT present in S3."
           fi
           done
