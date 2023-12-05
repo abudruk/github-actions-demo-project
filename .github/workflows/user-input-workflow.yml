@@ -99,6 +99,14 @@ jobs:
           ls
           tree
 
+      - name: Process JSON files
+        working-directory: tmp
+        run: |
+          for json_file in $(find . -type f -name '*.json'); do
+            echo "Processing JSON file: $json_file"
+            # Add your commands to process each JSON file here
+          done
+      
 
     
       # # generate a random workflow identifier for CB python script to use
