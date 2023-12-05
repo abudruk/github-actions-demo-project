@@ -198,23 +198,27 @@ jobs:
           cd ../../../
       
       - name: print directory tree
-        working-directory: downloads
         if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
           sudo apt-get install tree -y
           tree
 
       - name: Generate SHA file for every zip file
-        working-directory: downloads
         if: steps.download-artifact.outputs.artifact-found == 'true'
         shell: bash -l {0}
         run: |
-          for f in ${{ github.event.inputs.content_type }}/tmp/*.zip; do
+          for f in downloads/${{ github.event.inputs.content_type }}/tmp/*.zip; do
             echo "Generating SHA for $f"
             sha256sum "$f" >> sha256sum.txt
           done
           cat ./sha256sum.txt
           cd ../../../
+
+      - name: print directory tree after sha creation
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          sudo apt-get install tree -y
+          tree
 
       - name: Move all .zip files to ./zip/ and rename with SHA and add path to metadata.json
         if: steps.download-artifact.outputs.artifact-found == 'true'
