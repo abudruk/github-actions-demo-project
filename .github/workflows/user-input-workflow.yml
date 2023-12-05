@@ -42,7 +42,24 @@ defaults:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
+  get_versions:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Get Versions
+      id: get_versions
+      env:
+        GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+      run: |
+        VERSIONS=$(gh api repos/CloudBoltSoftware/cloudbolt/releases --paginate --jq='.[] | .tag_name | ltrimstr("v") | split("-")[0]' | sort -u -r -V)
+        echo "::set-output name=versions::${VERSIONS}"
+        echo "${VERSIONS}"
+
   archive-collections:
+    needs: get_versions
     name: Archive Collections
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -52,24 +69,14 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: User Input with Dynamic Options
+        env:
+          VERSION_OPTIONS: ${{ needs.get_versions.outputs.versions }}
+        run: |
+          echo "Selected Version: ${{ github.event.inputs.version }}"
 
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Get Versions
-        id: get_versions
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          VERSIONS=$(gh api repos/CloudBoltSoftware/cloudbolt/releases --paginate --jq='.[] | .tag_name | ltrimstr("v") | split("-")[0]' | sort -u -r -V)
-          echo "::set-output name=versions::${VERSIONS}"
-          echo "${VERSIONS}"
-
-      - name: User Input with Dynamic Options
-        env:
-          VERSION_OPTIONS: ${{ steps.get_versions.outputs.versions }}
-        run: |
-          echo "Selected Version: ${{ github.event.inputs.version }}"
 
       - name: List the files
         run: |
