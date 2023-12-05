@@ -4,36 +4,36 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      # content_type:
-      #   description: "Type of Content"
-      #   required: true
-      #   type: choice
-      #   options:
-      #     - blueprints
-      #     - ui-extension-packages
-      #     - cb-applets
-      #     - orchestration-actions
-      #     - recurring-jobs
-      #     - server-actions
-      #     - resource-actions
-
-      blueprint_name:
-        description: "Name of Content"
+      content_type:
+        description: "Type of Content"
         required: true
+        type: choice
+        options:
+          - blueprints
+          - ui-extension-packages
+          - cb-applets
+          - orchestration-actions
+          - recurring-jobs
+          - server-actions
+          - resource-actions
 
-      # version:
-      #   description: "Version for Deployment"
+      # blueprint_name:
+      #   description: "Name of Content"
       #   required: true
-      #   type: choice
-      #   options:
-      #     - 2023.5.21
-      #     - 2023.5.1
-      #     - 2023.4.9
-      #     - 2023.4.8
 
-      # blueprint_file_path:
-      #   description: 'Path to the zip file'
-      #   required: true
+      version:
+        description: "Version for Deployment"
+        required: true
+        type: choice
+        options:
+          - 2023.5.21
+          - 2023.5.1
+          - 2023.4.9
+          - 2023.4.8
+
+      blueprint_file_path:
+        description: 'Path to the zip file'
+        required: true
 
 defaults:
   run:
@@ -42,34 +42,521 @@ defaults:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  testing-user-input-workflow:
+  archive-collections:
+    name: Archive Collections
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env:
       TF_IN_AUTOMATION: true
+      
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
-      # - name: Checkout repository
-      #   uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+
+      - name: List the files
+        run: |
+          echo "Listing Files"
+          pwd
+          ls
+          # tree
+      
+
+      - name: Download zip file
+        run: |
+          mkdir -p "${{github.workspace}}/tmp"
+          cd "${{github.workspace}}/tmp"
+          rm -rf ./*
+          curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
+
+      # - name: Set up AWS CLI
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ap-south-1
+
+
+      # - name: Create ${{ matrix.type }} Artifacts
+      #   working-directory: CMP/${{ matrix.type }}
+      #   run: |
+      #     shopt -s globstar
+      #     mkdir -p "${{github.workspace}}/tmp"
+      #     for file in **/*.zip; do
+      #       echo "Moving $file"
+      #       BASENAME=$(basename "$file")
+      #       mv "$file" "${{ github.workspace }}/tmp/$BASENAME"
+      #     done
+
 
       # - name: Unzip the provided file
+      #   working-directory: tmp
       #   run: |
-      #   echo "Unzipping File : ${{ github.event.inputs.blueprint_file_path }}"
+      #     echo "Unzipping File: ${{ github.event.inputs.blueprint_file_path }}"
+      #     unzip -o "$(basename "${{ github.event.inputs.blueprint_file_path }}")"
 
-      #   unzip ${{ github.event.inputs.blueprint_file_path }}
-
-      # - name: List the files
-      #   run: |
-          
-      #     echo "Listing Files"
-      #     pwd
-      #     ls
-    
-      # generate a random workflow identifier for CB python script to use
-      - name: Printing Inputes provided by User
+      - name: List the files
+        working-directory: tmp
         run: |
-          echo "Blueprint Name: ${{ github.event.inputs.blueprint_name }}"
+          echo "Listing Files in tmp folder "
+          pwd
+          ls
+          tree
+
+      - name: Create a single tar of all the files in the current directory
+        working-directory: tmp
+        run: |
+          WORKING_DIRECTORY=$(pwd)
+          echo "WORKING_DIRECTORY : ${WORKING_DIRECTORY}"
+          echo "Check if the content is present in this directory : ${WORKING_DIRECTORY} "
+          if [ -z "$(ls -A $WORKING_DIRECTORY)" ]; then
+            echo "Directory does not exist."
+          else
+            echo "Creating a tar of all the files in the current directory"
+            tar -cvzf "${{ github.event.inputs.content_type }}".tar.gz *.zip
+          fi
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.inputs.content_type }}
+          path: |
+            **/${{ github.event.inputs.content_type }}.tar.gz
+
+      - name: print Files tree
+        working-directory: tmp
+        run: |
+          sudo apt-get install tree -y
+          echo "Current directory"
+          pwd
+          ls
+          tree
+
+
+      # - name: Process JSON files
+      #   working-directory: tmp
+      #   run: |
+      #     for json_file in $(find . -type f -name '*.json'); do
+      #       echo "Processing JSON file: $json_file"
+      #       name=$(jq -r '.name' "$json_file")
+      #       echo "Blueprint Name: ${name}"
+      #     done
+      
+      # - name: List Zip Files
+      #   working-directory: tmp
+      #   run: |
+      #     # Use find to locate all files with a '.zip' extension in the current directory
+      #     zip_files=$(find . -maxdepth 1 -type f -name '*.zip')
+
+      #     # Print the list of zip files
+      #     echo "List of Zip Files:"
+      #     echo "$zip_files"
+
+    
+      # # generate a random workflow identifier for CB python script to use
+      # - name: Printing Inputes provided by User
+      #   run: |
+      #     echo "Version: ${{ github.event.inputs.version }}"
+      #     echo "Blueprint File Path: ${{ github.event.inputs.blueprint_file_path }}"
 
         
+  generate-assets:
+    name: Generate Assets
+    needs:
+      - archive-collections
+    runs-on: ubuntu-latest
+    env:
+      bucket: abbybucketcloudformation-dont-delete
+    steps:
+      - name: Download All Artifacts
+        id: download-artifact
+        uses: abudruk/download-artifact@main #This is reference to forked repository
+        with:
+          name: ${{ github.event.inputs.content_type }}
+          path: downloads/${{ github.event.inputs.content_type }}
+
+      - name: print directory tree
+        run: |
+          sudo apt-get install tree -y
+          echo "Current directory"
+          pwd
+          echo "Tree from pwd"
+          ls
+          tree
+
+      - name: Untar all artifacts in current directory
+        working-directory: downloads
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          echo "List Files "
+          ls
+          rm -f *.zip
+          echo "current dir:"
+          pwd
+          cd ${{ github.event.inputs.content_type }}/tmp
+          echo "Untarring ${{ github.event.inputs.content_type }}.tar.gz"
+          tar -xvzf "${{ github.event.inputs.content_type }}.tar.gz"
+          cd ../../../
+      
+      - name: print directory tree
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          sudo apt-get install tree -y
+          tree
+
+      - name: Generate SHA file for every zip file
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        shell: bash -l {0}
+        run: |
+          for f in downloads/${{ github.event.inputs.content_type }}/tmp/*.zip; do
+            echo "Generating SHA for $f"
+            sha256sum "$f" >> sha256sum.txt
+          done
+          cat ./sha256sum.txt
+          cd ../../../
+
+      - name: print directory tree after sha creation
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          sudo apt-get install tree -y
+          tree
+
+      - name: Move all .zip files to ./zip/ and rename with SHA and add path to metadata.json
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        shell: bash -l {0}
+        env:
+          minimum_version: "9.4.6.1"
+        run: |
+          # WARNING: This script will skip collections with special characters in their name.
+          function set_variable {
+            local varname="$1"
+            local value="$2"
+            local default="$3"
+            # if value is empty, set it to default value
+            if [ -z "$value" ]; then
+              value="$default"
+            fi
+            printf -v "$varname" '%s' "$value"
+            echo "Setting $varname to $value"
+          }
+
+          function find_sha_in_file {
+            local SHAFILE="$1"
+            local BASENAME="$2"
+            local SHA_VAR="$3"
+            set_variable "$SHA_VAR" "$(grep <"$SHAFILE" "$BASENAME" | tail -n 1 | awk '{print $1}')"
+          }
+
+          set_minimum_version_in_metadata() {
+            local DEFAULT_VERSION="${{env.minimum_version}}"
+            local MINIMUM_VERSION_REQUIRED=$(jq -r 'try(.minimum_version_required) // "empty"' "$METADATA_PATH")
+
+            echo "DEFAULT_VERSION: $DEFAULT_VERSION"
+            echo "MINIMUM_VERSION_REQUIRED: $MINIMUM_VERSION_REQUIRED"
+            cat "$METADATA_PATH"
+
+            if [[ "$MINIMUM_VERSION_REQUIRED" == "empty" ]]; then
+              jq --arg version "$DEFAULT_VERSION" '.minimum_version_required = $version' "$METADATA_PATH" > "$METADATA_PATH.tmp"
+              mv "$METADATA_PATH.tmp" "$METADATA_PATH"
+            fi
+
+          }
+
+          add_artifact_path_to_metadata() {
+            local METADATA_PATH="$1"
+            local ARTIFACT_PATH="$2"
+            local SHA="$3"
+            cat "$METADATA_PATH" | jq .
+            cat "$METADATA_PATH" | jq --arg artifactpath "$ARTIFACT_PATH" \
+              --arg sha "$SHA" '. + {"artifact_path": $artifactpath } + {"sha": $sha }' >"$METADATA_PATH.tmp"
+            mv "$METADATA_PATH.tmp" "$METADATA_PATH"
+          }
+
+          add_image_path_to_metadata() {
+            local METADATA_PATH="$1"
+            local IMAGE_PATH="$2"
+            echo "$IMAGE_PATH"
+            cat "$METADATA_PATH" | jq .
+            cat "$METADATA_PATH" | jq --arg imagepath "$IMAGE_PATH" '. + {"library-image-url": $imagepath }' >"$METADATA_PATH.tmp"
+            mv "$METADATA_PATH.tmp" "$METADATA_PATH"
+          }
+
+          add_collection_type_to_metadata() {
+            local METADATA_PATH="$1"
+            local COLLECTION_TYPE="$2"
+            jq . "$METADATA_PATH"
+            cat "$METADATA_PATH" | jq --arg collectiontype "$COLLECTION_TYPE" '. + {"collection_type": $collectiontype }' >"$METADATA_PATH.tmp"
+            mv "$METADATA_PATH.tmp" "./$METADATA_PATH"
+          }
+
+          log_json() {
+            local JSON="$1"
+            echo "$JSON" | jq -r '.'
+          }
+
+          move_and_log_file() {
+            local SRC="$1"
+            local DST="$2"
+            mkdir -p "$(dirname "$DST")"
+            mv "$SRC" "$DST"
+            echo "Moved $SRC to $DST"
+          }
+
+          extract_icon_from_zip() {
+            local ZIP="$1"
+            local METADATA_PATH="$2"
+            cat "$METADATA_PATH"
+            local ICON=$(jq -r ".icon" "$METADATA_PATH")
+            mkdir -p "./tmp_images"
+            echo "ICON: $ICON"
+            unzip -j "$ZIP" -d "./tmp_images"
+            ls ./tmp_images
+            local ICON_SHA=$(sha256sum "./tmp_images/$ICON" | awk '{print $1}')
+            local EXTENSION="${ICON##*.}"
+            mkdir -p "./images"
+            set_variable "ICON_FILENAME" "$ICON_SHA.$EXTENSION"
+            echo "ICON_FILENAME: $ICON_FILENAME"
+            mv ./tmp_images/"$ICON" ./images/"$ICON_FILENAME"
+            rm -rf ./tmp_images
+          }
+
+          extract_metadata_from_zip() {
+            local ZIP="$1"
+            local DST="$2"
+            local COLLECTION_NAME="$3"
+            mkdir -p "$(dirname "$DST")"
+            unzip -p "$ZIP" "*.json" >"$DST"
+            echo "Extracted Metadata from $ZIP to $DST"
+          }
+
+          for f in downloads/${{ github.event.inputs.content_type }}/tmp/*.zip; do
+            echo "Processing $f ..."
+            set_variable "ZIPFILE" "$f"
+            set_variable "BASENAME" "$(basename "$ZIPFILE")"
+            find_sha_in_file "sha256sum.txt" "$BASENAME" "SHA"
+            set_variable "COLLECTION_PATH" "${ZIPFILE%.*}"
+            set_variable "COLLECTION_NAME" "${BASENAME%.*}"
+            extract_metadata_from_zip "$ZIPFILE" "metadata/$COLLECTION_NAME Metadata.json" "$COLLECTION_NAME"
+            set_variable "METADATA_PATH" "metadata/$COLLECTION_NAME Metadata.json"
+            set_variable "METADATA_FILENAME" "$(basename "$METADATA_PATH")"
+            extract_icon_from_zip "$ZIPFILE" "$METADATA_PATH"
+            set_variable "ARTIFACT_PATH" "zip/$SHA.zip"
+            add_artifact_path_to_metadata "$METADATA_PATH" "$ARTIFACT_PATH" "$SHA"
+            add_image_path_to_metadata "$METADATA_PATH" "images/$ICON_FILENAME"
+            log_json "$METADATA_PATH"
+            add_collection_type_to_metadata "$METADATA_PATH" "${{matrix.type}}"
+            set_minimum_version_in_metadata
+            move_and_log_file "$ZIPFILE" "./zip/${SHA}.zip"
+            move_and_log_file "$METADATA_PATH" "./asset_files/${METADATA_FILENAME}"
+          done
+
+      - name: List the files in current Directory
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          echo "working-directory"
+          pwd
+          echo "List files"
+          ls
+
+      - name: Remove Downloads directory
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          rm -vrf downloads
+
+      - name: Remove metadata directory
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          rm -vrf metadata
+      
+      - name: Remove sha256sum.txt
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          rm -vrf sha256sum.txt
+          rm -vrf sha256sum_png.txt
+
+
+      - name: List the files in current Directory after removal of folders
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          echo "working-directory"
+          pwd
+          echo "List files"
+          ls
+          tree
+
+      - name: Create ${{ github.event.inputs.content_type }}.json
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        env:
+          MATRIX_TYPE: "${{ github.event.inputs.content_type }}"
+        run: |
+          for f in ./*/*.json; do
+            echo "Processing $f ..."
+            DIRNAME="$(dirname "$f")"
+            # awk print last directory
+            LAST_DIRNAME="$(awk -F/ '{print $NF}' <<<"$DIRNAME")"
+            jq -n '[inputs]' ./$LAST_DIRNAME/*.json > "$LAST_DIRNAME/$MATRIX_TYPE".json
+          done
+
+      - name: List the files after creation of content_type.json file in assets folder
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          pwd
+          tree
+      # Download blueprint.json file from bucket and update and reupload again 
+
+      - name: Set up AWS CLI
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: List folders in S3 bucket
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        id: list-folders
+        run: |
+          retries=3
+          for ((i=0; i<retries; i++)); do
+            folders=$(aws s3api list-objects-v2 --bucket $bucket --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
+            if [ $? -eq 0 ]; then
+              echo "::set-output name=folders::${folders}"
+              break
+            else
+              echo "Retrying..."
+            fi
+          done
+          # folders=$(aws s3api list-objects-v2 --bucket $bucket --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
+          # echo "::set-output name=folders::${folders}"
+
+      - name: Download , Update and Upload JSON objects
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+
+          if [[ "${{ github.event.inputs.content_type }}" == "blueprints" || "${{ github.event.inputs.content_type }}" == "recurring-jobs" || "${{ github.event.inputs.content_type }}" == "orchestration-actions" ]]; then
+            comparing_key='name' 
+          else
+            comparing_key='label'
+          fi
+
+          echo "Comparing key is : ${comparing_key}"
+          target_folder="${{ github.event.inputs.version }}"
+          echo "Folders ${{ steps.list-folders.outputs.folders }}"
+          IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
+          
+
+          echo "folders array: ${folders[@]}"
+
+          if echo "${folders[@]}" | grep -q "$target_folder"; then
+            echo "Folder target_folder is present in S3."
+            folder="$target_folder"  # Remove trailing slash
+            echo "Processing folder : $folder"
+            
+
+            # Download JSON file from the folder
+            echo "Downloading  File : ${{ github.event.inputs.content_type }}.json"
+
+            # Check if File Exists 
+            echo "Check if File Exists at $folder/${{ github.event.inputs.content_type }}.json"
+            if aws s3api head-object --bucket "$bucket" --key "$folder/${{ github.event.inputs.content_type }}.json" 2>&1 | grep -q "Not Found"; then
+              echo "File not found in S3. Skipping download."
+            else
+              # Download the file from Bitbucket
+              echo " Download the file $folder/${{ github.event.inputs.content_type }}.json" 
+              aws s3 cp "s3://$bucket/$folder/${{ github.event.inputs.content_type }}.json" .
+              echo "File downloaded successfully."
+
+              echo "Quering and Updating File where name is ADO Pipeline" 
+
+              jq -c '.[]' "./asset_files/${{ github.event.inputs.content_type }}.json" | while read -r object; do
+                # echo "Object : $object"
+                name=$(echo "$object" | jq -r '.name')
+                artifact_path=$(echo "$object" | jq -r '.artifact_path')
+                sha=$(echo "$object" | jq -r '.sha')
+                libraryimageurl=$(echo "$object" | jq -r '.["library-image-url"]')
+                updated_date=$(date +'%Y-%m-%d')
+                
+                echo "name : $name"
+                echo "artifact_path : $artifact_path"
+                echo "sha : $sha"
+                echo "library-image-url : $libraryimageurl}"
+
+
+                jq "map(if .\"$comparing_key\" == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" | .last_updated = \"$updated_date\" else . end)" ${{ github.event.inputs.content_type }}.json > modified_${{ github.event.inputs.content_type }}_new.json
+
+                mv "modified_${{ github.event.inputs.content_type }}_new.json" "${{ github.event.inputs.content_type }}.json"
+              done
+              
+              echo "Uploading File ${{ github.event.inputs.content_type }}.json to folder ${folder}"   
+              aws s3 mv ${{ github.event.inputs.content_type }}.json "s3://$bucket/$folder/${{ github.event.inputs.content_type }}.json"
+            fi
+          else
+            echo "Folder ${{ github.event.inputs.version }} is NOT present in S3."
+          fi
+
+      - name: display directory tree
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          sudo apt-get install tree -y
+          tree -L 5
+          ls
+
+      - name: Remove '*Metadata.json' files
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          shopt -s globstar
+          rm -vf **/*Metadata.json
+
+      - name: display directory tree
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          sudo apt-get install tree -y
+          tree -L 5
+          ls
+      
+      - name: Create a single tar of all the files in the current directory
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          echo "Creating a tar.gz of all the files in the current directory"
+          tar --exclude-vcs --ignore-failed-read -czvf assets.tar.gz *
+
+      - name: display directory tree
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          sudo apt-get install tree -y
+          tree -L 5
+          ls
+      
+      - uses: actions/upload-artifact@v3
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        with:
+          name: ${{ github.event.inputs.content_type }} Assets
+          path: |
+            **/*.tar.gz
+  
+  deploy-to-staging:
+    name: Deploy to Staging
+    needs:
+      - generate-assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Deploy to Staging
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+          content_type: ${{ github.event.inputs.content_type }}
+        run: |
+          gh workflow run publish-artifact-for-user-input.yml \
+          --field="run_id=${{ github.run_id }}" \
+          --field="environment=Staging" \
+          --field="content_type=${content_type}" \
+          --ref=github-user-input-workflow-testing \
+          --repo abudruk/github-actions-demo-project

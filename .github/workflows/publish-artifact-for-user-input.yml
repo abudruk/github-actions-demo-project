@@ -1,0 +1,132 @@
+name: Publish Collection Artifacts
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        required: true
+      environment:
+        required: true
+        default: Development
+      content_type:
+        required: true
+
+defaults:
+  run:
+    shell: bash -leo pipefail {0}
+
+jobs:
+  upload-to-s3:
+    name: Upload to ${{ github.event.inputs.environment }} S3 Bucket
+    environment:
+      name: ${{ github.event.inputs.environment }}
+      bucket: abbybucketcloudformation-dont-delete
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set current directory
+        id: set-directory
+        run: |
+          echo "::set-output name=current_directory::$(pwd)"
+
+      - name: Download Artifacts from Run ID
+        id: download-artifacts
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          artifact= "${{ github.event.inputs.content_type }} Assets"
+          #Create the directory
+          echo "Artifact Name: $artifact"  
+          if gh run download ${{ github.event.inputs.run_id }} -n "$artifact" --repo abudruk/github-actions-demo-project --dir "${artifact}"; then
+            echo "${artifact}  downloaded successfully"
+          else
+            echo "Failed to download artifact ${artifact}"
+          fi
+            
+      - name: print directory tree
+        run: |
+          sudo apt-get install -y tree
+          echo "Current directory"
+          pwd
+          echo "Listing Files"
+          ls
+          
+      - name: Extract contents from the downloaded file
+        run: |
+          artifact= "${{ github.event.inputs.content_type }} Assets"
+          echo "Extracting File  ${artifact}/assets.tar.gz "
+          if tar -xvzf "${artifact}/assets.tar.gz"; then
+            echo "${artifact}  Extracted Successfully"
+          else
+            echo "Failed to Extract  ${artifact}"
+          fi
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: print directory tree
+        run: |
+          sudo apt-get install -y tree
+          echo "Current directory"
+          pwd
+          echo "Tree from pwd"
+          ls
+
+      - name: print directory tree
+        run: |
+          sudo apt-get install -y tree
+          echo "Current directory"
+          pwd
+          echo "Tree from pwd"
+          ls
+
+      - name: Remove Directories
+        continue-on-error: true
+        run: |
+          ls -R
+          rm -rf "asset_files"
+          rm -rf "${{ github.event.inputs.content_type }} Assets"
+          rm -rf .github
+          rm -rf .git
+          rm -rf .gitignore
+          rm -rf assets.tar.gz
+          rm -rf CMP                                            
+      
+
+      - name: Sync current directory to S3 
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-south-1
+
+        run: |
+          CREDENTIALS=$(\
+          aws sts assume-role \
+          --role-arn "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/Abby_GitHub_Action_Upload_Content_Library" \
+          --role-session-name "s3-sync-role" \
+          --duration-seconds 3600\
+          )
+          export AWS_ACCESS_KEY_ID=$(echo $CREDENTIALS | jq -r '.Credentials.AccessKeyId')
+          export AWS_SECRET_ACCESS_KEY=$(echo $CREDENTIALS | jq -r '.Credentials.SecretAccessKey')
+          export AWS_SESSION_TOKEN=$(echo $CREDENTIALS | jq -r '.Credentials.SessionToken')
+          # Delete Everything in the bucket
+          # aws s3 rm s3://${{ secrets.S3_BUCKET }} --recursive
+          # Overwrite with what we want the bucket to look like
+          
+          aws s3 sync . s3://$bucket/ \
+          --exclude "*" \
+          --include "zip/*" \
+          --include "images/*" \
+
+          # invalidate cloudfront distribution cache
+          #aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+
+      - name: display directory tree
+        run: |
+          sudo apt-get install -y tree
+          # tree -L 5
+          ls
