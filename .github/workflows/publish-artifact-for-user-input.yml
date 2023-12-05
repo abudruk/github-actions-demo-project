@@ -21,7 +21,6 @@ jobs:
     name: Upload to ${{ github.event.inputs.environment }} S3 Bucket
     environment:
       name: ${{ github.event.inputs.environment }}
-      bucket: ${{ github.event.inputs.bucket }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -119,7 +118,7 @@ jobs:
           # aws s3 rm s3://${{ secrets.S3_BUCKET }} --recursive
           # Overwrite with what we want the bucket to look like
           
-          aws s3 sync . s3://$bucket/ \
+          aws s3 sync . s3://${{ github.event.inputs.bucket }}/ \
           --exclude "*" \
           --include "zip/*" \
           --include "images/*" \
