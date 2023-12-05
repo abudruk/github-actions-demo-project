@@ -1,4 +1,4 @@
-name: Publish Collection Artifacts
+name: Publish Collection Artifacts New
 on:
   workflow_dispatch:
     inputs:
