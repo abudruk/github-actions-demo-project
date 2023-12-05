@@ -168,11 +168,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download All Artifacts
-          id: download-artifact
-          uses: abudruk/download-artifact@main #This is reference to forked repository
-          with:
-            name: ${{ github.event.inputs.content_type }}
-            path: downloads/${{ github.event.inputs.content_type }}
+        id: download-artifact
+        uses: abudruk/download-artifact@main #This is reference to forked repository
+        with:
+          name: ${{ github.event.inputs.content_type }}
+          path: downloads/${{ github.event.inputs.content_type }}
 
       - name: print directory tree
         run: |
