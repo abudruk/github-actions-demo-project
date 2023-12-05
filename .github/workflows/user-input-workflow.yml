@@ -54,8 +54,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+
+      - name: List the files
+        run: |
+          echo "Listing Files"
+          pwd
+          ls
+          tree
+
       - name: Download zip file
-        run: curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
+        run: |
+          mkdir -p "${{github.workspace}}/tmp"
+          curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
+
+      
+
+
+      # - name: Create ${{ matrix.type }} Artifacts
+      #   working-directory: CMP/${{ matrix.type }}
+      #   run: |
+      #     shopt -s globstar
+      #     mkdir -p "${{github.workspace}}/tmp"
+      #     for file in **/*.zip; do
+      #       echo "Moving $file"
+      #       BASENAME=$(basename "$file")
+      #       mv "$file" "${{ github.workspace }}/tmp/$BASENAME"
+      #     done
+
 
       - name: Unzip the provided file
         run: |
@@ -63,15 +88,19 @@ jobs:
           unzip -o "$(basename "${{ github.event.inputs.blueprint_file_path }}")"
 
       - name: List the files
+        working-directory: tmp
         run: |
           echo "Listing Files"
           pwd
           ls
+          tree
+
+
     
-      # generate a random workflow identifier for CB python script to use
-      - name: Printing Inputes provided by User
-        run: |
-          echo "Version: ${{ github.event.inputs.version }}"
-          echo "Blueprint File Path: ${{ github.event.inputs.blueprint_file_path }}"
+      # # generate a random workflow identifier for CB python script to use
+      # - name: Printing Inputes provided by User
+      #   run: |
+      #     echo "Version: ${{ github.event.inputs.version }}"
+      #     echo "Blueprint File Path: ${{ github.event.inputs.blueprint_file_path }}"
 
         
