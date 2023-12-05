@@ -445,9 +445,9 @@ jobs:
 
           echo "Folders ${{ steps.list-folders.outputs.folders }}"
           IFS=$'\t' read -ra folders <<< "${{ steps.list-folders.outputs.folders }}"
-          if echo "$folders" | grep -q "^${{ github.event.inputs.content_type }}/"; then
-            echo "Folder ${{ github.event.inputs.content_type }} is present in S3."
-            folder="${{ github.event.inputs.content_type }}"  # Remove trailing slash
+          if echo "$folders" | grep -q "^${{ github.event.inputs.version }}/"; then
+            echo "Folder ${{ github.event.inputs.version }} is present in S3."
+            folder="${{ github.event.inputs.version }}"  # Remove trailing slash
             echo "Processing folder : $folder"
 
 
@@ -487,6 +487,7 @@ jobs:
               
               echo "Uploading File ${{ github.event.inputs.content_type }}.json to folder ${folder}"   
               aws s3 mv ${{ github.event.inputs.content_type }}.json "s3://$bucket/$folder/${{ github.event.inputs.content_type }}.json"
+            fi
           else
-            echo "Folder ${{ github.event.inputs.content_type }} is NOT present in S3."
+            echo "Folder ${{ github.event.inputs.version }} is NOT present in S3."
           fi
