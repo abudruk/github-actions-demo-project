@@ -42,7 +42,8 @@ defaults:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  testing-user-input-workflow:
+  archive-collections:
+    name: Archive Collections
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env:
@@ -70,7 +71,12 @@ jobs:
           rm -rf ./*
           curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
 
-      
+      # - name: Set up AWS CLI
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ap-south-1
 
 
       # - name: Create ${{ matrix.type }} Artifacts
@@ -85,38 +91,66 @@ jobs:
       #     done
 
 
-      - name: Unzip the provided file
-        working-directory: tmp
-        run: |
-          echo "Unzipping File: ${{ github.event.inputs.blueprint_file_path }}"
-          unzip -o "$(basename "${{ github.event.inputs.blueprint_file_path }}")"
+      # - name: Unzip the provided file
+      #   working-directory: tmp
+      #   run: |
+      #     echo "Unzipping File: ${{ github.event.inputs.blueprint_file_path }}"
+      #     unzip -o "$(basename "${{ github.event.inputs.blueprint_file_path }}")"
 
       - name: List the files
         working-directory: tmp
         run: |
-          echo "Listing Files"
+          echo "Listing Files in tmp folder "
           pwd
           ls
           tree
 
-      - name: Process JSON files
+      - name: Create a single tar of all the files in the current directory
         working-directory: tmp
         run: |
-          for json_file in $(find . -type f -name '*.json'); do
-            echo "Processing JSON file: $json_file"
-            name=$(jq -r '.name' "$json_file")
-            echo "Blueprint Name: ${name}"
-          done
-      
-      - name: List Zip Files
-        working-directory: tmp
-        run: |
-          # Use find to locate all files with a '.zip' extension in the current directory
-          zip_files=$(find . -maxdepth 1 -type f -name '*.zip')
+          WORKING_DIRECTORY=$(pwd)
+          echo "WORKING_DIRECTORY : ${WORKING_DIRECTORY}"
+          echo "Check if the content is present in this directory : ${WORKING_DIRECTORY} "
+          if [ -z "$(ls -A $WORKING_DIRECTORY)" ]; then
+            echo "Directory does not exist."
+          else
+            echo "Creating a tar of all the files in the current directory"
+            tar -cvzf "${{ github.event.inputs.content_type }}".tar.gz *.zip
+          fi
 
-          # Print the list of zip files
-          echo "List of Zip Files:"
-          echo "$zip_files"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.inputs.content_type }}
+          path: |
+            **/${{ github.event.inputs.content_type }}.tar.gz
+
+      - name: print Files tree
+        run: |
+          sudo apt-get install tree -y
+          echo "Current directory"
+          pwd
+          ls
+          tree
+
+
+      # - name: Process JSON files
+      #   working-directory: tmp
+      #   run: |
+      #     for json_file in $(find . -type f -name '*.json'); do
+      #       echo "Processing JSON file: $json_file"
+      #       name=$(jq -r '.name' "$json_file")
+      #       echo "Blueprint Name: ${name}"
+      #     done
+      
+      # - name: List Zip Files
+      #   working-directory: tmp
+      #   run: |
+      #     # Use find to locate all files with a '.zip' extension in the current directory
+      #     zip_files=$(find . -maxdepth 1 -type f -name '*.zip')
+
+      #     # Print the list of zip files
+      #     echo "List of Zip Files:"
+      #     echo "$zip_files"
 
     
       # # generate a random workflow identifier for CB python script to use
