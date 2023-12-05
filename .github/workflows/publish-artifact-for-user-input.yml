@@ -35,13 +35,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          artifact= "${{ github.event.inputs.content_type }} Assets"
+          # artifact= "${{ github.event.inputs.content_type }} Assets"
           #Create the directory
-          echo "Artifact Name: $artifact"  
-          if gh run download ${{ github.event.inputs.run_id }} -n "$artifact" --repo abudruk/github-actions-demo-project --dir "${artifact}"; then
-            echo "${artifact}  downloaded successfully"
+          echo "Artifact Name: ${{ github.event.inputs.content_type }} Assets"  
+          if gh run download ${{ github.event.inputs.run_id }} -n "${{ github.event.inputs.content_type }} Assets" --repo abudruk/github-actions-demo-project --dir "${artifact}"; then
+            echo "${{ github.event.inputs.content_type }} Assets downloaded successfully"
           else
-            echo "Failed to download artifact ${artifact}"
+            echo "Failed to download artifact ${{ github.event.inputs.content_type }} Assets"
           fi
             
       - name: print directory tree
@@ -54,10 +54,10 @@ jobs:
           
       - name: Extract contents from the downloaded file
         run: |
-          artifact= "${{ github.event.inputs.content_type }} Assets"
-          echo "Extracting File  ${artifact}/assets.tar.gz "
-          if tar -xvzf "${artifact}/assets.tar.gz"; then
-            echo "${artifact}  Extracted Successfully"
+          # artifact= "${{ github.event.inputs.content_type }} Assets"
+          echo "Extracting File  ${{ github.event.inputs.content_type }} Assets/assets.tar.gz "
+          if tar -xvzf "${{ github.event.inputs.content_type }} Assets/assets.tar.gz"; then
+            echo "${{ github.event.inputs.content_type }} Assets  Extracted Successfully"
           else
             echo "Failed to Extract  ${artifact}"
           fi
