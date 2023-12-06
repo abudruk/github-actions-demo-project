@@ -431,6 +431,7 @@ jobs:
 
           echo "folders array: ${folders[@]}"
 
+          #Check if the target_folder that is version based Eg. 2023.5.29 is present or no, If not then create these folder and copy the previous version data here
           if ! echo "${folders[@]}" | grep -q "$target_folder"; then
             echo "Folder ${{ github.event.inputs.version }} is NOT present in S3."
             echo "Creating Folder and Copying the Files"
@@ -481,8 +482,16 @@ jobs:
               echo "sha : $sha"
               echo "library-image-url : $libraryimageurl}"
 
-
-              jq "map(if .\"$comparing_key\" == \"$name\" then .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" | .last_updated = \"$updated_date\" else . end) + (if map(select(.\"$comparing_key\" == \"$name\")) | length == 0 then [$object] else empty end)" ${{ github.event.inputs.content_type }}.json > modified_${{ github.event.inputs.content_type }}_new.json
+              #Check if any content is found with name provided here then update the values for these mentioned fields, if not then add the entire object inside the content file blueprint.json 
+              jq "map(if .\"$comparing_key\" == \"$name\" then 
+                .artifact_path = \"$artifact_path\" | .sha = \"$sha\" | .[\"library-image-url\"] = \"$libraryimageurl\" | .last_updated = \"$updated_date\" 
+              else 
+                . 
+              end) + (if map(select(.\"$comparing_key\" == \"$name\")) | length == 0 then 
+                [$object + { "collection_type": "${{ github.event.inputs.content_type }}" } | .last_updated = "$updated_date"]
+              else 
+                empty 
+              end)" ${{ github.event.inputs.content_type }}.json > modified_${{ github.event.inputs.content_type }}_new.json
 
               mv "modified_${{ github.event.inputs.content_type }}_new.json" "${{ github.event.inputs.content_type }}.json"
             done

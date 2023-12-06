@@ -123,8 +123,8 @@ jobs:
           --include "zip/*" \
           --include "images/*" \
 
-          # invalidate cloudfront distribution cache
-          #aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+          invalidate cloudfront distribution cache
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
 
       - name: display directory tree
         run: |
