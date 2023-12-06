@@ -488,7 +488,7 @@ jobs:
               else 
                 . 
               end) + (if map(select(.\"$comparing_key\" == \"$name\")) | length == 0 then 
-                [$object + { "collection_type": "${{ github.event.inputs.content_type }}" } | .last_updated = "$updated_date"]
+                [$object | .collection_type="${{ github.event.inputs.content_type }}" | .last_updated = "$updated_date"]
               else 
                 empty 
               end)" ${{ github.event.inputs.content_type }}.json > modified_${{ github.event.inputs.content_type }}_new.json
