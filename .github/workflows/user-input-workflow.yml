@@ -495,10 +495,10 @@ jobs:
                   end
                 ) +
                 (
-                  if any(.\"$comparing_key\" != \"$name\") then
-                    [$object | .last_updated = \"$updated_date\" | .collection_type = \"${{ github.event.inputs.content_type }}\"]
+                  if any(.\"$comparing_key\"; . != \"$name\") then
+                    empty
                   else
-                    .
+                    [$object | .last_updated = \"$updated_date\" | .collection_type = \"${{ github.event.inputs.content_type }}\"]
                   end
                 )
               " ${{ github.event.inputs.content_type }}.json > modified_${{ github.event.inputs.content_type }}_new.json
