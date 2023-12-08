@@ -495,7 +495,7 @@ jobs:
                   end
                 ) +
                 (
-                  if all(.\"$comparing_key\" == \"$name\") | not then
+                  if any(.\"$comparing_key\" != \"$name\") then
                     [$object | .last_updated = \"$updated_date\" | .collection_type = \"${{ github.event.inputs.content_type }}\"]
                   else
                     .
