@@ -487,13 +487,13 @@ jobs:
 
               jq "map(
                 if .\"$comparing_key\" == \"$name\" then
-                  echo "Data Exists So updating JSON Array"
+                  echo \"Data Exists So updating JSON Array\"
                   .artifact_path = \"$artifact_path\" 
                   | .sha = \"$sha\"
                   | .[\"library-image-url\"] = \"$libraryimageurl\" 
                   | .last_updated = \"$updated_date\" 
                 else 
-                  echo "Data  doesnt Exists So adding JSON record"
+                  echo \"Data  doesnt Exists So adding JSON record\"
                   [$object | .last_updated = \"$updated_date\" | .collection_type = \"${{ github.event.inputs.content_type }}\"]
                 end
               # ) + (
