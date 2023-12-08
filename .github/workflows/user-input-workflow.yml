@@ -493,7 +493,11 @@ jobs:
                 else
                   .
                 end
-              ) 
+              ) +
+              (
+                select(.\"$comparing_key\" != \"$name\") |
+                [$object | .last_updated = \"$updated_date\" | .collection_type = \"${{ github.event.inputs.content_type }}\"]
+              )
               " ${{ github.event.inputs.content_type }}.json > modified_${{ github.event.inputs.content_type }}_new.json
 
 
