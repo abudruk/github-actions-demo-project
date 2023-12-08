@@ -483,26 +483,6 @@ jobs:
               echo "library-image-url : $libraryimageurl}"
 
               #Check if any content is found with name provided here then update the values for these mentioned fields, if not then add the entire object inside the content file blueprint.json 
-              # jq "
-              #   map(
-              #     if .\"$comparing_key\" == \"$name\" then
-              #       .artifact_path = \"$artifact_path\"
-              #       | .sha = \"$sha\"
-              #       | .[\"library-image-url\"] = \"$libraryimageurl\"
-              #       | .last_updated = \"$updated_date\"
-              #     else
-              #       .
-              #     end
-              #   ) +
-              #   (
-              #     if map(select(.\"$comparing_key\" != \"$name\")) | length == 0 then
-              #       [$object | .last_updated = \"$updated_date\" | .collection_type = \"${{ github.event.inputs.content_type }}\"]
-              #     else
-              #       empty
-              #     end
-              #   )
-              # " ${{ github.event.inputs.content_type }}.json > modified_${{ github.event.inputs.content_type }}_new.json
-
               jq "
                 map(
                   if .\"$comparing_key\" == \"$name\" then
@@ -510,16 +490,19 @@ jobs:
                     | .sha = \"$sha\"
                     | .[\"library-image-url\"] = \"$libraryimageurl\"
                     | .last_updated = \"$updated_date\"
-                    | .found = true
                   else
                     .
                   end
                 ) +
                 (
-                  select(.found != true) |
-                  [$object | .last_updated = \"$updated_date\" | .collection_type = \"${{ github.event.inputs.content_type }}\"]
+                  if map(select(.\"$comparing_key\" == \"$name\")) | length == 0 then
+                    [$object | .last_updated = \"$updated_date\" | .collection_type = \"${{ github.event.inputs.content_type }}\"]
+                  else
+                    empty
+                  end
                 )
               " ${{ github.event.inputs.content_type }}.json > modified_${{ github.event.inputs.content_type }}_new.json
+
 
               mv "modified_${{ github.event.inputs.content_type }}_new.json" "${{ github.event.inputs.content_type }}.json"
             done
