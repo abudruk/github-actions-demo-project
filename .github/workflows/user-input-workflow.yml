@@ -512,7 +512,7 @@ jobs:
             #   mv "modified_${{ github.event.inputs.content_type }}_new.json" "${{ github.event.inputs.content_type }}.json"
             # done
 
-            python .github/scripts/update_json.py "./asset_files/${{ github.event.inputs.content_type }}.json" "${{ github.event.inputs.content_type }}.json"  modified_${{ github.event.inputs.content_type }}_new.json
+            python "github-actions-demo-project/.github/scripts/update_json.py" "./asset_files/${{ github.event.inputs.content_type }}.json" "${{ github.event.inputs.content_type }}.json"  modified_${{ github.event.inputs.content_type }}_new.json
             
             echo "Uploading File ${{ github.event.inputs.content_type }}.json to folder ${folder}"   
             aws s3 mv ${{ github.event.inputs.content_type }}.json "s3://$bucket/$folder/${{ github.event.inputs.content_type }}.json"
