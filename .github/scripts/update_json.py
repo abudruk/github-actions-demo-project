@@ -39,14 +39,14 @@ def main():
             
             updated = False
             with open(input_file_path, 'r+') as input_file:
-                print("input_file", input_file)
+                # print("input_file", input_file)
                 input_data = json.load(input_file)
                 
                 print("input_data", input_data)
                 for item in input_data:
                     # print("item", item)
                     if item.get('name') == name:
-                        print("Match Found Updating", updated)   
+                        print("Match Found , Updating the Record")   
                         item["artifact_path"] = artifact_path
                         item["sha"] = sha
                         item["library-image-url"] = libraryimageurl
@@ -56,7 +56,7 @@ def main():
                   
                    
                 if not updated:
-                    print("Match Not Found Adding")
+                    print("Match Not Found , Adding the New Record Adding")
                     item = record 
                     item["collection_type"] = "recurring_jobs"
                     item["last_updated"] = datetime.now().strftime("%Y-%m-%d")
