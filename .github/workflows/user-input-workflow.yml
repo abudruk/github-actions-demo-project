@@ -413,6 +413,11 @@ jobs:
           # folders=$(aws s3api list-objects-v2 --bucket $bucket --delimiter "/" --query "CommonPrefixes[].Prefix" --output text)
           # echo "::set-output name=folders::${folders}"
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
       - name: Download , Update and Upload JSON objects
         if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
@@ -469,43 +474,45 @@ jobs:
 
             echo "Quering and Updating File where name is ADO Pipeline" 
 
-            jq -c '.[]' "./asset_files/${{ github.event.inputs.content_type }}.json" | while read -r object; do
-              # echo "Object : $object"
-              name=$(echo "$object" | jq -r '.name')
-              artifact_path=$(echo "$object" | jq -r '.artifact_path')
-              sha=$(echo "$object" | jq -r '.sha')
-              libraryimageurl=$(echo "$object" | jq -r '.["library-image-url"]')
-              updated_date=$(date +'%Y-%m-%d')
+            # jq -c '.[]' "./asset_files/${{ github.event.inputs.content_type }}.json" | while read -r object; do
+            #   # echo "Object : $object"
+            #   name=$(echo "$object" | jq -r '.name')
+            #   artifact_path=$(echo "$object" | jq -r '.artifact_path')
+            #   sha=$(echo "$object" | jq -r '.sha')
+            #   libraryimageurl=$(echo "$object" | jq -r '.["library-image-url"]')
+            #   updated_date=$(date +'%Y-%m-%d')
               
-              echo "name : $name"
-              echo "artifact_path : $artifact_path"
-              echo "sha : $sha"
-              echo "library-image-url : $libraryimageurl}"
+            #   echo "name : $name"
+            #   echo "artifact_path : $artifact_path"
+            #   echo "sha : $sha"
+            #   echo "library-image-url : $libraryimageurl}"
 
-              #Check if any content is found with name provided here then update the values for these mentioned fields, if not then add the entire object inside the content file blueprint.json 
-              jq "
-                map(
-                  if .\"$comparing_key\" == \"$name\" then
-                    .artifact_path = \"$artifact_path\"
-                    | .sha = \"$sha\"
-                    | .[\"library-image-url\"] = \"$libraryimageurl\"
-                    | .last_updated = \"$updated_date\"
-                  else
-                    .
-                  end
-                ) +
-                (
-                  if any(.\"$comparing_key\"; . != \"$name\") then
-                    empty
-                  else
-                    [$object | .last_updated = \"$updated_date\" | .collection_type = \"${{ github.event.inputs.content_type }}\"]
-                  end
-                )
-              " ${{ github.event.inputs.content_type }}.json > modified_${{ github.event.inputs.content_type }}_new.json
+            #   #Check if any content is found with name provided here then update the values for these mentioned fields, if not then add the entire object inside the content file blueprint.json 
+            #   jq "
+            #     map(
+            #       if .\"$comparing_key\" == \"$name\" then
+            #         .artifact_path = \"$artifact_path\"
+            #         | .sha = \"$sha\"
+            #         | .[\"library-image-url\"] = \"$libraryimageurl\"
+            #         | .last_updated = \"$updated_date\"
+            #       else
+            #         .
+            #       end
+            #     ) +
+            #     (
+            #       if any(.\"$comparing_key\" != \"$name\") then
+            #         [$object | .last_updated = \"$updated_date\" | .collection_type = \"${{ github.event.inputs.content_type }}\"]
+            #       else
+            #         .
+            #       end
+            #     )
+            #   " ${{ github.event.inputs.content_type }}.json > modified_${{ github.event.inputs.content_type }}_new.json
 
 
-              mv "modified_${{ github.event.inputs.content_type }}_new.json" "${{ github.event.inputs.content_type }}.json"
-            done
+            #   mv "modified_${{ github.event.inputs.content_type }}_new.json" "${{ github.event.inputs.content_type }}.json"
+            # done
+
+            python .github/scripts/update_json.py "./asset_files/${{ github.event.inputs.content_type }}.json" "${{ github.event.inputs.content_type }}.json"  modified_${{ github.event.inputs.content_type }}_new.json
             
             echo "Uploading File ${{ github.event.inputs.content_type }}.json to folder ${folder}"   
             aws s3 mv ${{ github.event.inputs.content_type }}.json "s3://$bucket/$folder/${{ github.event.inputs.content_type }}.json"
