@@ -62,18 +62,9 @@ jobs:
         run: |
           echo "Listing Files"
           pwd
-          ls
+          ls -a
           tree
 
-      - name: Show Hidden Files
-        run: ls -a
-      
-      - name: Debug
-        run: |
-          pwd
-          echo "GitHub Workspace: $GITHUB_WORKSPACE"
-          ls -a
-      
 
       - name: Download zip file
         run: |
@@ -426,6 +417,14 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+          
+      - name: List the files
+        run: |
+          echo "Listing Files"
+          pwd
+          ls -a
+          tree
+
 
       - name: Download , Update and Upload JSON objects
         if: steps.download-artifact.outputs.artifact-found == 'true'
