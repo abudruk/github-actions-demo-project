@@ -63,7 +63,7 @@ jobs:
           echo "Listing Files"
           pwd
           ls
-          # tree
+          tree
       
 
       - name: Download zip file
