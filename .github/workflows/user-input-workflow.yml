@@ -64,6 +64,15 @@ jobs:
           pwd
           ls
           tree
+
+      - name: Show Hidden Files
+        run: ls -a
+      
+      - name: Debug
+        run: |
+          pwd
+          echo "GitHub Workspace: $GITHUB_WORKSPACE"
+          ls -a
       
 
       - name: Download zip file
