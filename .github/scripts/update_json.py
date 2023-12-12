@@ -11,6 +11,7 @@ def main():
     asset_file_path = sys.argv[1]
     input_file_path = sys.argv[2]
     output_file_path = sys.argv[3]
+    content_type = sys.argv[4]
     
     # asset_file_path = "/home/dell/Downloads/recurring-jobs Assets/assets/asset_files/recurring-jobs.json"
     # input_file_path = "/home/dell/Downloads/recurring-jobs.json"    
@@ -46,22 +47,28 @@ def main():
                 for item in input_data:
                     # print("item", item)
                     if item.get('name') == name:
-                        print("Match Found , Updating the Record")   
-                        item["artifact_path"] = artifact_path
-                        item["sha"] = sha
-                        item["library-image-url"] = libraryimageurl
-                        item["last_updated"] = datetime.now().strftime("%Y-%m-%d")
+                        print("Match Found , Deleting the Record")   
+                        # item["artifact_path"] = artifact_path
+                        # item["sha"] = sha
+                        # item["library-image-url"] = libraryimageurl
+                        # item["last_updated"] = datetime.now().strftime("%Y-%m-%d")
+                        try:
+                            del item
+                        except Exception as e:
+                            print(e)
+                            print("Exception Occurred while deleting the object".format(name))
                         updated =True
+                    
                         
                   
                    
-                if not updated:
-                    print("Match Not Found , Adding the New Record Adding")
-                    item = record 
-                    item["collection_type"] = "recurring_jobs"
-                    item["last_updated"] = datetime.now().strftime("%Y-%m-%d")
-                    
-                    input_data.append(item)
+                # if not updated:
+                print(" Adding the New Record ")
+                item = record 
+                item["collection_type"] = content_type
+                item["last_updated"] = datetime.now().strftime("%Y-%m-%d")
+                
+                input_data.append(item)
 
                     # # Write the updated data to a new file
                 with open(output_file_path, 'w') as output_file:
