@@ -25,7 +25,7 @@ def main():
     with open(asset_file_path, "r") as asset_file:
         records = json.load(asset_file)
         for record in records:
-            print("record", record)
+            # print("record", record)
             name = record['name']  
             artifact_path = record['artifact_path']  
             sha = record['sha']  
