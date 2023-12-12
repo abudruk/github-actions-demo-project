@@ -4,7 +4,7 @@ import shutil
 from datetime import datetime
 
 def main():
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 5:
         print("Not enough arguments are provided")
         sys.exit(1)
 
