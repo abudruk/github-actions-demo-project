@@ -68,7 +68,7 @@ def main():
                   
                    
                 # if not updated:
-                print(" Adding the New Record ")
+                print(" Adding  New Record ")
                 item = record 
                 item["collection_type"] = content_type
                 item["last_updated"] = datetime.now().strftime("%Y-%m-%d")
