@@ -4,7 +4,7 @@ import shutil
 from datetime import datetime
 
 def main():
-    if len(sys.argv) != 5:
+    if len(sys.argv) != 6:
         print("Not enough arguments are provided")
         sys.exit(1)
 
@@ -12,6 +12,7 @@ def main():
     input_file_path = sys.argv[2]
     output_file_path = sys.argv[3]
     content_type = sys.argv[4]
+    comparing_key = sys.argv[5]
     
     # asset_file_path = "/home/dell/Downloads/recurring-jobs Assets/assets/asset_files/recurring-jobs.json"
     # input_file_path = "/home/dell/Downloads/recurring-jobs.json"    
@@ -46,7 +47,7 @@ def main():
                 print("input_data", input_data)
                 for item in input_data:
                     # print("item", item)
-                    if item.get('name') == name:
+                    if item.get(comparing_key) == name:
                         print("Match Found , Deleting the Record")   
                         # item["artifact_path"] = artifact_path
                         # item["sha"] = sha
