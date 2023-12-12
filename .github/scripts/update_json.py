@@ -54,7 +54,11 @@ def main():
                         # item["library-image-url"] = libraryimageurl
                         # item["last_updated"] = datetime.now().strftime("%Y-%m-%d")
                         try:
-                            del item
+                            # del input_data.remove(item)
+                            print("Removing Element ", item)
+                            element_to_remove = item
+                            input_data = [object for object in input_data if object != element_to_remove]
+
                         except Exception as e:
                             print(e)
                             print("Exception Occurred while deleting the object".format(name))
