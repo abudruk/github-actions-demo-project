@@ -14,11 +14,6 @@ def main():
     content_type = sys.argv[4]
     comparing_key = sys.argv[5]
     
-    # asset_file_path = "/home/dell/Downloads/recurring-jobs Assets/assets/asset_files/recurring-jobs.json"
-    # input_file_path = "/home/dell/Downloads/recurring-jobs.json"    
-    # output_file_path = "/home/dell/Downloads/modified_recurring-jobs_new.json"
-    
-    
     print("asset_file_path", asset_file_path)
     print("input_file_path", input_file_path)
     print("output_file_path", output_file_path)
@@ -27,19 +22,16 @@ def main():
     with open(asset_file_path, "r") as asset_file:
         records = json.load(asset_file)
         for record in records:
-            # print("record", record)
             name = record['name']  
             artifact_path = record['artifact_path']  
             sha = record['sha']  
             libraryimageurl = record['library-image-url']  
-            
             
             print("name", name)
             print("artifact_path", artifact_path)
             print("sha", sha)
             print("library-image-url", libraryimageurl)
             
-            updated = False
             with open(input_file_path, 'r+') as input_file:
                 # print("input_file", input_file)
                 input_data = json.load(input_file)
@@ -48,27 +40,21 @@ def main():
                 for item in input_data:
                     # print("item", item)
                     if item.get(comparing_key) == name:
-                        print("Match Found , Deleting the Record")   
-                        # item["artifact_path"] = artifact_path
-                        # item["sha"] = sha
-                        # item["library-image-url"] = libraryimageurl
-                        # item["last_updated"] = datetime.now().strftime("%Y-%m-%d")
+                        print("Match Found , Deleting this Completed Record")   
                         try:
                             # del input_data.remove(item)
                             print("Removing Element ", item)
                             element_to_remove = item
+                            #Filter list where we take off this item from list t, the item that should be deleted. 
                             input_data = [object for object in input_data if object != element_to_remove]
 
                         except Exception as e:
                             print(e)
                             print("Exception Occurred while deleting the object".format(name))
-                        updated =True
                     
                         
-                  
-                   
                 # if not updated:
-                print(" Adding  New Record ")
+                print("Adding New Record with Updated Details ")
                 item = record 
                 item["collection_type"] = content_type
                 item["last_updated"] = datetime.now().strftime("%Y-%m-%d")
