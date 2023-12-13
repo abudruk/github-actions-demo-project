@@ -347,6 +347,21 @@ jobs:
           echo "List files"
           ls
 
+      - name: Remove CMP directory
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          rm -vrf CMP
+
+      - name: Remove README directory
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          rm -vrf README.md
+
+      - name: Remove tmp directory
+        if: steps.download-artifact.outputs.artifact-found == 'true'
+        run: |
+          rm -vrf tmp
+
       - name: Remove Downloads directory
         if: steps.download-artifact.outputs.artifact-found == 'true'
         run: |
