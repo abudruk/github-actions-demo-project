@@ -1,11 +1,10 @@
 name: Workflow for User Input Content Item Deployment
+# Controls when the action will run.
+on:
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Branch name'
-        required: false
-        default: 'github-user-input-workflow-testing'  # Set a default branch name
       content_type:
         description: "Type of Content"
         required: true
