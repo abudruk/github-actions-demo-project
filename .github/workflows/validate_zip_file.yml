@@ -1,0 +1,63 @@
+workflow_dispatch:
+    inputs:
+      content_type:
+        description: "Type of Content"
+        required: true
+        type: choice
+        options:
+          - blueprints
+          - ui-extension-packages
+          - cb-applets
+          - orchestration-actions
+          - recurring-jobs
+          - server-actions
+          - resource-actions
+
+      blueprint_file_path:
+        description: 'Path to the zip file'
+        required: true
+
+defaults:
+  run:
+    shell: bash -leo pipefail {0}
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  archive-collections:
+    name: Archive Collections
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+
+      - name: List the files
+        run: |
+          echo "Listing Files"
+          pwd
+          ls -a
+          tree
+
+
+      - name: Validate zip file
+        run: |
+
+          mkdir -p "${{github.workspace}}/zip_validation"
+          cd "${{github.workspace}}/zip_validation"
+          rm -rf ./*
+
+          desired_folder_name=$(basename "${{ github.event.inputs.blueprint_file_path }}")
+          echo "desired folder name:$desired_folder_name"
+          curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
+          
+          if [ -d "$desired_folder_name" ]; then
+            echo "The zip file contains the desired folder."
+          else
+            echo "The zip file does not contain the desired folder."
+            exit 1  # Exit with an error code if the folder is not found
+          fi
