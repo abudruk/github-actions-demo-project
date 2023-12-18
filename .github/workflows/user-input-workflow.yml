@@ -70,6 +70,12 @@ jobs:
 
       - name: Validate zip file
         run: |
+          # Check if the path ends with ".zip"
+          if [[ "${{ github.event.inputs.blueprint_file_path }}" != *.zip ]]; then
+            echo "Error: The 'zip-file-path' must point to a zip file."
+            exit 1
+          fi
+
           mkdir -p "${{github.workspace}}/zip_validation"
           cd "${{github.workspace}}/zip_validation"
           rm -rf ./*
@@ -94,13 +100,10 @@ jobs:
 
 
 
-          # Check if the path ends with ".zip"
-          if [[ "${{ github.event.inputs.blueprint_file_path }}" != *.zip ]]; then
-            echo "Error: The 'zip-file-path' must point to a zip file."
-            exit 1
-          fi
-
-          if [ -d "$desired_folder_name" ]; then
+          # Convert spaces to underscores and convert to lowercase
+          RENAMED_LAMBDA_FILE=$(echo "$DECODED_FILE_PATH" | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
+          echo "RENAMED_LAMBDA_FILE: $RENAMED_LAMBDA_FILE"
+          if [ -d "$RENAMED_LAMBDA_FILE" ]; then
             echo "The zip file contains the desired folder."
           else
             echo "The zip file does not contain the desired folder."
