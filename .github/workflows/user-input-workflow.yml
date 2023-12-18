@@ -83,6 +83,9 @@ jobs:
           DECODED_FILE_PATH=$(echo -e "${desired_folder_name//%/\\x}")
 
           echo " Docoded file path ${DECODED_FILE_PATH}"
+
+          mv "$desired_folder_name" "$DECODED_FILE_PATH"
+          ls
           unzip -q "${DECODED_FILE_PATH}"
           echo "List files after download"
 
