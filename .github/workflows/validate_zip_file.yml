@@ -1,4 +1,4 @@
-name: Workflow for User Input Content Item Deployment
+name: Workflow for Zip Validation
 # Controls when the action will run.
 on:
   workflow_dispatch:
