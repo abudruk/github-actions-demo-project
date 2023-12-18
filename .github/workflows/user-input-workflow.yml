@@ -76,10 +76,11 @@ jobs:
 
           desired_folder_name=$(basename "${{ github.event.inputs.blueprint_file_path }}")
           echo "desired folder name:$desired_folder_name"
-          # curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
-          SYNC_RESOURCES_FILE_PATH="${{ github.event.inputs.blueprint_file_path }}"
+          curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
 
-          DECODED_FILE_PATH=$(echo -e "${SYNC_RESOURCES_FILE_PATH//%/\\x}")
+          # SYNC_RESOURCES_FILE_PATH="${{ github.event.inputs.blueprint_file_path }}"
+
+          DECODED_FILE_PATH=$(echo -e "${desired_folder_name//%/\\x}")
 
           echo " Docoded file path ${DECODED_FILE_PATH}"
           unzip -q "${DECODED_FILE_PATH}"
@@ -87,6 +88,8 @@ jobs:
 
           ls 
           tree
+
+
 
           # Check if the path ends with ".zip"
           if [[ "${{ github.event.inputs.blueprint_file_path }}" != *.zip ]]; then
