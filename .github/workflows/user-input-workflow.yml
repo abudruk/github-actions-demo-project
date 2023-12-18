@@ -68,6 +68,22 @@ jobs:
           ls -a
           tree
 
+      - name: Validate zip file
+        run: |
+          mkdir -p "${{github.workspace}}/zip_validation"
+          cd "${{github.workspace}}/zip_validation"
+          rm -rf ./*
+
+          desired_folder_name=$(basename "${{ github.event.inputs.blueprint_file_path }}")
+          echo "desired folder name:$desired_folder_name"
+          curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
+          
+          if [ -d "$desired_folder_name" ]; then
+            echo "The zip file contains the desired folder."
+          else
+            echo "The zip file does not contain the desired folder."
+            exit 1  # Exit with an error code if the folder is not found
+          fi
 
       - name: Download zip file
         run: |
