@@ -77,8 +77,10 @@ jobs:
           desired_folder_name=$(basename "${{ github.event.inputs.blueprint_file_path }}")
           echo "desired folder name:$desired_folder_name"
           curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
-          
-          if [ -d "$desired_folder_name" ]; then
+          echo "List files after download"
+          ls 
+          tree
+          if [ -d "./$desired_folder_name" ]; then
             echo "The zip file contains the desired folder."
           else
             echo "The zip file does not contain the desired folder."
