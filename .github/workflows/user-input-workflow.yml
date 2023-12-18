@@ -76,11 +76,20 @@ jobs:
 
           desired_folder_name=$(basename "${{ github.event.inputs.blueprint_file_path }}")
           echo "desired folder name:$desired_folder_name"
-          curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
+          # curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
+          unzip -q "${{ github.event.inputs.blueprint_file_path }}"
           echo "List files after download"
+
           ls 
           tree
-          if [ -d "./$desired_folder_name" ]; then
+
+          # Check if the path ends with ".zip"
+          if [[ "${{ github.event.inputs.blueprint_file_path }}" != *.zip ]]; then
+            echo "Error: The 'zip-file-path' must point to a zip file."
+            exit 1
+          fi
+
+          if [ -d "$desired_folder_name" ]; then
             echo "The zip file contains the desired folder."
           else
             echo "The zip file does not contain the desired folder."
@@ -88,6 +97,7 @@ jobs:
           fi
 
       - name: Download zip file
+        if: success()
         run: |
           mkdir -p "${{github.workspace}}/tmp"
           cd "${{github.workspace}}/tmp"
