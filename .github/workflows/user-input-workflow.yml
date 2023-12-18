@@ -77,7 +77,11 @@ jobs:
           desired_folder_name=$(basename "${{ github.event.inputs.blueprint_file_path }}")
           echo "desired folder name:$desired_folder_name"
           # curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
-          unzip -q "${desired_folder_name}"
+
+          DECODED_FILE_PATH=$(echo -e "${{github.event.inputs.blueprint_file_path//%/\\x}}")
+
+
+          unzip -q "${DECODED_FILE_PATH}"
           echo "List files after download"
 
           ls 
