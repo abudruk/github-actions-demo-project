@@ -1,4 +1,7 @@
-workflow_dispatch:
+name: Workflow for User Input Content Item Deployment
+# Controls when the action will run.
+on:
+  workflow_dispatch:
     inputs:
       content_type:
         description: "Type of Content"
@@ -31,18 +34,14 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v2
-
 
       - name: List the files
         run: |
           echo "Listing Files"
           pwd
           ls -a
-          tree
-
 
       - name: Validate zip file
         run: |
