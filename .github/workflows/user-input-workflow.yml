@@ -108,7 +108,7 @@ jobs:
             echo "The zip file contains the desired folder."
             #Check if metadata file is present inside this folder 
             # Check if the file exists
-            cd "${RENAMED_LAMBDA_FILE}%.zip"
+            cd "${RENAMED_LAMBDA_FILE%.zip}"
             if [ -f "${RENAMED_LAMBDA_FILE}.json" ]; then
               echo "File ${RENAMED_LAMBDA_FILE}.json exists."
               # Add further actions or steps here
