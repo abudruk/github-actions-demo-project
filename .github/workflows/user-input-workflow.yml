@@ -103,7 +103,8 @@ jobs:
           # Convert spaces to underscores and convert to lowercase
           RENAMED_LAMBDA_FILE=$(echo "$DECODED_FILE_PATH" | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
           echo "RENAMED_LAMBDA_FILE: $RENAMED_LAMBDA_FILE"
-          if [ -d "$RENAMED_LAMBDA_FILE" ]; then
+          echo "Removed .zip RENAMED_LAMBDA_FILE: ${RENAMED_LAMBDA_FILE%.zip}"
+          if [ -d "${RENAMED_LAMBDA_FILE%.zip}" ]; then
             echo "The zip file contains the desired folder."
           else
             echo "The zip file does not contain the desired folder."
