@@ -72,7 +72,7 @@ jobs:
         run: |
           # Check if the path ends with ".zip"
           if [[ "${{ github.event.inputs.blueprint_file_path }}" != *.zip ]]; then
-            echo "Error: The 'zip-file-path' must point to a zip file."
+            echo "Error: The 'blueprint_file_path' must be of .zip extension"
             exit 1
           fi
 
@@ -81,15 +81,15 @@ jobs:
           rm -rf ./*
 
           filename_with_encoded_space=$(basename "${{ github.event.inputs.blueprint_file_path }}")
-
           echo "filename_with_encoded_space:$filename_with_encoded_space"
 
+          #Download the file 
           curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
 
           #replacing %20 with a space in the filename
           filename_with_space=$(echo -e "${filename_with_encoded_space//%/\\x}")
 
-          echo " Docoded file path ${filename_with_space}"
+          echo " filename_with_space ${filename_with_space}"
           
           #Copy the data of filename_with_encoded_space.zip file in the filename_with_space.zip
           mv "$filename_with_encoded_space" "$filename_with_space"
@@ -98,17 +98,14 @@ jobs:
           unzip -q "${filename_with_space}"
 
           # Convert spaces to underscores and convert to lowercase
-          
           folder_with_underscore=$(echo "${filename_with_space%.zip}" | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
           echo "folder_with_underscore: $folder_with_underscore"
           
-          # echo "Removed .zip folder_with_underscore: ${folder_with_underscore%.zip}"
           if [ -d "${folder_with_underscore}" ]; then
             echo "The zip file contains the desired folder."
-            #Check if metadata file is present inside this folder 
-            # Check if the file exists
-            cd "${folder_with_underscore}"
-            if [ -f "${folder_with_underscore}.json" ]; then
+            # Check if metadata file is present inside this folder 
+            # cd "${folder_with_underscore}"
+            if [ -f "./${folder_with_underscore}/${folder_with_underscore}.json" ]; then
               echo "File ${folder_with_underscore}.json exists."
               # Add further actions or steps here
             else
@@ -117,7 +114,7 @@ jobs:
               exit 1
             fi
           else
-            echo "The zip file does not contain the desired folder."
+            echo "The zip file does not contain the desired folder with name ${folder_with_underscore}"
             exit 1  # Exit with an error code if the folder is not found
           fi
 
