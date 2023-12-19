@@ -98,7 +98,7 @@ jobs:
           unzip -q "${filename_with_space}"
 
           # Convert spaces to underscores and convert to lowercase
-          folder_with_underscore=$(echo "${filename_with_space%.zip}" | tr -cd '[:alnum:]' "_" | tr '[:upper:]' '[:lower:]')
+          folder_with_underscore=$(echo "${filename_with_space%.zip}" | tr -cs '[:alnum:]' "_" | tr '[:upper:]' '[:lower:]' | sed 's/_$//')
           echo "folder_with_underscore: $folder_with_underscore"
           
           if [ -d "${folder_with_underscore}" ]; then
