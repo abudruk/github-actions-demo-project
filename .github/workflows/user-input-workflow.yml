@@ -104,14 +104,11 @@ jobs:
           if [ -d "${folder_with_underscore}" ]; then
             echo "The zip file contains the desired folder."
             # Check if metadata file is present inside this folder 
-            # cd "${folder_with_underscore}"
             if [ -f "./${folder_with_underscore}/${folder_with_underscore}.json" ]; then
               echo "File ${folder_with_underscore}.json exists."
-              # Add further actions or steps here
             else
               echo "File ${folder_with_underscore}.json does not exist."
-              # You can handle this case accordingly, for example, exit the workflow or take alternative actions
-              exit 1
+              exit 1 # Exit with an error code if the File is not found
             fi
           else
             echo "The zip file does not contain the desired folder with name ${folder_with_underscore}"
@@ -125,13 +122,6 @@ jobs:
           cd "${{github.workspace}}/tmp"
           rm -rf ./*
           curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
-
-
-      # - name: Unzip the provided file
-      #   working-directory: tmp
-      #   run: |
-      #     echo "Unzipping File: ${{ github.event.inputs.blueprint_file_path }}"
-      #     unzip -o "$(basename "${{ github.event.inputs.blueprint_file_path }}")"
 
       - name: List the files
         working-directory: tmp
@@ -168,34 +158,6 @@ jobs:
           pwd
           ls
           tree
-
-
-      # - name: Process JSON files
-      #   working-directory: tmp
-      #   run: |
-      #     for json_file in $(find . -type f -name '*.json'); do
-      #       echo "Processing JSON file: $json_file"
-      #       name=$(jq -r '.name' "$json_file")
-      #       echo "Blueprint Name: ${name}"
-      #     done
-      
-      # - name: List Zip Files
-      #   working-directory: tmp
-      #   run: |
-      #     # Use find to locate all files with a '.zip' extension in the current directory
-      #     zip_files=$(find . -maxdepth 1 -type f -name '*.zip')
-
-      #     # Print the list of zip files
-      #     echo "List of Zip Files:"
-      #     echo "$zip_files"
-
-    
-      # # generate a random workflow identifier for CB python script to use
-      # - name: Printing Inputes provided by User
-      #   run: |
-      #     echo "Version: ${{ github.event.inputs.version }}"
-      #     echo "Blueprint File Path: ${{ github.event.inputs.blueprint_file_path }}"
-
         
   generate-assets:
     name: Generate Assets
