@@ -92,7 +92,7 @@ jobs:
           echo " Docoded file path ${filename_with_space}"
           
           #Copy the data of filename_with_encoded_space.zip file in the filename_with_space.zip
-          mv "$desired_folder_name" "$filename_with_space"
+          mv "$filename_with_encoded_space" "$filename_with_space"
 
           #Unzip filename_with_space.zip
           unzip -q "${filename_with_space}"
