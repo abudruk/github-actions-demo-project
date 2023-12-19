@@ -80,40 +80,39 @@ jobs:
           cd "${{github.workspace}}/zip_validation"
           rm -rf ./*
 
-          desired_folder_name=$(basename "${{ github.event.inputs.blueprint_file_path }}")
-          echo "desired folder name:$desired_folder_name"
+          filename_with_encoded_space=$(basename "${{ github.event.inputs.blueprint_file_path }}")
+
+          echo "filename_with_encoded_space:$filename_with_encoded_space"
+
           curl -sLJO "${{ github.event.inputs.blueprint_file_path }}"
 
-          # SYNC_RESOURCES_FILE_PATH="${{ github.event.inputs.blueprint_file_path }}"
+          #replacing %20 with a space in the filename
+          filename_with_space=$(echo -e "${filename_with_encoded_space//%/\\x}")
 
-          DECODED_FILE_PATH=$(echo -e "${desired_folder_name//%/\\x}")
+          echo " Docoded file path ${filename_with_space}"
+          
+          #Copy the data of filename_with_encoded_space.zip file in the filename_with_space.zip
+          mv "$desired_folder_name" "$filename_with_space"
 
-          echo " Docoded file path ${DECODED_FILE_PATH}"
-
-          mv "$desired_folder_name" "$DECODED_FILE_PATH"
-          ls
-          unzip -q "${DECODED_FILE_PATH}"
-          echo "List files after download"
-
-          ls 
-          tree
-
-
+          #Unzip filename_with_space.zip
+          unzip -q "${filename_with_space}"
 
           # Convert spaces to underscores and convert to lowercase
-          RENAMED_LAMBDA_FILE=$(echo "$DECODED_FILE_PATH" | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
-          echo "RENAMED_LAMBDA_FILE: $RENAMED_LAMBDA_FILE"
-          echo "Removed .zip RENAMED_LAMBDA_FILE: ${RENAMED_LAMBDA_FILE%.zip}"
-          if [ -d "${RENAMED_LAMBDA_FILE%.zip}" ]; then
+          
+          folder_with_underscore=$(echo "${filename_with_space%.zip}" | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
+          echo "folder_with_underscore: $folder_with_underscore"
+          
+          # echo "Removed .zip folder_with_underscore: ${folder_with_underscore%.zip}"
+          if [ -d "${folder_with_underscore}" ]; then
             echo "The zip file contains the desired folder."
             #Check if metadata file is present inside this folder 
             # Check if the file exists
-            cd "${RENAMED_LAMBDA_FILE%.zip}"
-            if [ -f "${RENAMED_LAMBDA_FILE%.zip}.json" ]; then
-              echo "File ${RENAMED_LAMBDA_FILE}.json exists."
+            cd "${folder_with_underscore}"
+            if [ -f "${folder_with_underscore}.json" ]; then
+              echo "File ${folder_with_underscore}.json exists."
               # Add further actions or steps here
             else
-              echo "File ${RENAMED_LAMBDA_FILE}.json does not exist."
+              echo "File ${folder_with_underscore}.json does not exist."
               # You can handle this case accordingly, for example, exit the workflow or take alternative actions
               exit 1
             fi
