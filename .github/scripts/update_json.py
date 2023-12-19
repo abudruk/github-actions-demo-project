@@ -22,7 +22,7 @@ def main():
     with open(asset_file_path, "r") as asset_file:
         records = json.load(asset_file)
         for record in records:
-            name = record['name']  
+            name = record[comparing_key]  
             artifact_path = record['artifact_path']  
             sha = record['sha']  
             libraryimageurl = record['library-image-url']  
