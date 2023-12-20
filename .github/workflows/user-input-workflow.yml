@@ -100,7 +100,20 @@ jobs:
           # Convert spaces to underscores and convert to lowercase
           folder_with_underscore=$(echo "${filename_with_space%.zip}" | tr -cs '[:alnum:]' "_" | tr '[:upper:]' '[:lower:]' | sed 's/_$//')
           echo "folder_with_underscore: $folder_with_underscore"
-          
+
+          if "${{ github.event.inputs.content_type }}" == "ui-extension-packages"; then
+            echo "Content Type is ui extension"
+            JSON_FILE=$(find . -maxdepth 2 -type f -name '*.json' | head -n 1)
+            # Check if a JSON file is found
+            if [ -n "$JSON_FILE" ]; then
+              # Read and print the contents of the JSON file
+              folder_with_underscore=$(cat "$JSON_FILE" | jq -r '.name')
+              echo "Name Attribute: $folder_with_underscore"        
+            else
+              echo "No JSON file found in the current directory."
+              exit 1
+            fi
+          # else
           if [ -d "${folder_with_underscore}" ]; then
             echo "The zip file contains the desired folder."
             # Check if metadata file is present inside this folder 
@@ -114,7 +127,7 @@ jobs:
             echo "The zip file does not contain the desired folder with name ${folder_with_underscore}"
             exit 1  # Exit with an error code if the folder is not found
           fi
-
+          # fi
       - name: Download zip file
         if: success()
         run: |
