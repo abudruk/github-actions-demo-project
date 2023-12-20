@@ -105,7 +105,7 @@ jobs:
           echo "folder_with_underscore: $folder_with_underscore"
 
           #Need to handle ui-extension-packages as it consists on different naming conventions
-          if [ "${{ github.event.inputs.content_type }}" == "ui-extension-packages" ]; then
+          if [ "${{ github.event.inputs.content_type }}" == "ui-extension-packages" ] || [ "${{ github.event.inputs.content_type }}" == "cb-applets" ]; then
             echo "Content Type is ui extension"
             JSON_FILE=$(find . -maxdepth 2 -type f -name '*.json' | head -n 1)
             # Check if a JSON file is found
