@@ -92,7 +92,10 @@ jobs:
           echo " filename_with_space ${filename_with_space}"
           
           #Copy the data of filename_with_encoded_space.zip file in the filename_with_space.zip
-          mv "$filename_with_encoded_space" "$filename_with_space"
+          #if both names are found similar then dont perform anything here in case of ui-extension SolarWinds.zip
+          if [ "${filename_with_encoded_space}" != "${filename_with_space}" ]; then
+            mv "$filename_with_encoded_space" "$filename_with_space"
+          fi
 
           #Unzip filename_with_space.zip
           unzip -q "${filename_with_space}"
@@ -101,6 +104,7 @@ jobs:
           folder_with_underscore=$(echo "${filename_with_space%.zip}" | tr -cs '[:alnum:]' "_" | tr '[:upper:]' '[:lower:]' | sed 's/_$//')
           echo "folder_with_underscore: $folder_with_underscore"
 
+          #Need to handle ui-extension-packages as it consists on different naming conventions
           if [ "${{ github.event.inputs.content_type }}" == "ui-extension-packages" ]; then
             echo "Content Type is ui extension"
             JSON_FILE=$(find . -maxdepth 2 -type f -name '*.json' | head -n 1)
