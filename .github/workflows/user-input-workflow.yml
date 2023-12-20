@@ -113,6 +113,7 @@ jobs:
               echo "No JSON file found in the current directory."
               exit 1
             fi
+          fi
           
           if [ -d "${folder_with_underscore}" ]; then
             echo "The zip file contains the desired folder."
